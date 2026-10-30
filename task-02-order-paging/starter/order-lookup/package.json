@@ -1,0 +1,21 @@
+{
+  "name": "order-lookup",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Internal order lookup tool for the support desk",
+  "type": "module",
+  "scripts": {
+    "dev:api": "node --watch server/index.js",
+    "dev:web": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "express": "^5.3.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.1.2",
+    "vite": "^8.3.5"
+  }
+}

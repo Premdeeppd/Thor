@@ -53,17 +53,17 @@ Fixed repository (zip) with the commit and FIX_NOTES.md, plus the exported Postm
 
 ## 2. One-time setup (before recording; nothing here is recorded)
 
-1. Finish and submit task 1 first. Then delete task 1's working copy, `~/Desktop/order-lookup`, because this task uses the same folder name.
+1. Finish and submit task 1 first. Then delete task 1's working copy, `~/Developer/order-lookup`, because this task uses the same folder name.
 2. Change the desktop appearance from task 1's and log it in the playbook's variety table.
 3. **Postman:** sign in, and open an empty workspace with no collections in it. Don't touch Postbot or Agent Mode.
 4. **Working copy:**
    ```bash
-   bash ~/Desktop/WebD/Odin/task-02-order-paging/setup-workcopy.sh
+   bash ~/Developer/Odin/task-02-order-paging/setup-workcopy.sh
    ```
-5. **VS Code:** File → Open Folder → `~/Desktop/order-lookup`, NPM Scripts panel visible, no editor tabs.
+5. **VS Code:** File → Open Folder → `~/Developer/order-lookup`, NPM Scripts panel visible, no editor tabs.
 6. **Rehearse on a separate copy:**
    ```bash
-   bash ~/Desktop/WebD/Odin/task-02-order-paging/setup-workcopy.sh ~/Desktop/order-lookup-rehearsal
+   bash ~/Developer/Odin/task-02-order-paging/setup-workcopy.sh ~/Developer/order-lookup-rehearsal
    ```
    Do the whole run-sheet once while timing yourself. Then delete the rehearsal folder and the rehearsal collection in Postman.
 
@@ -222,11 +222,11 @@ J  Epilogue 3–4 min: verify · decisions · limits · common mistake
 
 ## 7. After recording
 
-1. Make `~/Desktop/Deliverables` with:
+1. Make `~/Developer/Deliverables` with:
    - `input 1.zip`: copy of `inputs/input 1.zip`
    - `final output 1.zip`: the fixed repo without `node_modules`. In Terminal:
      ```bash
-     cd ~/Desktop && zip -r "Deliverables/final output 1.zip" order-lookup -x "order-lookup/node_modules/*"
+     cd ~/Developer && zip -r "Deliverables/final output 1.zip" order-lookup -x "order-lookup/node_modules/*"
      ```
    - `final output 2.json`: the exported Postman collection, renamed
 2. Zip the folder as `Deliverables.zip`. Keep `Metadata.rtf`, `video.mp4` and the TaskRecorder archive separate.

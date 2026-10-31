@@ -64,6 +64,7 @@ The full current list is at `odin-mercor1.vercel.app/validated-apps` (needs your
 - [ ] Resolution matches Studio. Dock left or right. Clock shows seconds. Default cursor.
 - [ ] Mac on power, enough free storage.
 - [ ] Focus / Do Not Disturb on. Personal accounts, notifications, recent files and private info hidden.
+- [ ] Desktop cleared: no files or folders on it. Project folders and working copies live in `~/Developer`.
 - [ ] Studio, Slack, these notes and anything showing Mercor or Odin closed or minimised.
 - [ ] Unused apps quit (ChatGPT, Claude, Antigravity, Wispr Flow, Raycast, Hubstaff, other dev servers). Unused browser tabs closed. Sync and downloads paused.
 - [ ] Every task app launched and signed in, startup dialogs done, files and workspaces open, windows positioned, then minimised. Never launch or set up an app after Start Recording.

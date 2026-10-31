@@ -3,11 +3,11 @@
 # unzips it, installs dependencies, and makes a baseline git commit so VS Code's Source Control
 # view shows only the changes you make while recording.
 #
-# Usage: bash setup-workcopy.sh [destination]    (default: ~/Desktop/order-lookup)
+# Usage: bash setup-workcopy.sh [destination]    (default: ~/Developer/order-lookup)
 set -euo pipefail
 
 here="$(cd "$(dirname "$0")" && pwd)"
-dest="${1:-$HOME/Desktop/order-lookup}"
+dest="${1:-$HOME/Developer/order-lookup}"
 
 if [ -e "$dest" ]; then
   echo "$dest already exists. Delete it first or pass a different destination." >&2

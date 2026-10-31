@@ -49,15 +49,15 @@ Fixed repository (zip) with the commit and FIX_NOTES.md, plus before/after HAR f
 2. **Brave:** in Settings → **Leo**, turn Leo off and hide its icon and suggestions. Turn off Rewards and News notifications so nothing pops up. Use a profile with no personal bookmarks or extensions showing. If localhost requests ever misbehave, turn Shields off for `localhost` (the lion icon).
 3. **Working copy:** in Terminal, run:
    ```bash
-   bash ~/Desktop/WebD/Odin/task-01-order-lookup/setup-workcopy.sh
+   bash ~/Developer/Odin/task-01-order-lookup/setup-workcopy.sh
    ```
-   This unzips the app to `~/Desktop/order-lookup`, installs packages and makes a "starting point" commit. The copy sits outside the Odin folder, so "Odin" never shows in VS Code's title bar or terminal.
-4. **VS Code:** File → Open Folder → `~/Desktop/order-lookup`. In the Explorer's `…` menu, tick **NPM Scripts** so the script panel shows. Close every editor tab.
+   This unzips the app to `~/Developer/order-lookup`, installs packages and makes a "starting point" commit. The copy sits outside the Odin folder, so "Odin" never shows in VS Code's title bar or terminal.
+4. **VS Code:** File → Open Folder → `~/Developer/order-lookup`. In the Explorer's `…` menu, tick **NPM Scripts** so the script panel shows. Close every editor tab.
 5. **Rehearse on a separate copy:**
    ```bash
-   bash ~/Desktop/WebD/Odin/task-01-order-lookup/setup-workcopy.sh ~/Desktop/order-lookup-rehearsal
+   bash ~/Developer/Odin/task-01-order-lookup/setup-workcopy.sh ~/Developer/order-lookup-rehearsal
    ```
-   Do the whole run-sheet once while timing yourself, then delete `~/Desktop/order-lookup-rehearsal`.
+   Do the whole run-sheet once while timing yourself, then delete `~/Developer/order-lookup-rehearsal`.
 
 `REFERENCE.md` has the working code to rehearse with, and `NARRATION.md` has talking points for every step. Rehearse with both, then close them. Don't have them open, or paste from them, while recording.
 
@@ -192,13 +192,13 @@ H  Epilogue 3–4 min: verify · decisions · limits · common mistake
 
 ## 7. After recording
 
-1. Make `~/Desktop/Deliverables` with:
+1. Make `~/Developer/Deliverables` with:
    - `input 1.zip`: copy of `inputs/input 1.zip`
    - `artifact 1.har`: `before-fix.har`, renamed
    - `artifact 2.har`: `after-fix.har`, renamed
    - `final output 1.zip`: the fixed repo without `node_modules`. In Terminal:
      ```bash
-     cd ~/Desktop && zip -r "Deliverables/final output 1.zip" order-lookup -x "order-lookup/node_modules/*"
+     cd ~/Developer && zip -r "Deliverables/final output 1.zip" order-lookup -x "order-lookup/node_modules/*"
      ```
 2. Zip the folder as `Deliverables.zip`. Keep `Metadata.rtf`, `video.mp4` and the TaskRecorder archive separate.
 3. **Metadata.rtf**, in TextEdit from the Studio template:
@@ -207,4 +207,4 @@ H  Epilogue 3–4 min: verify · decisions · limits · common mistake
    - **Request:** your Goal, exactly as in TaskRecorder.
    - **Task Description:** a numbered outline built from the 6 Steps in your idea, adjusted to what you actually did (apps, methods, final deliverable).
 4. **AI disclosure:** wherever Studio asks, state that `input 1` (the starter app and ticket) was AI-generated before recording, and that no AI was used during the recording.
-5. Upload, run AutoQC, final checks, submit. Then delete `~/Desktop/order-lookup` before setting up task 2. Task 2 uses the same folder name.
+5. Upload, run AutoQC, final checks, submit. Then delete `~/Developer/order-lookup` before setting up task 2. Task 2 uses the same folder name.

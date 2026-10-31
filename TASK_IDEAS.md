@@ -6,11 +6,11 @@ Only pick ideas you could do at work without help: the recording is checked agai
 
 | # | Track | Idea | Apps | Deliverable a reviewer can check | Status |
 |---|---|---|---|---|---|
-| 1 | Software | Search shows results for an older search when agents type fast (front-end race condition) | VS Code, Google Chrome | Fixed repo + before/after HAR evidence | **Ready.** `task-01-order-lookup/PLAN.md` |
-| 2 | Software | "Load more" repeats orders while new ones arrive; move the API from offset to cursor paging, test-first | VS Code, Postman, Google Chrome | Fixed repo + Postman regression collection | **Ready.** `task-02-order-paging/PLAN.md` |
+| 1 | Software | Search shows results for an older search when agents type fast (front-end race condition) | VS Code, Brave Browser | Fixed repo + before/after HAR evidence | **Ready.** `task-01-order-lookup/PLAN.md` |
+| 2 | Software | "Load more" repeats orders while new ones arrive; move the API from offset to cursor paging, test-first | VS Code, Postman, Brave Browser | Fixed repo + Postman regression collection | **Ready.** `task-02-order-paging/PLAN.md` |
 | 3 | Data analytics | A/B test readout that catches a sample-ratio mismatch before recommending ship / no-ship | Google Sheets, Google Docs | Analysis workbook + one-page decision memo | Idea only |
 | 4 | Data engineering | Speed up a slow PostgreSQL dashboard query and prove the results didn't change | pgAdmin 4, Google Sheets | Migration SQL, before/after query plans, benchmark sheet | Idea only |
-| 5 | Software / QA | Find and fix a flaky Playwright checkout test using Trace Viewer | VS Code, Playwright Trace Viewer, Google Chrome | Fixed spec + HTML report with 20/20 repeated passes | Idea only |
+| 5 | Software / QA | Find and fix a flaky Playwright checkout test using Trace Viewer | VS Code, Playwright Trace Viewer, Brave Browser | Fixed spec + HTML report with 20/20 repeated passes | Idea only |
 | 6 | Data engineering (NoSQL) | Clean inconsistent event data in MongoDB into a validated daily-metrics collection | MongoDB Compass, Google Sheets | Exported pipeline, schema validator, reconciliation sheet | Idea only |
 | 7 | Data analytics / BI | Support SLA dashboard with business-hours logic | Google Sheets, Looker Studio | Looker Studio report (PDF + link) whose numbers match a Sheets pivot | Idea only |
 

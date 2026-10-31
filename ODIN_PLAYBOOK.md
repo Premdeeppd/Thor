@@ -13,11 +13,11 @@ Screen recordings of real professional work on a Mac, narrated as you go: **what
 | Rule | What it means in practice |
 |---|---|
 | AI for the idea text is allowed | The newer guidelines allow any AI tool for drafting **Describe your idea**. The older PDF said not to paste AI text, so if a reviewer ever queries it, point to the newer guidelines. The plan must still be one you can carry out, because your recording is checked against it. |
-| No AI while recording | Quit ChatGPT, Claude, Antigravity, Wispr Flow and Raycast first. Inside task apps, leave AI alone: VS Code Copilot/Chat, Chrome's Gemini and DevTools "AI assistance", Postman's Postbot/Agent Mode, Compass's natural-language queries, Gemini in Google Docs/Sheets. |
+| No AI while recording | Quit ChatGPT, Claude, Antigravity, Wispr Flow and Raycast first. Inside task apps, leave AI alone: VS Code Copilot/Chat, Brave's Leo, Chrome's Gemini and DevTools "AI assistance", Postman's Postbot/Agent Mode, Compass's natural-language queries, Gemini in Google Docs/Sheets. |
 | Disclose AI-made inputs | Inputs prepared with AI *before* recording are allowed (any AI tool, not only Gemini), as long as you disclose which ones are AI-produced. |
 | Inputs are self-made or synthetic | No real customer/company data, nothing proprietary. Anything downloaded must be CC0 or public domain. |
 | No restricted apps | See the banned list below. TextEdit is allowed **only** for writing Metadata.rtf. Don't use Notes or TextEdit for the opening Goal doc. Desktop Excel causes recording problems, so use Google Sheets or Excel on the web. |
-| 2–3 apps, each doing real work | Finder doesn't count. Apps you only open briefly don't count. Name web apps (Google Sheets), not the browser, unless the browser itself does the work (Chrome DevTools does). The **same list** goes in Studio's Apps field, TaskRecorder's Used Apps and Metadata.rtf. |
+| 2–3 apps, each doing real work | Finder doesn't count. Apps you only open briefly don't count. Name web apps (Google Sheets), not the browser, unless the browser itself does the work (DevTools does). The **same list** goes in Studio's Apps field, TaskRecorder's Used Apps and Metadata.rtf. |
 | Length 15:00–50:59 | Includes the intro (under 20 s) and the epilogue (3–4 min, 4:00 max). Aim for 30–40 min. |
 | Mostly mouse-driven | Prefer menus, panels and buttons over shortcuts and terminal commands, and say what you click. |
 | No padding, no tinkering | Don't wait around, and stop once the task is done. Before stopping, check the output is accurate, readable and usable. |
@@ -29,7 +29,7 @@ Screen recordings of real professional work on a Mac, narrated as you go: **what
 
 Godot, VSCodium, Inkscape, GIMP, Blender, MATLAB, Sublime Text, Photoshop, Ableton Live, ZBrush, Grammarly, Microsoft Whiteboard, Adobe Bridge, Adobe Animate, Unreal Editor, Telegram, KNIME / KNIME Analytics Platform, Reactotron, Craft, LiquidText, Media Encoder, Sublime Merge, Vital, Twinmotion, Figma, Adobe Lightroom, Autodesk FBX Review, Defold, KiCad, OpenVSP, anatomyapp, FL Studio, GameMaker, LTspice, Parallels Desktop, UCSF Chimera, and more. The video stopped scrolling there.
 
-The full current list is at `odin-mercor1.vercel.app/validated-apps` (needs your Okta sign-in). Check it once for the apps in `TASK_IDEAS.md`: VS Code, Google Chrome, Postman, pgAdmin 4, MongoDB Compass, Google Sheets, Google Docs, Looker Studio.
+The full current list is at `odin-mercor1.vercel.app/validated-apps` (needs your Okta sign-in). Check it once for the apps in `TASK_IDEAS.md`: Brave Browser, VS Code, Postman, pgAdmin 4, MongoDB Compass, Google Sheets, Google Docs, Looker Studio.
 
 ## Your Mac: what's ready (checked 31 Oct 2026)
 
@@ -39,7 +39,7 @@ The full current list is at `odin-mercor1.vercel.app/validated-apps` (needs your
 | TaskRecorder 2.4.4 | ❌ Not found | Install it from the Project Guide's Technical Setup section. All three permissions green, microphone on, correct display selected. |
 | Visual Studio Code | ❌ Not installed | Install it from code.visualstudio.com. Then **Settings → search "disable AI" → tick "Chat: Disable AI Features"** and don't sign in to Copilot. Don't record in Antigravity; it's an AI-first editor. |
 | Insightful (time tracking) | ✅ Installed as Workpuls.app | Keep it running while you work. It doesn't count as a task app. |
-| Chrome, Safari, Postman, Docker, MongoDB Compass, pgAdmin 4, Node 24, git | ✅ | |
+| Brave, Chrome, Safari, Postman, Docker, MongoDB Compass, pgAdmin 4, Node 24, git | ✅ | You record with Brave; Chrome is the fallback. |
 | Menu-bar clock with seconds | Check | System Settings → Control Center → Clock Options → turn on "Display the time with seconds". |
 | Dock on the left or right | Check | System Settings → Desktop & Dock → Position on screen. |
 | Resolution matches Studio | Check | Use the value shown in your Studio task. |
@@ -113,4 +113,4 @@ One row per task, so no two recordings look the same.
 
 ## Still to confirm
 
-Check the canonical app list (or ask in `#odin--helpdesk`) that VS Code, Postman, pgAdmin 4 and MongoDB Compass aren't restricted.
+Check the canonical app list (or ask in `#odin--helpdesk`) that **Brave Browser**, VS Code, Postman, pgAdmin 4 and MongoDB Compass aren't restricted. The 22 Oct update named only Safari and Chrome as permitted browsers, so confirm Brave before submitting. If it isn't allowed, use Chrome for the browser steps instead.

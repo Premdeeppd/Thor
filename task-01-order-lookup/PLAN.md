@@ -6,7 +6,7 @@ Status (31 Oct 2026): the input is built, and the bug and its fix are tested in 
 |---|---|
 | Domain | DSD: Software engineering |
 | Role | Full-stack engineer (React + Node/Express) on an internal tools team |
-| Apps, the same list everywhere | **Visual Studio Code · Google Chrome** |
+| Apps, the same list everywhere | **Visual Studio Code · Brave Browser** |
 | Planned length | About 32–36 min at a relaxed, explaining pace: intro 0:20, work about 29 min, epilogue about 3:30 |
 | Input | `inputs/input 1.zip`: the Order Lookup app with seeded synthetic orders, a README and support ticket `docs/SUP-1427.md`. AI-generated, so disclose it. |
 | Outputs | `artifact 1.har` (network log before the fix), `artifact 2.har` (after the fix), `final output 1.zip` (fixed repo) |
@@ -19,37 +19,34 @@ Paste this into the **Describe your idea** box. It keeps the form's five heading
 
 ```text
 Domain / Role:
-Software engineering. I'm a full-stack JavaScript developer (React and Node.js/Express) on an internal tools team that builds and maintains the apps our customer support desk uses.
+Software engineering. Full-stack JavaScript developer (React, Node.js/Express) on an internal tools team that supports the customer support desk.
 
 Goal:
-Fix the bug in support ticket SUP-1427 for our internal Order Lookup tool, which support agents use to find customer orders. When an agent types a customer's name quickly, the table can end up showing results for an older, shorter search even though the search box shows the full name. When I'm done, the table always matches what is in the search box, real errors are still shown to agents, and the fix is verified with Chrome DevTools.
+Fix support ticket SUP-1427 in our internal Order Lookup tool: when agents type a name quickly, the table shows results for an older, shorter search. After the fix, results always match the search box, real errors still show, and the fix is verified with Brave DevTools.
 
 Starting materials:
-Existing files prepared before recording, with synthetic data only:
-- Order Lookup: a small React (Vite) front end with a Node.js/Express API that serves 320 seeded, made-up orders from memory. Broad searches respond more slowly than narrow ones, like the production search. It includes a README describing the API.
-- Support ticket SUP-1427 (a Markdown file in the repo) describing the bug, how agents reproduce it, and the expected behaviour.
-The app code, the order data and the ticket were generated with AI before recording.
+- Order Lookup app: React (Vite) front end and Node.js/Express API with 320 synthetic orders; broad searches respond slower than narrow ones.
+- Ticket SUP-1427 (Markdown in the repo) describing the bug and expected behaviour.
+Both AI-generated before recording.
 
 Steps (with the apps for each):
-1. Visual Studio Code: read ticket SUP-1427 and the README, then start the API and the web app from the NPM Scripts panel.
-2. Google Chrome: reproduce the bug by typing "alice" quickly and then slowly, to show that the result depends on timing.
-3. Google Chrome: in the DevTools Network panel, compare the five search requests and show that the broad "a" search finishes last. Add a logpoint in the Sources panel on the line that stores the results, to show which response is applied last, and export a HAR as evidence.
-4. Visual Studio Code: weigh a debounce, an ignore flag and an AbortController, then cancel superseded searches with an AbortController in the React search effect, ignoring only AbortError and keeping the loading indicator correct.
-5. Google Chrome: verify that earlier requests now show as canceled and that the logpoint shows only the latest search being applied, and export a second HAR. Stop the API from Visual Studio Code to confirm that real errors still reach the agent, then restart it.
-6. Visual Studio Code: review the change in the Source Control diff view, write FIX_NOTES.md (root cause, fix, verification, limitations) and commit.
+1. Visual Studio Code: read the ticket and README; start the API and web app from NPM Scripts.
+2. Brave Browser: reproduce by typing "alice" fast, then slowly.
+3. Brave Browser (DevTools): Network panel shows the broad "a" request finishing last; a Sources logpoint shows it overwriting newer results; export a HAR.
+4. Visual Studio Code: cancel superseded searches with an AbortController in the React effect, ignoring AbortError and fixing the loading state.
+5. Brave Browser: confirm old requests are canceled and only the latest result is applied; export a second HAR; stop the API to confirm errors still show.
+6. Visual Studio Code: review the diff, write FIX_NOTES.md, commit.
 
 Deliverable:
-- The fixed Order Lookup repository (zip), with the fix committed and FIX_NOTES.md.
-- Before-and-after HAR exports from Chrome as supporting evidence.
-A reviewer can check it by typing "alice" quickly (only Alice's orders appear, and earlier requests show as canceled in the Network panel) and by stopping the API (the agent sees an error message).
+Fixed repository (zip) with the commit and FIX_NOTES.md, plus before/after HAR files. Check: typing "alice" quickly shows only Alice's orders with earlier requests canceled; stopping the API shows an error message.
 ```
 
-**Apps field:** select Visual Studio Code and Google Chrome. The same two go in TaskRecorder's Used Apps and in Metadata.rtf.
+**Apps field:** select Visual Studio Code and Brave Browser (if Brave isn't in the list, choose Other and type Brave Browser). The same two go in TaskRecorder's Used Apps and in Metadata.rtf.
 
 ## 2. One-time setup (days before; nothing here is recorded)
 
 1. Install the missing pieces from `../ODIN_PLAYBOOK.md`: Xcode (for Accessibility Inspector), TaskRecorder and VS Code. Then turn VS Code's AI features off.
-2. **Chrome:** open DevTools → ⚙ Settings → **AI innovations** and turn everything off. Use a Chrome profile with no personal bookmarks or extensions showing.
+2. **Brave:** in Settings → **Leo**, turn Leo off and hide its icon and suggestions. Turn off Rewards and News notifications so nothing pops up. Use a profile with no personal bookmarks or extensions showing. If localhost requests ever misbehave, turn Shields off for `localhost` (the lion icon).
 3. **Working copy:** in Terminal, run:
    ```bash
    bash ~/Desktop/WebD/Odin/task-01-order-lookup/setup-workcopy.sh
@@ -71,9 +68,9 @@ Do the full pre-check list in `../ODIN_PLAYBOOK.md`, plus:
 - [ ] Stop your Examlo frontend dev server. It holds port 5173, and its terminal would show another project.
 - [ ] Set the desktop appearance for this task and log it in the playbook's variety table.
 - [ ] VS Code: `order-lookup` open, no editor tabs, NPM Scripts panel visible, then minimised.
-- [ ] Chrome: one window, one blank tab, then minimised. DevTools closed.
+- [ ] Brave: one window, one blank tab, Leo hidden, DevTools closed, then minimised.
 - [ ] Goal doc in Google Docs with only the Goal text, behind TaskRecorder.
-- [ ] TaskRecorder: Task Description = Goal (exact); Used Apps = Visual Studio Code, Google Chrome.
+- [ ] TaskRecorder: Task Description = Goal (exact); Used Apps = Visual Studio Code, Brave Browser.
 - [ ] This file, NARRATION.md, REFERENCE.md and the playbook closed. The cue card (section 5) is on paper or your phone, never on the recorded screen.
 
 ## 4. Run-sheet
@@ -93,7 +90,7 @@ For each step: **Do** is the action, **Why** is the reasoning to explain, and **
 3. **Do:** NPM Scripts panel → ▷ next to `dev:api`, then ▷ next to `dev:web`.
    **See:** "Order API listening on http://localhost:3001" and Vite's local URL (5173; 5174 if 5173 is busy).
 
-### C. Reproduce (about 3:30–6:30) · Chrome: LOOKUP
+### C. Reproduce (about 3:30–6:30) · Brave: LOOKUP
 
 1. **Do:** open the Vite URL. Type `alice` at normal speed.
    **See:** the status says *for "alice"*, but the rows are other customers and nothing is highlighted.
@@ -101,7 +98,7 @@ For each step: **Do** is the action, **Why** is the reasoning to explain, and **
    **See:** now it's correct.
 3. **Why:** the same input gives different results depending on typing speed. That points to a timing problem: responses may be coming back in a different order than the requests were sent.
 
-### D. Diagnose (about 6:30–14:30) · Chrome DevTools
+### D. Diagnose (about 6:30–14:30) · Brave DevTools
 
 1. **Network panel** (about 4 min)
    - **Do:** View → Developer → Developer Tools → **Network** → filter **Fetch/XHR** → clear the log (🚫) → clear the search box → type `alice` at normal speed.
@@ -131,7 +128,7 @@ For each step: **Do** is the action, **Why** is the reasoning to explain, and **
    - Move `setLoading(false)` out of `.finally` into the success and real-error paths. Otherwise a cancelled request switches "Searching…" off while the newer search is still loading.
    - Leave `loadMore` alone. Paging is a separate ticket.
 
-### F. Verify (about 21:00–27:00) · Chrome: LOOKUP, then VS Code and back
+### F. Verify (about 21:00–27:00) · Brave: LOOKUP, then VS Code and back
 
 1. **Do:** reload the page with the Network panel open and type `alice` at normal speed.
    **See:** earlier requests show **(canceled)** in red, and only Alice rows appear, highlighted. Try it three or four times, and with other names (`omar`, `priya`).
@@ -139,8 +136,8 @@ For each step: **Do** is the action, **Why** is the reasoning to explain, and **
 2. **Do:** check the logpoint. If it vanished after the code change, add it again on the `setOrders(data.orders);` line. Type `alice`.
    **See:** the last console line is always *applied results for alice*. Cancelled searches never appear.
 3. **Do:** Network panel → **Export HAR** → `after-fix.har`. It becomes `artifact 2.har`.
-4. **Error path** · VS Code: LOOKUP, then Chrome: LOOKUP
-   - **Do:** in VS Code's terminal panel, select the `dev:api` terminal and click the trash icon to stop the API. Back in Chrome, type one more letter.
+4. **Error path** · VS Code: LOOKUP, then Brave: LOOKUP
+   - **Do:** in VS Code's terminal panel, select the `dev:api` terminal and click the trash icon to stop the API. Back in Brave, type one more letter.
    - **See:** a red "Order search failed (502)".
    - **Why:** you ignore only `AbortError`, so real failures still reach the agent, as the ticket asks.
    - Point out the old rows still showing under the error. That's a known limitation for FIX_NOTES and the epilogue.
@@ -151,7 +148,7 @@ For each step: **Do** is the action, **Why** is the reasoning to explain, and **
 2. **Do:** Source Control view → click each changed file and walk through the diff out loud.
 3. **Do:** create `FIX_NOTES.md` with these headings: Summary · Root cause · Fix · How I verified · Known limitations.
 4. **Do:** stage all (＋), write the message "Fix stale search results (SUP-1427)", then **Commit**.
-5. **Do (Chrome, LOOKUP):** one last `alice` check. **Stop here; don't keep tinkering.**
+5. **Do (Brave, LOOKUP):** one last `alice` check. **Stop here; don't keep tinkering.**
 
 ### H. Epilogue (about 31:00–34:30, no mouse)
 
@@ -206,7 +203,7 @@ H  Epilogue 3–4 min: verify · decisions · limits · common mistake
 2. Zip the folder as `Deliverables.zip`. Keep `Metadata.rtf`, `video.mp4` and the TaskRecorder archive separate.
 3. **Metadata.rtf**, in TextEdit from the Studio template:
    - **Topology:** match what you actually did. If you follow the run-sheet it is:
-     `Visual Studio Code (LOOKUP) -> Google Chrome (LOOKUP) -> Visual Studio Code (MODIFY) -> Google Chrome (LOOKUP) -> Visual Studio Code (LOOKUP) -> Google Chrome (LOOKUP) -> Visual Studio Code (CREATE) -> Google Chrome (LOOKUP)`
+     `Visual Studio Code (LOOKUP) -> Brave Browser (LOOKUP) -> Visual Studio Code (MODIFY) -> Brave Browser (LOOKUP) -> Visual Studio Code (LOOKUP) -> Brave Browser (LOOKUP) -> Visual Studio Code (CREATE) -> Brave Browser (LOOKUP)`
    - **Request:** your Goal, exactly as in TaskRecorder.
    - **Task Description:** a numbered outline built from the 6 Steps in your idea, adjusted to what you actually did (apps, methods, final deliverable).
 4. **AI disclosure:** wherever Studio asks, state that `input 1` (the starter app and ticket) was AI-generated before recording, and that no AI was used during the recording.

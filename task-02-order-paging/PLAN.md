@@ -6,7 +6,7 @@ Status (31 Oct 2026): the input is built. The bug, the fix and every Postman tes
 |---|---|
 | Domain | DSD: Software engineering |
 | Role | Full-stack engineer (React + Node/Express) on an internal tools team |
-| Apps, the same list everywhere | **Visual Studio Code · Postman · Google Chrome** |
+| Apps, the same list everywhere | **Visual Studio Code · Postman · Brave Browser** |
 | Planned length | About 38–42 min at a relaxed, explaining pace: intro 0:20, work about 35 min, epilogue about 3:30. The hard limit is 50:59. |
 | Input | `inputs/input 1.zip`: Order Lookup with task 1's search fix already in, offset paging, and support ticket `docs/SUP-1433.md`. AI-generated, so disclose it. |
 | Outputs | `final output 1.zip` (fixed repo), `final output 2.json` (Postman collection) |
@@ -26,33 +26,30 @@ Paste this into the **Describe your idea** box. It keeps the form's five heading
 
 ```text
 Domain / Role:
-Software engineering. I'm a full-stack JavaScript developer (React and Node.js/Express) on an internal tools team that builds and maintains the apps our customer support desk uses.
+Software engineering. Full-stack JavaScript developer (React, Node.js/Express) on an internal tools team that supports the customer support desk.
 
 Goal:
-Fix the bug in support ticket SUP-1433 for our internal Order Lookup tool, which support agents use to work through customer orders. While new orders are arriving, "Load more" shows some orders twice and can skip others. When I'm done, paging through the list never repeats or skips an order, invalid paging requests are rejected cleanly, and the behaviour is protected by a Postman regression collection.
+Fix support ticket SUP-1433 in our internal Order Lookup tool: while new orders arrive, "Load more" repeats some orders and can skip others. After the fix, paging never repeats or skips an order, invalid paging requests are rejected, and a Postman regression collection protects the behaviour.
 
 Starting materials:
-Existing files prepared before recording, with synthetic data only:
-- Order Lookup: a small React (Vite) front end with a Node.js/Express API that serves 320 seeded, made-up orders from memory and pages them with offset and limit. It already includes an earlier fix for search requests. It has a README describing the API and a dev-only endpoint that simulates new orders arriving.
-- Support ticket SUP-1433 (a Markdown file in the repo) describing the bug, how agents see it, and the expected behaviour.
-The app code, the order data and the ticket were generated with AI before recording. The Postman collection and its tests will be built from scratch during the recording.
+- Order Lookup app: React (Vite) front end and Node.js/Express API with 320 synthetic orders, offset/limit paging, and a dev endpoint that simulates new orders; the earlier search fix is already in.
+- Ticket SUP-1433 (Markdown in the repo) describing the bug and expected behaviour.
+Both AI-generated before recording. The Postman collection is built during the recording.
 
 Steps (with the apps for each):
-1. Visual Studio Code: read ticket SUP-1433 and the README, then start the API and the web app from the NPM Scripts panel.
-2. Postman and Google Chrome: simulate three new orders with a Postman request, click "Load more" in Chrome, and show the repeated order IDs and React's duplicate-key errors in the DevTools Console.
-3. Postman: build a regression collection (a 40-order snapshot, page 1, three simulated orders, page 2) with test scripts asserting that page 1 plus page 2 equals the snapshot exactly, and run it in the Collection Runner to show it failing against the current offset-based API.
-4. Visual Studio Code: replace offset paging in the Express API with cursor paging keyed on (createdAt, id), using the order ID as a tie-breaker because batch imports share timestamps, with an opaque cursor and a 400 response for an invalid one.
-5. Postman: switch page 2 to the cursor, add an invalid-cursor check, and re-run the collection until every test passes.
-6. Visual Studio Code and Google Chrome: update the React client to page with nextCursor and to show "Load more" only while more results exist, then verify in Chrome that order IDs continue without repeats while new orders arrive.
-7. Postman and Visual Studio Code: export the collection, review every change in the Source Control diff view, write FIX_NOTES.md (root cause, fix, verification, limitations) and commit.
+1. Visual Studio Code: read the ticket and README; start the API and web app from NPM Scripts.
+2. Postman and Brave Browser: simulate 3 new orders, click "Load more", show the repeated IDs and React duplicate-key errors in the Console.
+3. Postman: build a regression collection (snapshot, page 1, simulate, page 2) asserting page 1 + page 2 equals the snapshot; run it and show it failing.
+4. Visual Studio Code: replace offset paging with an opaque cursor on (createdAt, id), using the ID to break timestamp ties, and return 400 for invalid cursors.
+5. Postman: switch page 2 to the cursor, add an invalid-cursor test, re-run until all pass.
+6. Visual Studio Code and Brave Browser: update the React client to page with nextCursor; verify no repeats while orders arrive.
+7. Postman and Visual Studio Code: export the collection, review the diff, write FIX_NOTES.md, commit.
 
 Deliverable:
-- The fixed Order Lookup repository (zip), with the fix committed and FIX_NOTES.md.
-- The exported Postman collection with its regression tests.
-A reviewer can check it by running the collection against the fixed API (all five tests pass; against the original code the snapshot test fails) and by clicking "Load more" in Chrome after simulating new orders (no repeated order IDs and no duplicate-key errors in the Console).
+Fixed repository (zip) with the commit and FIX_NOTES.md, plus the exported Postman collection. Check: the collection passes all 5 tests (the snapshot test fails on the original code), and "Load more" after simulating orders shows no repeated IDs.
 ```
 
-**Apps field:** select Visual Studio Code, Postman and Google Chrome. The same three go in TaskRecorder's Used Apps and in Metadata.rtf.
+**Apps field:** select Visual Studio Code, Postman and Brave Browser (if Brave isn't in the list, choose Other and type Brave Browser). The same three go in TaskRecorder's Used Apps and in Metadata.rtf.
 
 ## 2. One-time setup (before recording; nothing here is recorded)
 
@@ -79,9 +76,9 @@ Do the full pre-check list in `../ODIN_PLAYBOOK.md`, plus:
 - [ ] Examlo dev server stopped (port 5173).
 - [ ] VS Code: `order-lookup` open, no editor tabs, then minimised.
 - [ ] Postman: empty workspace open, then minimised.
-- [ ] Chrome: one window, one blank tab, DevTools closed, then minimised.
+- [ ] Brave: one window, one blank tab, Leo hidden, DevTools closed, then minimised.
 - [ ] Goal doc in Google Docs with only the Goal text, behind TaskRecorder.
-- [ ] TaskRecorder: Task Description = Goal (exact); Used Apps = Visual Studio Code, Postman, Google Chrome.
+- [ ] TaskRecorder: Task Description = Goal (exact); Used Apps = Visual Studio Code, Postman, Brave Browser.
 - [ ] This file, NARRATION.md, REFERENCE.md and the playbook closed. The cue card is on paper or your phone.
 
 ## 4. Run-sheet
@@ -100,15 +97,15 @@ For each step: **Do** is the action, **Why** is the reasoning to explain, and **
    **Why:** newest-first plus orders arriving at the top is a warning sign for offset paging.
 3. **Do:** NPM Scripts → ▷ `dev:api`, then ▷ `dev:web`.
 
-### C. Reproduce (about 3:30–8:00) · Chrome, Postman, Chrome
+### C. Reproduce (about 3:30–8:00) · Brave, Postman, Brave
 
-1. **Do (Chrome, LOOKUP):** open the Vite URL with an empty search. You see the 20 newest orders.
+1. **Do (Brave, LOOKUP):** open the Vite URL with an empty search. You see the 20 newest orders.
 2. **Do (Postman, CREATE):**
    - New → HTTP → `POST http://localhost:3001/api/dev/simulate-orders?count=3` → **Send**.
    - **See:** 201 with three new IDs.
    - **Save** it into a new collection named **Order Lookup API**.
    - Collection → **Variables** → add `baseUrl` = `http://localhost:3001`. Change the request URL to start with `{{baseUrl}}`.
-3. **Do (Chrome, LOOKUP):** click **Load more**. Open DevTools → **Console**.
+3. **Do (Brave, LOOKUP):** click **Load more**. Open DevTools → **Console**.
    **See:** the same IDs twice around rows 18–23, and "Encountered two children with the same key".
    **Why:** three new orders landed on top, pushing everything down three places. `offset=20` now starts three rows too early.
 
@@ -167,13 +164,13 @@ For each step: **Do** is the action, **Why** is the reasoning to explain, and **
      - show the button when `nextCursor` exists.
    **Why:** the old check `orders.length < total` breaks once new orders raise `total`. Let the server say whether there's more.
 
-### H. Verify in the browser (about 32:00–34:30) · Chrome, Postman, Chrome
+### H. Verify in the browser (about 32:00–34:30) · Brave, Postman, Brave
 
-1. **Do (Chrome):** reload.
+1. **Do (Brave):** reload.
 2. **Do (Postman):** send **Simulate 3 orders**.
-3. **Do (Chrome):** click **Load more**.
+3. **Do (Brave):** click **Load more**.
    **See:** IDs continue without repeats, and the Console is clean.
-4. **Do (Chrome):** search `al` (82 orders, so about four clicks) and click **Load more** until the button disappears at the end of the list.
+4. **Do (Brave):** search `al` (82 orders, so about four clicks) and click **Load more** until the button disappears at the end of the list.
 
 ### I. Export and hand off (about 34:30–38:00)
 
@@ -186,7 +183,7 @@ For each step: **Do** is the action, **Why** is the reasoning to explain, and **
 
 ### J. Epilogue (about 38:00–41:30, no mouse)
 
-- **Verification:** the collection failing first and passing after the fix; repeated runs; continuous IDs in Chrome with a clean Console; the optional `createdAt`-only failure if you showed it.
+- **Verification:** the collection failing first and passing after the fix; repeated runs; continuous IDs in Brave with a clean Console; the optional `createdAt`-only failure if you showed it.
 - **Key decisions:**
   - Test-first.
   - Cursor over offset.
@@ -205,8 +202,8 @@ For each step: **Do** is the action, **Why** is the reasoning to explain, and **
 ```
 A  Goal doc → "I will be beginning my task soon. Here is the workflow I have in mind." → minimise
 B  Ticket preview (never repeats AND never skips) → README offset/limit, newest first → ▷ dev:api ▷ dev:web
-C  Chrome list → Postman POST simulate 3 → save to "Order Lookup API" + baseUrl var
-   → Chrome Load more → dupes rows 18–23 + Console key error → "list shifted by 3"
+C  Brave list → Postman POST simulate 3 → save to "Order Lookup API" + baseUrl var
+   → Brave Load more → dupes rows 18–23 + Console key error → "list shifted by 3"
 D  Snapshot 40 / Page 1 offset 0 / Simulate / Page 2 offset 20 → scripts → Runner → Page 2 FAILS
 E  offset vs cursor → orders.js newestFirst (createdAt, id) → encode/decode cursor, 400,
    filter after cursor, nextCursor, drop offset → save (API restarts)
@@ -235,7 +232,7 @@ J  Epilogue 3–4 min: verify · decisions · limits · common mistake
 2. Zip the folder as `Deliverables.zip`. Keep `Metadata.rtf`, `video.mp4` and the TaskRecorder archive separate.
 3. **Metadata.rtf:**
    - **Topology:** match what you actually did. If you follow the run-sheet it is:
-     `Visual Studio Code (LOOKUP) -> Google Chrome (LOOKUP) -> Postman (CREATE) -> Google Chrome (LOOKUP) -> Postman (CREATE) -> Visual Studio Code (MODIFY) -> Postman (MODIFY) -> Visual Studio Code (MODIFY) -> Google Chrome (LOOKUP) -> Postman (LOOKUP) -> Google Chrome (LOOKUP) -> Postman (CREATE) -> Visual Studio Code (CREATE)`
+     `Visual Studio Code (LOOKUP) -> Brave Browser (LOOKUP) -> Postman (CREATE) -> Brave Browser (LOOKUP) -> Postman (CREATE) -> Visual Studio Code (MODIFY) -> Postman (MODIFY) -> Visual Studio Code (MODIFY) -> Brave Browser (LOOKUP) -> Postman (LOOKUP) -> Brave Browser (LOOKUP) -> Postman (CREATE) -> Visual Studio Code (CREATE)`
    - **Request:** your Goal, exactly as in TaskRecorder.
    - **Task Description:** a numbered outline built from the 7 Steps in your idea, adjusted to what you actually did.
 4. **AI disclosure:** `input 1` (the app and ticket) was AI-generated before recording; no AI was used during the recording.

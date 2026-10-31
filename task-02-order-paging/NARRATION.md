@@ -33,10 +33,10 @@ Then minimise the Goal doc. Don't read or explain the Goal.
 **Start the app**
 - I'm starting the API and the web app from the NPM Scripts panel: the play button next to `dev:api`, then next to `dev:web`.
 
-## C. Reproduce the bug (Chrome, Postman, Chrome)
+## C. Reproduce the bug (Brave, Postman, Brave)
 
-**Load the list in Chrome**
-- I'm opening the app in Chrome with an empty search. These are the 20 newest orders.
+**Load the list in Brave**
+- I'm opening the app in Brave with an empty search. These are the 20 newest orders.
 
 **Simulate new orders in Postman**
 - To simulate new orders arriving, I'll use Postman. I'm creating a new HTTP request: POST to `/api/dev/simulate-orders` with `count=3`, and clicking Send.
@@ -44,8 +44,8 @@ Then minimise the Goal doc. Don't read or explain the Goal.
 - I'll save this request in a new collection called "Order Lookup API", because I'll reuse it in my tests.
 - I'm adding a collection variable called `baseUrl`, set to `localhost:3001`, and changing the request to use it. That way every request in the collection points at the same server.
 
-**See the duplicates in Chrome**
-- Back in Chrome, without refreshing, I'm clicking Load more. That's what an agent does after looking at the list while new orders came in.
+**See the duplicates in Brave**
+- Back in Brave, without refreshing, I'm clicking Load more. That's what an agent does after looking at the list while new orders came in.
 - Here it is. These order IDs appear twice: at the end of page one and again at the top of page two. *(Read out the repeated IDs.)*
 - I'm opening the DevTools Console. React warns about "two children with the same key", which means the same order is being rendered twice.
 - Why: three new orders landed at the top, so everything moved down three places. Page two asked the server to skip 20 orders, but skipping 20 now lands three rows too early. So the last three orders of page one come back again. And if orders ever left the list, offset paging would skip orders instead.
@@ -115,11 +115,11 @@ Then minimise the Goal doc. Don't read or explain the Goal.
 - In `OrderSearch.jsx`, I add `nextCursor` state. Both the search and Load more save the `nextCursor` from the response, and Load more sends it back.
 - The Load more button used to show while the number of loaded orders was less than the total. But the total grows when new orders arrive, so the button could stay even at the end of the list. Now it shows only while the server returns a next cursor. The server decides whether there's more.
 
-## H. Verify in the browser (Chrome, Postman, Chrome)
+## H. Verify in the browser (Brave, Postman, Brave)
 
 **No repeats**
-- In Chrome, I'm reloading the page. In Postman, I send Simulate again, to add three orders while I'm looking at page one.
-- Back in Chrome, I click Load more. The IDs continue straight on from page one, with no repeats, and the Console has no duplicate-key warnings.
+- In Brave, I'm reloading the page. In Postman, I send Simulate again, to add three orders while I'm looking at page one.
+- Back in Brave, I click Load more. The IDs continue straight on from page one, with no repeats, and the Console has no duplicate-key warnings.
 
 **End of the list**
 - To check the end of the list quickly, I'll search "al", which matches about 80 orders. I click Load more until the button disappears.
@@ -144,7 +144,7 @@ What to put under each heading (your own words):
 | Summary | Load more repeated or skipped orders while new orders arrived. Fixed with cursor paging. |
 | Root cause | Offset paging counts positions in a newest-first list. New orders shift every position, so the next page overlaps the previous one. |
 | Fix | Opaque cursor on (createdAt, id), the same keys as the sort, with the ID breaking timestamp ties; 400 for a bad cursor; nextCursor drives the Load more button. |
-| How I verified | The Postman collection failed before the fix and passes after it, on repeated runs; Chrome shows continuous IDs and no Console warnings. |
+| How I verified | The Postman collection failed before the fix and passes after it, on repeated runs; Brave shows continuous IDs and no Console warnings. |
 | Known limitations | New orders only appear after a refresh; the README still documents offset; Load more isn't cancelled when the search changes. |
 
 **Commit**
@@ -160,7 +160,7 @@ Cover these in order, in your own words, and speak about what really happened in
 **2. How I verified it**
 - I wrote the test first and saw it fail on the old code.
 - After the fix, all five tests passed, on more than one run.
-- In Chrome, IDs continue with no repeats and the Console is clean.
+- In Brave, IDs continue with no repeats and the Console is clean.
 - If you did the optional step: the `createdAt`-only cursor failed, because it skipped a tied order.
 
 **3. Approach and key decisions**

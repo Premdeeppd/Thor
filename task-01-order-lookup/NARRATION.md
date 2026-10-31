@@ -36,18 +36,18 @@ Then minimise the Goal doc. Don't read or explain the Goal.
 - I'm clicking the play button next to `dev:api` to start the Express API. It's listening on port 3001.
 - Now the play button next to `dev:web` for the React front end. Vite shows me the local address.
 
-## C. Reproduce the bug (Chrome)
+## C. Reproduce the bug (Brave)
 
-- Now I'll reproduce the bug in Chrome. I'm opening the local address Vite printed.
+- Now I'll reproduce the bug in Brave. I'm opening the local address Vite printed.
 - The table shows the newest orders. I'll click in the search box and type "alice" at a normal speed.
 - Here's the bug. The line above the table says "for alice", but the rows are other customers, like Elena Fischer and Noah Rossi. None of them is Alice, and nothing is highlighted.
 - Let me clear the box and type "alice" very slowly, one letter at a time. *(type slowly)* Now it's correct: only Alice's orders, with "alice" highlighted.
 - So the same text gives a different result depending on how fast I type. That usually means a timing problem: the answers are coming back in a different order than the requests went out. I'll check that in DevTools.
 
-## D. Find the cause (Chrome DevTools)
+## D. Find the cause (Brave DevTools)
 
 **Network panel**
-- I'm opening Chrome DevTools from the View menu, Developer, Developer Tools.
+- I'm opening DevTools in Brave from the View menu, Developer, Developer Tools.
 - I'm on the Network tab. I'm filtering to Fetch/XHR so I only see the API calls, and clearing the log.
 - I'll clear the search box and type "alice" again at normal speed.
 - There are five requests, one per letter: a, al, ali, alic and alice. Every keystroke sends a new search.
@@ -86,10 +86,10 @@ Then minimise the Goal doc. Don't read or explain the Goal.
 - I'm leaving Load more as it is. Paging is a separate ticket.
 - Saving the files. Vite reloads the page automatically.
 
-## F. Verify the fix (Chrome, then VS Code and back)
+## F. Verify the fix (Brave, then VS Code and back)
 
 **Cancelled requests**
-- Back in Chrome, I'm reloading the page with the Network panel still open.
+- Back in Brave, I'm reloading the page with the Network panel still open.
 - I'm typing "alice" at normal speed. Now the earlier requests show as "canceled" in red, and the table has only Alice's orders, highlighted: 9 orders.
 - I'll try it a few more times, and with other names like "omar" and "priya". It's correct every time.
 - There's also a cancelled request right when the page loads. That's React StrictMode in development: it mounts the component twice on purpose, so the first request gets cancelled. That's expected.
@@ -104,7 +104,7 @@ Then minimise the Goal doc. Don't read or explain the Goal.
 **Error path**
 - The ticket also says agents must still see an error if a search fails. I'm now ignoring AbortError, so I want to make sure I didn't hide real errors.
 - In VS Code, I'm selecting the `dev:api` terminal and clicking the trash icon to stop the API.
-- In Chrome, I'll type one more letter. There's the red message: "Order search failed (502)". Real errors still reach the agent.
+- In Brave, I'll type one more letter. There's the red message: "Order search failed (502)". Real errors still reach the agent.
 - One thing I notice: the old rows are still visible under the error. That's not part of this ticket, but I'll note it as a known limitation.
 
 ## G. Review, write notes, commit (VS Code)
@@ -129,7 +129,7 @@ Now I'm writing `FIX_NOTES.md` for the next developer. What to put under each he
 
 **Commit and final check**
 - I'm staging all changes and committing with the message "Fix stale search results (SUP-1427)".
-- One last check in Chrome: typing "alice" quickly. Only Alice's orders. The task is done.
+- One last check in Brave: typing "alice" quickly. Only Alice's orders. The task is done.
 
 ## H. Epilogue (3–4 minutes, no mouse)
 

@@ -48,12 +48,14 @@ Then minimise the Goal doc. Don't read or explain the Goal.
 
 **Network panel**
 - I'm opening DevTools in Brave from the View menu, Developer, Developer Tools.
-- I'm on the Network tab. I'm filtering to Fetch/XHR so I only see the API calls, and clearing the log.
+- I'm on the Network tab. I'm ticking Disable cache, so every search really goes to the server, and filtering to Fetch/XHR so I only see the API calls.
+- I'm right-clicking the column header and turning on the Waterfall column. That gives every request its own timing bar, so I can see when each one started and finished. Then I clear the log.
 - I'll clear the search box and type "alice" again at normal speed.
 - There are five requests, one per letter: a, al, ali, alic and alice. Every keystroke sends a new search.
 - I'm clicking the first one, `q=a`. In Preview, the query is "a", and it matched all 320 orders, because every email ends in example.com, which contains an "a".
 - In the Timing tab, it waited about 1.4 seconds for the server. The "alice" request took only about 0.14 seconds.
-- In the Waterfall column, the bar for "a" ends last. So the first request sent is the last answer to arrive.
+- In the Waterfall column, each bar starts when the request was sent and ends when its answer arrived. The bar for "a" is the longest and ends furthest right. So the first request sent is the last answer to arrive.
+- The Time column says the same in numbers: about 1.4 seconds for "a", and about 140 milliseconds for "alice".
 - That matches the README. A one-letter search matches everything, so it's the slowest. And nothing in the client throws away answers to old searches, so whichever answer arrives last wins.
 
 **Logpoint in Sources**

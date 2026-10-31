@@ -101,9 +101,10 @@ For each step: **Do** is the action, **Why** is the reasoning to explain, and **
 ### D. Diagnose (about 6:30–14:30) · Brave DevTools
 
 1. **Network panel** (about 4 min)
-   - **Do:** View → Developer → Developer Tools → **Network** → filter **Fetch/XHR** → clear the log (🚫) → clear the search box → type `alice` at normal speed.
+   - **Do:** View → Developer → Developer Tools → **Network** → tick **Disable cache** → filter **Fetch/XHR** → right-click any column header (for example **Name**) and tick **Waterfall**, so every request gets its own timing bar → clear the log (🚫) → clear the search box → type `alice` at normal speed.
    - **See:** five requests: `q=a`, `q=al`, `q=ali`, `q=alic`, `q=alice`.
-   - **Do:** click `q=a` → **Preview** shows `"query": "a"` and 320 matches → **Timing** shows about 1.4 s waiting for the server. Click `q=alice`: about 0.14 s. In the **Waterfall** column, the `a` bar ends last.
+   - **Do:** click `q=a` → **Preview** shows `"query": "a"` and 320 matches → **Timing** shows about 1.4 s waiting for the server. Click `q=alice`: about 0.14 s. In the **Waterfall** column, each bar runs from when the request was sent to when its answer arrived: the `a` bar is the longest and ends furthest right. The **Time** column shows the same in numbers (about 1.4 s against 143 ms).
+   - **Note:** with **Disable cache** ticked, the requests show status 200. Without it, repeat searches show 304: the browser re-checked a copy it already had. The server still ran the search, so the timing is the same, but 200 is simpler to explain.
    - **Why:** the first request was sent first but answered last, because a one-letter search matches everything and the server is slower for broad searches. Nothing in the client says "ignore answers to old searches".
 2. **Logpoint in Sources** (about 3 min)
    - **Do:** **Sources** → Page tree → `localhost:5173` → `src` → `OrderSearch.jsx`. Find `setOrders(data.orders);` inside the effect. Right-click its line number → **Add logpoint…** → type `'applied results for', data.query` → Enter. Open the **Console** (DevTools ⋮ menu → Show console drawer), clear the box, and type `alice` again.
@@ -172,7 +173,7 @@ Talk from what actually happened in *your* recording:
 A  Goal doc → "I will be beginning my task soon. Here is the workflow I have in mind." → minimise
 B  Ticket preview (2 expectations) → README "broad searches slower" → NPM Scripts ▷ dev:api ▷ dev:web
 C  type alice fast → wrong rows → slowly → right rows → timing problem
-D  Network Fetch/XHR → 5 requests → q=a Preview/Timing 1.4 s → Waterfall: a ends last
+D  Network: Disable cache, Fetch/XHR, right-click header → Waterfall → 5 requests → q=a Preview/Timing 1.4 s → a bar ends last
    → Sources logpoint on setOrders: 'applied results for', data.query → last = a
    → Export HAR (before-fix)
 E  options: debounce / ignore flag / AbortController → api.js signal

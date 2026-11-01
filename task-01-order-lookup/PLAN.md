@@ -7,7 +7,7 @@ Status (31 Oct 2026): the input is built, and the bug and its fix are tested in 
 | Domain | DSD: Software engineering |
 | Role | Full-stack engineer (React + Node/Express) on an internal tools team |
 | Apps, the same list everywhere | **Visual Studio Code · Brave Browser** |
-| Planned length | About 32–36 min at a relaxed, explaining pace: intro 0:20, work about 29 min, epilogue about 3:30 |
+| Planned length | About 35–39 min at a relaxed, explaining pace: intro 0:20, work about 33 min, epilogue about 3:30 |
 | Input | `inputs/input 1.zip`: the Order Lookup app with seeded synthetic orders, a README and support ticket `docs/SUP-1427.md`. AI-generated, so disclose it. |
 | Outputs | `artifact 1.har` (network log before the fix), `artifact 2.har` (after the fix), `final output 1.zip` (fixed repo) |
 
@@ -107,29 +107,29 @@ For each step: **Do** is the action, **Why** is the reasoning to explain, and **
    - **Note:** with **Disable cache** ticked, the requests show status 200. Without it, repeat searches show 304: the browser re-checked a copy it already had. The server still ran the search, so the timing is the same, but 200 is simpler to explain.
    - **Why:** the first request was sent first but answered last, because a one-letter search matches everything and the server is slower for broad searches. Nothing in the client says "ignore answers to old searches".
 2. **Logpoint in Sources** (about 3 min)
-   - **Do:** **Sources** → Page tree → `localhost:5173` → `src` → `OrderSearch.jsx`. Find `setOrders(data.orders);` inside the effect. Right-click its line number → **Add logpoint…** → type `'applied results for', data.query` → Enter. Open the **Console** (DevTools ⋮ menu → Show console drawer), clear the box, and type `alice` again.
+   - **Do:** **Sources** → Page tree → `localhost:5173` → `src` → the *italic* `OrderSearch.jsx`. Every file shows twice: the italic one is your original code, rebuilt from Vite's source map; the plain one is the compiled JavaScript Vite serves. Find `setOrders(data.orders);` inside the effect (line 19, not the one in `loadMore`). Right-click its line number → **Add logpoint…** → type `'applied results for', data.query` → Enter. The marker turns pink. If you get a blue marker instead, that's a normal breakpoint that pauses the page: click it to remove it, then use Add logpoint… Open the **Console** (DevTools ⋮ menu → Show console drawer), clear the box, and type `alice` again.
    - **See:** console lines in arrival order, ending with *applied results for a*.
    - **Why:** this proves it at the state level: the last response to arrive overwrites the table, even though it's for an old search.
 3. **Save evidence** (about 1 min)
    - **Do:** Network panel → download icon → **Export HAR**. Save to Downloads as `before-fix.har`. It becomes `artifact 1.har`.
 
-### E. Fix (about 14:30–21:00) · VS Code: MODIFY
+### E. Fix (about 14:30–23:30) · VS Code: MODIFY
 
-1. **Do:** open `client/src/api.js` and `client/src/OrderSearch.jsx` from the Explorer.
+1. **Do:** open `client/src/OrderSearch.jsx` and `client/src/api.js` from the Explorer. Walk through the search effect first: it runs on every keystroke, and nothing cancels an older request or checks which search an answer is for.
 2. **Why (explain the options before choosing):**
    - **Debounce:** fewer requests, but a slow response can still land late. It makes the race rarer and hides it, without fixing it.
-   - **An "ignore" flag in the effect cleanup:** fixes what the agent sees, but the old requests keep running on the server.
-   - **AbortController:** cancels the old request *and* guarantees its result never reaches the table. Choose this one.
-3. **Do:**
-   - `api.js`: accept a `signal` and pass it to `fetch`.
+   - **An "ignore" flag in the effect cleanup:** fixes what the agent sees, but the browser still waits for and downloads every old answer, only to throw it away.
+   - **AbortController:** cancels the old request in the browser *and* guarantees its result never reaches the table. DevTools marks it as canceled, so the fix is easy to prove. Choose this one.
+3. **Do**, in this order:
+   - `api.js`: add an optional `signal` parameter and pass it to `fetch` as `{ signal }`.
    - In the search `useEffect`:
-     - create an `AbortController` and pass `controller.signal`;
+     - at the top, create an `AbortController`, and pass `signal: controller.signal` to `fetchOrders`;
+     - at the end, add `return () => controller.abort();` with a one-line comment saying why, so the next keystroke cancels this request;
      - in `.catch`, return early when `err.name === 'AbortError'` (a cancel isn't an error for the agent);
-     - add `return () => controller.abort();` so the next keystroke cancels this request.
-   - Move `setLoading(false)` out of `.finally` into the success and real-error paths. Otherwise a cancelled request switches "Searching…" off while the newer search is still loading.
-   - Leave `loadMore` alone. Paging is a separate ticket.
+     - move `setLoading(false)` out of `.finally` into the success and real-error paths. Otherwise a cancelled request turns the loading state off while the newer search is still loading.
+   - Leave `loadMore` alone. It's outside this ticket; note it as a known limitation.
 
-### F. Verify (about 21:00–27:00) · Brave: LOOKUP, then VS Code and back
+### F. Verify (about 23:30–29:30) · Brave: LOOKUP, then VS Code and back
 
 1. **Do:** reload the page with the Network panel open and type `alice` at normal speed.
    **See:** earlier requests show **(canceled)** in red, and only Alice rows appear, highlighted. Try it three or four times, and with other names (`omar`, `priya`).
@@ -143,7 +143,7 @@ For each step: **Do** is the action, **Why** is the reasoning to explain, and **
    - **Why:** you ignore only `AbortError`, so real failures still reach the agent, as the ticket asks.
    - Point out the old rows still showing under the error. That's a known limitation for FIX_NOTES and the epilogue.
 
-### G. Hand off (about 27:00–31:00) · VS Code: CREATE
+### G. Hand off (about 29:30–33:30) · VS Code: CREATE
 
 1. **Do:** NPM Scripts → ▷ `dev:api` to restart the API.
 2. **Do:** Source Control view → click each changed file and walk through the diff out loud.
@@ -151,7 +151,7 @@ For each step: **Do** is the action, **Why** is the reasoning to explain, and **
 4. **Do:** stage all (＋), write the message "Fix stale search results (SUP-1427)", then **Commit**.
 5. **Do (Brave, LOOKUP):** one last `alice` check. **Stop here; don't keep tinkering.**
 
-### H. Epilogue (about 31:00–34:30, no mouse)
+### H. Epilogue (about 33:30–37:00, no mouse)
 
 Talk from what actually happened in *your* recording:
 
@@ -176,8 +176,8 @@ C  type alice fast → wrong rows → slowly → right rows → timing problem
 D  Network: Disable cache, Fetch/XHR, right-click header → Waterfall → 5 requests → q=a Preview/Timing 1.4 s → a bar ends last
    → Sources logpoint on setOrders: 'applied results for', data.query → last = a
    → Export HAR (before-fix)
-E  options: debounce / ignore flag / AbortController → api.js signal
-   → effect: controller, signal, skip AbortError, cleanup abort, move setLoading(false)
+E  current effect: no cancel, no check → options: debounce / ignore flag / AbortController
+   → api.js signal → effect: controller, signal, cleanup abort → skip AbortError → move setLoading(false)
 F  reload → (canceled) → only Alice ×3 + other names → logpoint last = alice → Export HAR (after-fix)
    → kill dev:api → type → "Order search failed (502)" → note old rows
 G  ▷ dev:api → Source Control diff → FIX_NOTES.md → commit → final check → STOP

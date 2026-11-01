@@ -101,13 +101,13 @@ For each step: **Do** is the action, **Why** is the reasoning to explain, and **
 ### D. Diagnose (about 6:30–14:30) · Brave DevTools
 
 1. **Network panel** (about 4 min)
-   - **Do:** View → Developer → Developer Tools → **Network** → tick **Disable cache** → filter **Fetch/XHR** → right-click any column header (for example **Name**) and tick **Waterfall**, so every request gets its own timing bar → clear the log (🚫) → clear the search box → type `alice` at normal speed.
+   - **Do:** View → Developer → Developer Tools → **Network** → tick **Disable cache** → filter **Fetch/XHR** → right-click any column header (for example **Name**) and tick **Waterfall**, so every request gets its own timing bar → clear the search box and wait for the full list to come back → clear the log (🚫) → type `alice` at normal speed. Clear the box *before* the log, or the empty search shows up as a sixth request.
    - **See:** five requests: `q=a`, `q=al`, `q=ali`, `q=alic`, `q=alice`.
    - **Do:** click `q=a` → **Preview** shows `"query": "a"` and 320 matches → **Timing** shows about 1.4 s waiting for the server. Click `q=alice`: about 0.14 s. In the **Waterfall** column, each bar runs from when the request was sent to when its answer arrived: the `a` bar is the longest and ends furthest right. The **Time** column shows the same in numbers (about 1.4 s against 143 ms).
    - **Note:** with **Disable cache** ticked, the requests show status 200. Without it, repeat searches show 304: the browser re-checked a copy it already had. The server still ran the search, so the timing is the same, but 200 is simpler to explain.
    - **Why:** the first request was sent first but answered last, because a one-letter search matches everything and the server is slower for broad searches. Nothing in the client says "ignore answers to old searches".
 2. **Logpoint in Sources** (about 3 min)
-   - **Do:** **Sources** → Page tree → `localhost:5173` → `src` → the *italic* `OrderSearch.jsx`. Every file shows twice: the italic one is your original code, rebuilt from Vite's source map; the plain one is the compiled JavaScript Vite serves. Find `setOrders(data.orders);` inside the effect (line 19, not the one in `loadMore`). Right-click its line number → **Add logpoint…** → type `'applied results for', data.query` → Enter. The marker turns pink. If you get a blue marker instead, that's a normal breakpoint that pauses the page: click it to remove it, then use Add logpoint… Open the **Console** (DevTools ⋮ menu → Show console drawer), clear the box, and type `alice` again.
+   - **Do:** **Sources** → Page tree → `localhost:5173` → `src` → the *italic* `OrderSearch.jsx`. Every file shows twice: the italic one is your original code, rebuilt from Vite's source map; the plain one is the compiled JavaScript Vite serves. Find `setOrders(data.orders);` inside the effect (line 19, not the one in `loadMore`). Right-click its line number → **Add logpoint…** → type `'applied results for', data.query` → Enter. The marker turns pink. If you get a blue marker instead, that's a normal breakpoint that pauses the page: click it to remove it, then use Add logpoint… Open the **Console** drawer (press Esc, or DevTools ⋮ menu → Show console drawer). Clear the box and wait for the full list, clear the console (🚫), then type `alice` again.
    - **See:** console lines in arrival order, ending with *applied results for a*.
    - **Why:** this proves it at the state level: the last response to arrive overwrites the table, even though it's for an old search.
 3. **Save evidence** (about 1 min)
@@ -132,10 +132,10 @@ For each step: **Do** is the action, **Why** is the reasoning to explain, and **
 ### F. Verify (about 23:30–29:30) · Brave: LOOKUP, then VS Code and back
 
 1. **Do:** reload the page with the Network panel open and type `alice` at normal speed.
-   **See:** earlier requests show **(canceled)** in red, and only Alice rows appear, highlighted. Try it three or four times, and with other names (`omar`, `priya`).
-   **Why:** mention that the first request on page load also shows canceled in development. That's React StrictMode mounting twice, and it's expected.
-2. **Do:** check the logpoint. If it vanished after the code change, add it again on the `setOrders(data.orders);` line. Type `alice`.
-   **See:** the last console line is always *applied results for alice*. Cancelled searches never appear.
+   **See:** earlier requests, including the slow `q=a`, show **(canceled)** in red, and only Alice rows appear, highlighted. Try it three or four times, and with other names (`omar`, `priya`).
+   **Why:** mention that the first request on page load also shows canceled in development. That's React StrictMode running the effect twice, so your own cleanup cancels the first request. It's expected.
+2. **Do:** **Sources** → the *italic* `OrderSearch.jsx`. The fix added a line above it, so `setOrders(data.orders);` is now **line 20**. If the old pink marker is still on line 19 (now the `.then` line), click it to remove it; if it's gone, skip that. Right-click line 20 → **Add logpoint…** → `'applied results for', data.query` → Enter. Clear the box and wait for the full list, clear the console (🚫), type `alice`.
+   **See:** the last console line is always *applied results for alice*, often the only line. Cancelled searches never appear.
 3. **Do:** Network panel → **Export HAR** → `after-fix.har`. It becomes `artifact 2.har`.
 4. **Error path** · VS Code: LOOKUP, then Brave: LOOKUP
    - **Do:** in VS Code's terminal panel, select the `dev:api` terminal and click the trash icon to stop the API. Back in Brave, type one more letter.
@@ -147,7 +147,7 @@ For each step: **Do** is the action, **Why** is the reasoning to explain, and **
 
 1. **Do:** NPM Scripts → ▷ `dev:api` to restart the API.
 2. **Do:** Source Control view → click each changed file and walk through the diff out loud.
-3. **Do:** create `FIX_NOTES.md` with these headings: Summary · Root cause · Fix · How I verified · Known limitations.
+3. **Do:** Explorer → New File at the project root → `FIX_NOTES.md` with these headings: Summary · Root cause · Fix · How I verified · Known limitations. Say each section out loud as you type it.
 4. **Do:** stage all (＋), write the message "Fix stale search results (SUP-1427)", then **Commit**.
 5. **Do (Brave, LOOKUP):** one last `alice` check. **Stop here; don't keep tinkering.**
 
@@ -173,12 +173,14 @@ Talk from what actually happened in *your* recording:
 A  Goal doc → "I will be beginning my task soon. Here is the workflow I have in mind." → minimise
 B  Ticket preview (2 expectations) → README "broad searches slower" → NPM Scripts ▷ dev:api ▷ dev:web
 C  type alice fast → wrong rows → slowly → right rows → timing problem
-D  Network: Disable cache, Fetch/XHR, right-click header → Waterfall → 5 requests → q=a Preview/Timing 1.4 s → a bar ends last
-   → Sources logpoint on setOrders: 'applied results for', data.query → last = a
+D  Network: Disable cache, Fetch/XHR, right-click header → Waterfall → clear box, wait, clear log → type alice
+   → 5 requests → q=a Preview/Timing 1.4 s → a bar ends last
+   → Sources logpoint on line 19 setOrders: 'applied results for', data.query → Esc console → last = a
    → Export HAR (before-fix)
 E  current effect: no cancel, no check → options: debounce / ignore flag / AbortController
    → api.js signal → effect: controller, signal, cleanup abort → skip AbortError → move setLoading(false)
-F  reload → (canceled) → only Alice ×3 + other names → logpoint last = alice → Export HAR (after-fix)
+F  reload → (canceled) → only Alice ×3 + other names → logpoint: remove old (19), add on 20 → last = alice
+   → Export HAR (after-fix)
    → kill dev:api → type → "Order search failed (502)" → note old rows
 G  ▷ dev:api → Source Control diff → FIX_NOTES.md → commit → final check → STOP
 H  Epilogue 3–4 min: verify · decisions · limits · common mistake
@@ -188,7 +190,7 @@ H  Epilogue 3–4 min: verify · decisions · limits · common mistake
 
 - **The race doesn't reproduce:** you typed slower than 1.4 s in total. Type at normal speed. Don't paste; pasting sends a single request.
 - **Port 5173 is busy:** use whatever URL Vite prints and say why it changed.
-- **The logpoint doesn't log:** check it's on the `setOrders(data.orders);` line inside the effect (not the one in `loadMore`), then reload.
+- **The logpoint doesn't log:** check it's on the `setOrders(data.orders);` line inside the effect (line 19 before the fix, line 20 after; not the one in `loadMore`), then reload.
 - **A mistake on camera:** fix it and explain what happened. That's real debugging and fine to show. Don't restart the recording for small slips.
 
 ## 7. After recording

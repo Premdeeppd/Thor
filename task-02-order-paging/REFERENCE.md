@@ -4,7 +4,7 @@
 >
 > Rehearse until you can write these changes yourself and explain every line.
 
-This is a working solution, tested on 31 Oct 2026 against the starter in `inputs/input 1.zip`. Three files change.
+This is a working solution, tested on 2 Nov 2026 against the starter in `inputs/input 1.zip`, with the Postman collection run in newman 6.2.3 against the real API. Four files change.
 
 ## `client/src/api.js`
 
@@ -51,7 +51,7 @@ export default function OrderSearch() {
         setError(err.message);
         setLoading(false);
       });
-    // A newer query replaces this one, so cancel it before its late response can overwrite newer results.
+    // Cancel the old search so it can't overwrite newer results.
     return () => controller.abort();
   }, [query]);
 
@@ -98,11 +98,19 @@ Changes from the starter:
 - `loadMore` sends the cursor instead of `offset: orders.length`.
 - The button shows when `nextCursor` exists, instead of `orders.length < total`. The old count check breaks once new orders raise `total`.
 
+## `server/orders.js`
+
+The only change is `export` in front of the sort comparator, so the API can reuse it:
+
+```js
+export const newestFirst = (a, b) => b.createdAt.localeCompare(a.createdAt) || b.id.localeCompare(a.id);
+```
+
 ## `server/index.js`
 
 ```js
 import express from 'express';
-import { createOrderStore } from './orders.js';
+import { createOrderStore, newestFirst } from './orders.js';
 
 const PORT = Number(process.env.PORT) || 3001;
 const MAX_PAGE_SIZE = 100;
@@ -116,12 +124,15 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 // We mimic that locally so timings behave like the real service.
 const searchLatency = (matchCount) => Math.min(100 + matchCount * 4, 1500);
 
-// Opaque cursor holding the sort key (createdAt, id) of the last order the client received.
-const encodeCursor = (order) => Buffer.from(JSON.stringify([order.createdAt, order.id])).toString('base64url');
+const encodeCursor = (o) =>
+  Buffer.from(JSON.stringify([o.createdAt, o.id])).toString('base64url');
 
 function decodeCursor(cursor) {
-  const [createdAt, id] = JSON.parse(Buffer.from(cursor, 'base64url').toString('utf8'));
-  if (typeof createdAt !== 'string' || typeof id !== 'string') throw new Error('Invalid cursor');
+  const json = Buffer.from(cursor, 'base64url').toString();
+  const [createdAt, id] = JSON.parse(json);
+  if (typeof createdAt !== 'string' || typeof id !== 'string') {
+    throw new Error('Invalid cursor');
+  }
   return { createdAt, id };
 }
 
@@ -130,20 +141,17 @@ app.get('/api/orders', async (req, res) => {
   const limit = Math.min(Math.max(Number(req.query.limit) || 20, 1), MAX_PAGE_SIZE);
 
   let after = null;
-  if (req.query.cursor) {
-    try {
-      after = decodeCursor(String(req.query.cursor));
-    } catch {
-      return res.status(400).json({ error: 'Invalid cursor' });
-    }
+  try {
+    if (req.query.cursor) after = decodeCursor(req.query.cursor);
+  } catch {
+    return res.status(400).json({ error: 'Invalid cursor' });
   }
 
   const matches = store.search(q);
   await sleep(searchLatency(matches.length));
 
-  // Same ordering as the sort: newest first, order ID breaks ties between equal timestamps.
   const remaining = after
-    ? matches.filter((o) => o.createdAt < after.createdAt || (o.createdAt === after.createdAt && o.id < after.id))
+    ? matches.filter((o) => newestFirst(o, after) > 0)
     : matches;
   const orders = remaining.slice(0, limit);
 
@@ -168,89 +176,69 @@ app.listen(PORT, () => {
 });
 ```
 
+There are no new comments. Explain the reasons out loud instead of typing them.
+
 Points worth being able to explain:
-- `newestFirst` in `server/orders.js` sorts by `createdAt`, then by order ID. The cursor must use exactly the same keys in the same order.
-- Marketplace imports share timestamps. In this data, orders 20 and 21 have the **same** `createdAt`, right at the page 1 / page 2 boundary. A cursor on `createdAt` alone therefore skips order 21, and the snapshot test catches it.
-- Comparing ISO timestamp strings works because they all share one UTC format, and the IDs have a fixed width. In a real database you'd compare typed columns, backed by an index on `(created_at DESC, id DESC)`.
-- The cursor is opaque (base64url), so clients can't build their own or depend on its format, and it needs no URL-encoding.
+- `newestFirst(o, after) > 0` means "`o` sorts after the cursor". Reusing the sort's own comparator guarantees the cursor follows exactly the same order, order-ID tie-breaker included.
+- Marketplace imports share timestamps. In this data, orders 20 and 21 (ORD-10301 and ORD-10300) have the **same** `createdAt`, right at the page 1 / page 2 boundary. A cursor filter on `createdAt` alone (`o.createdAt < after.createdAt`) therefore skips ORD-10300, and the snapshot test catches it.
+- `newestFirst` compares the ISO timestamps and IDs as strings. That works because every timestamp has the same UTC format and every ID the same width. In a real database you'd compare typed columns, backed by an index on `(created_at DESC, id DESC)`.
+- The cursor is opaque (base64url JSON of `[createdAt, id]`), so clients can't build their own or depend on its format, and it needs no URL-encoding. Anything that doesn't decode to two strings makes `decodeCursor` throw, and the route answers 400.
 
 ## Postman collection: Order Lookup API
 
-Collection variable: `baseUrl = http://localhost:3001`. Paste each script into the request's **Scripts → Post-response** tab (called **Tests** in older Postman versions).
+Collection variable: `baseUrl = http://localhost:3001`. Scripts go in the **Scripts → Post-response** tab (called **Tests** in older Postman versions).
+
+### Collection script: click the collection → Scripts → Post-response
+
+It runs after every request in the collection and saves that response's order IDs in a collection variable named after the request (`Snapshot`, `Page 1`, `Page 2`). That's why Snapshot and Page 1 need no script of their own.
+
+```js
+const orders = pm.response.json().orders || [];
+const ids = orders.map((o) => o.id).join();
+pm.collectionVariables.set(pm.info.requestName, ids);
+```
 
 ### Stage 1: before the fix (the run should FAIL)
 
-#### 1. Snapshot: `GET {{baseUrl}}/api/orders?limit=40`
+| Order | Request | URL | Made by |
+|---|---|---|---|
+| 1 | Snapshot | `GET {{baseUrl}}/api/orders?limit=40` | Add request |
+| 2 | Page 1 | `GET {{baseUrl}}/api/orders?limit=20&offset=0` | Duplicate Snapshot |
+| 3 | Simulate 3 orders | `POST {{baseUrl}}/api/dev/simulate-orders?count=3` | The request from step C, dragged here |
+| 4 | Page 2 | `GET {{baseUrl}}/api/orders?limit=20&offset=20` | Duplicate Page 1 |
+
+Simulate 3 orders:
 
 ```js
-const ids = pm.response.json().orders.map((o) => o.id);
-pm.collectionVariables.set('snapshot', JSON.stringify(ids));
-pm.test('snapshot has 40 orders', () => {
-  pm.expect(ids).to.have.lengthOf(40);
+pm.test('201 Created', () => pm.response.to.have.status(201));
+```
+
+Page 2:
+
+```js
+const v = pm.collectionVariables;
+const pages = v.get('Page 1') + ',' + v.get('Page 2');
+pm.test('page 1 + page 2 = snapshot', () => {
+  pm.expect(pages).to.equal(v.get('Snapshot'));
 });
 ```
 
-#### 2. Page 1: `GET {{baseUrl}}/api/orders?limit=20&offset=0`
-
-```js
-const body = pm.response.json();
-pm.collectionVariables.set('page1', JSON.stringify(body.orders.map((o) => o.id)));
-pm.test('page 1 returns 20 orders', () => {
-  pm.expect(body.orders).to.have.lengthOf(20);
-});
-```
-
-#### 3. Simulate 3 orders: `POST {{baseUrl}}/api/dev/simulate-orders?count=3`
-
-```js
-pm.test('3 new orders created', () => {
-  pm.response.to.have.status(201);
-  pm.expect(pm.response.json().created).to.have.lengthOf(3);
-});
-```
-
-#### 4. Page 2: `GET {{baseUrl}}/api/orders?limit=20&offset=20`
-
-```js
-const snapshot = JSON.parse(pm.collectionVariables.get('snapshot'));
-const page1 = JSON.parse(pm.collectionVariables.get('page1'));
-const page2 = pm.response.json().orders.map((o) => o.id);
-pm.test('page 1 + page 2 equal the snapshot (no repeats, no gaps)', () => {
-  pm.expect(page1.concat(page2)).to.eql(snapshot);
-});
-```
-
-Against the starter, requests 1–3 pass and **request 4 fails**: page 2 starts with the last 3 IDs of page 1. Seeing the test fail first proves it detects the bug.
+Against the starter, Simulate passes and **Page 2 fails**: page 2 starts with the last three IDs of page 1 (ORD-10303, ORD-10302 and ORD-10301 in this data). Seeing the test fail first proves it detects the bug.
 
 ### Stage 2: after the API fix (every test should PASS)
 
-#### Page 1: change the URL to `GET {{baseUrl}}/api/orders?limit=20` and the script to:
-
-```js
-const body = pm.response.json();
-pm.collectionVariables.set('page1', JSON.stringify(body.orders.map((o) => o.id)));
-pm.collectionVariables.set('nextCursor', body.nextCursor);
-pm.test('page 1 returns 20 orders and a cursor', () => {
-  pm.expect(body.orders).to.have.lengthOf(20);
-  pm.expect(body.nextCursor).to.be.a('string');
-});
-```
-
-#### Page 2: change the URL to `GET {{baseUrl}}/api/orders?limit=20&cursor={{nextCursor}}` and keep the same script.
-
-#### 5. Bad cursor (new request): `GET {{baseUrl}}/api/orders?cursor=garbage`
-
-```js
-pm.test('invalid cursor is rejected with 400', () => {
-  pm.response.to.have.status(400);
-});
-```
+- **Page 1:** delete `&offset=0` from the URL, and give it this script:
+  ```js
+  pm.collectionVariables.set('nextCursor', pm.response.json().nextCursor);
+  ```
+- **Page 2:** change `offset=20` to `cursor={{nextCursor}}`. Keep its script.
+- **Bad cursor**, request 5: duplicate Snapshot, rename it, drag it to the end, and change `limit=40` to `cursor=garbage`. Its script:
+  ```js
+  pm.test('400 for a bad cursor', () => pm.response.to.have.status(400));
+  ```
 
 Measured results:
-- Against the fixed API, all five pass.
-- Against a fix whose cursor uses `createdAt` only, **Page 2 fails**, because the tied order at the boundary is skipped.
-- Against the starter, Page 1, Page 2 and Bad cursor fail.
-
-## FIX_NOTES.md: headings only
-
-**Summary · Root cause · Fix · How I verified · Known limitations.** Write the content during the recording.
+- Against the fixed API, all three tests pass, and they pass again on a second run without restarting.
+- Against a fix whose cursor filter uses `createdAt` only, **Page 2 fails** on fresh data: ORD-10300 is missing.
+- Against the starter, Page 2 and Bad cursor fail.
+- Paging through the whole list, and through the "al" search, with three new orders added after page 1: every order came back exactly once, and the last page had no `nextCursor`.

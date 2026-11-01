@@ -1,13 +1,14 @@
 # Task 2: Order Lookup, "Load more" repeats orders
 
-Status (31 Oct 2026): the input is built. The bug, the fix and every Postman test are checked against the real API. The idea text is written (section 1). Record this after task 1.
+Status (2 Nov 2026): reworked to cut typing. FIX_NOTES.md is gone, one collection-level Postman script replaces three request scripts, requests are duplicated instead of typed, and the server fix is shorter. The bug, the fix and every Postman test are checked against the real API with newman. The idea text is written (section 1) but not submitted. Record this after task 1.
 
 | | |
 |---|---|
 | Domain | DSD: Software engineering |
 | Role | Full-stack engineer (React + Node/Express) on an internal tools team |
 | Apps, the same list everywhere | **Visual Studio Code · Postman · Brave Browser** |
-| Planned length | About 38–42 min at a relaxed, explaining pace: intro 0:20, work about 35 min, epilogue about 3:30. The hard limit is 50:59. |
+| Planned length | About 36–40 min at a relaxed, explaining pace: intro 0:20, work about 34 min, epilogue about 3:30. The hard limit is 50:59. |
+| Typing | About 1,630 characters: the server cursor code (about 660), the Postman scripts (about 530), URLs and names (about 230), and the client code and commit message (about 210). That's about 8 min at a quick 3.5 characters a second, or 11 min at 2.5: 20–29% of a 38-min recording. The limit for coding tasks is 35%, so keep your typing under about 13 min, and time it when you rehearse. The longest line is 72 characters, under 30 s at a normal pace (the limit is 45 s in one go). |
 | Input | `inputs/input 1.zip`: Order Lookup with task 1's search fix already in, offset paging, and support ticket `docs/SUP-1433.md`. AI-generated, so disclose it. |
 | Outputs | `final output 1.zip` (fixed repo), `final output 2.json` (Postman collection) |
 
@@ -43,10 +44,10 @@ Steps (with the apps for each):
 4. Visual Studio Code: replace offset paging with an opaque cursor on (createdAt, id), using the ID to break timestamp ties, and return 400 for invalid cursors.
 5. Postman: switch page 2 to the cursor, add an invalid-cursor test, re-run until all pass.
 6. Visual Studio Code and Brave Browser: update the React client to page with nextCursor; verify no repeats while orders arrive.
-7. Postman and Visual Studio Code: export the collection, review the diff, write FIX_NOTES.md, commit.
+7. Postman and Visual Studio Code: export the collection, review the diff and commit.
 
 Deliverable:
-Fixed repository (zip) with the commit and FIX_NOTES.md, plus the exported Postman collection. Check: the collection passes all 5 tests (the snapshot test fails on the original code), and "Load more" after simulating orders shows no repeated IDs.
+Fixed repository (zip) with the commit, plus the exported Postman collection. Check: the collection passes all 3 tests (the snapshot test fails on the original code), and "Load more" after simulating orders shows no repeated IDs.
 ```
 
 **Apps field:** select Visual Studio Code, Postman and Brave Browser (if Brave isn't in the list, choose Other and type Brave Browser). The same three go in TaskRecorder's Used Apps and in Metadata.rtf.
@@ -65,7 +66,7 @@ Fixed repository (zip) with the commit and FIX_NOTES.md, plus the exported Postm
    ```bash
    bash ~/Developer/Odin/task-02-order-paging/setup-workcopy.sh ~/Developer/order-lookup-rehearsal
    ```
-   Do the whole run-sheet once while timing yourself. Then delete the rehearsal folder and the rehearsal collection in Postman.
+   Do the whole run-sheet once while timing yourself, including your typing (under about 13 min in total). Then delete the rehearsal folder and the rehearsal collection in Postman.
 
 `REFERENCE.md` has the working code and both stages of the Postman scripts, and `NARRATION.md` has talking points for every step. Rehearse with both, then close them. Don't have them open, or paste from them, while recording.
 
@@ -84,6 +85,8 @@ Do the full pre-check list in `../ODIN_PLAYBOOK.md`, plus:
 ## 4. Run-sheet
 
 For each step: **Do** is the action, **Why** is the reasoning to explain, and **See** is what should happen. Times assume a relaxed pace with detailed explanation. Talking points for every step, including the epilogue, are in `NARRATION.md`.
+
+Type in short pieces. After each piece, stop typing and point at it with the cursor while you explain it. Odin allows at most 45 s of typing in one go, and at most 25% of the recording (35% for coding tasks).
 
 ### A. Intro (0:00–0:20)
 
@@ -109,52 +112,52 @@ For each step: **Do** is the action, **Why** is the reasoning to explain, and **
    **See:** the same IDs twice around rows 18–23, and "Encountered two children with the same key".
    **Why:** three new orders landed on top, pushing everything down three places. `offset=20` now starts three rows too early.
 
-### D. Write the failing test first (about 8:00–17:00) · Postman: CREATE
+### D. Write the failing test first (about 8:00–16:00) · Postman: CREATE
 
-1. **Do:** add three GET requests to the collection and arrange the four in this order:
+1. **Do:** in the collection, **Add request** → name it **Snapshot**, URL `{{baseUrl}}/api/orders?limit=40`. Make the other two with right-click → **Duplicate**, renaming each copy and changing only its query. Arrange the four in this order:
    1. **Snapshot** `{{baseUrl}}/api/orders?limit=40`
-   2. **Page 1** `{{baseUrl}}/api/orders?limit=20&offset=0`
-   3. **Simulate 3 orders** (the existing request)
-   4. **Page 2** `{{baseUrl}}/api/orders?limit=20&offset=20`
-2. **Do:** in each request's **Scripts → Post-response** tab, write the stage 1 scripts you rehearsed:
-   - Snapshot saves its 40 IDs.
-   - Page 1 saves its 20 IDs.
-   - Simulate checks for 201 and three IDs.
+   2. **Page 1**, a copy of Snapshot: `{{baseUrl}}/api/orders?limit=20&offset=0`
+   3. **Simulate 3 orders** (the existing request; drag it here)
+   4. **Page 2**, a copy of Page 1: `{{baseUrl}}/api/orders?limit=20&offset=20`
+2. **Do:** click the collection → **Scripts → Post-response** and write the collection script. After every request, it saves the response's order IDs in a collection variable named after the request. Then write two request scripts:
+   - Simulate checks for 201.
    - Page 2 asserts page 1 + page 2 equals the snapshot.
-   **Why:** the test models the real situation (orders arriving between pages) and checks for both repeats *and* gaps in one assertion.
+   **Why:** one collection script instead of the same script in three requests. The test models the real situation (orders arriving between pages) and checks for both repeats *and* gaps in one assertion.
 3. **Do:** collection `…` → **Run** → Run Order Lookup API.
    **See:** Page 2 **fails**. Open its response: the first three IDs match the last three on page 1.
    **Why:** the API itself returns overlapping pages, so this isn't a React rendering bug. A test you've seen fail is a test that can catch the bug.
 
-### E. Fix the API (about 17:00–25:00) · VS Code: MODIFY
+### E. Fix the API (about 16:00–23:00) · VS Code: MODIFY
 
 1. **Why first:** offset means "skip N positions" in a list that moves. A cursor means "continue after this exact order", so it can't shift.
-2. **Do:** open `server/orders.js` and show `newestFirst`: it sorts by `createdAt`, then order ID.
-   **Why:** marketplace imports share timestamps, so `createdAt` alone isn't unique. The cursor must use the same two keys as the sort.
+2. **Do:** open `server/orders.js` and show `newestFirst`: it sorts by `createdAt`, then order ID. Type `export` in front of it.
+   **Why:** marketplace imports share timestamps, so `createdAt` alone isn't unique. Reusing the sort's own comparator makes the cursor follow exactly the same order, tie-breaker included.
 3. **Do:** in `server/index.js`:
+   - import `newestFirst`;
    - add `encodeCursor` / `decodeCursor`, which wrap `[createdAt, id]` in base64url JSON;
    - read `cursor`, and answer **400** if it can't be decoded;
-   - keep only orders after the cursor in sort order;
+   - keep only the orders that sort after the cursor: `newestFirst(o, after) > 0`;
    - return the first `limit` orders plus `nextCursor` (null on the last page);
    - remove `offset`.
+   Say the reasons out loud instead of typing comments.
    **Why:** the opaque cursor stops clients building their own or depending on its format, and it's URL-safe.
 4. **Save.** `node --watch` restarts the API, which also resets the in-memory orders. That's expected.
 
 **Optional (adds about 3 min):** do this only if you'd genuinely try the simple version first.
-- Write the cursor filter with `createdAt` only, save, and run the collection after step F.
+- Write the cursor filter as `o.createdAt < after.createdAt`, save, and run the collection after step F.
 - Page 2 fails with **ORD-10300** missing. It has the same timestamp as ORD-10301, the last order on page 1.
-- Then add the order-ID tie-breaker. Run it straight after saving, while the data is fresh.
+- Then export and import `newestFirst`, and change the filter to `newestFirst(o, after) > 0`, which also compares the IDs. Run it straight after saving, while the data is fresh.
 
-### F. Update the tests and re-run (about 25:00–28:00) · Postman: MODIFY
+### F. Update the tests and re-run (about 23:00–26:00) · Postman: MODIFY
 
 1. **Do:**
-   - **Page 1:** URL `{{baseUrl}}/api/orders?limit=20`. The script also saves `nextCursor` and checks it's a string.
-   - **Page 2:** URL `{{baseUrl}}/api/orders?limit=20&cursor={{nextCursor}}`. Keep the same assertion.
-   - **Add** request 5, **Bad cursor**: `{{baseUrl}}/api/orders?cursor=garbage`, expecting 400.
+   - **Page 1:** delete `&offset=0` from the URL, and give it a one-line script that saves `nextCursor`.
+   - **Page 2:** change `offset=20` to `cursor={{nextCursor}}`. Keep the same assertion.
+   - **Bad cursor**, request 5: duplicate Snapshot, drag the copy to the end, change its query to `cursor=garbage`, and give it a script expecting 400.
 2. **Do:** run the collection.
-   **See:** all five pass. Run it a second time and they still pass.
+   **See:** all three tests pass. Run it a second time and they still pass.
 
-### G. Fix the client (about 28:00–32:00) · VS Code: MODIFY
+### G. Fix the client (about 26:00–30:00) · VS Code: MODIFY
 
 1. **Do:**
    - `api.js`: replace `offset` with a `cursor` parameter, sent only when present.
@@ -164,7 +167,7 @@ For each step: **Do** is the action, **Why** is the reasoning to explain, and **
      - show the button when `nextCursor` exists.
    **Why:** the old check `orders.length < total` breaks once new orders raise `total`. Let the server say whether there's more.
 
-### H. Verify in the browser (about 32:00–34:30) · Brave, Postman, Brave
+### H. Verify in the browser (about 30:00–32:30) · Brave, Postman, Brave
 
 1. **Do (Brave):** reload.
 2. **Do (Postman):** send **Simulate 3 orders**.
@@ -172,22 +175,21 @@ For each step: **Do** is the action, **Why** is the reasoning to explain, and **
    **See:** IDs continue without repeats, and the Console is clean.
 4. **Do (Brave):** search `al` (82 orders, so about four clicks) and click **Load more** until the button disappears at the end of the list.
 
-### I. Export and hand off (about 34:30–38:00)
+### I. Export, review and commit (about 32:30–34:30)
 
 1. **Do (Postman, CREATE):** collection `…` → **Export** → Collection v2.1 → save to Downloads. It becomes `final output 2.json`.
 2. **Do (VS Code, CREATE):**
-   - Source Control → walk through each diff.
-   - Create `FIX_NOTES.md` (Summary · Root cause · Fix · How I verified · Known limitations).
-   - Stage all, use the message "Use cursor paging for the order list (SUP-1433)", and **Commit**.
+   - Source Control → walk through the diff of each of the four files.
+   - Stage them (＋ next to Changes), use the message "Use cursor paging for the order list (SUP-1433)", and **Commit**. If VS Code then offers **Publish Branch**, don't click it: this copy has no remote.
 3. **Stop here; don't keep tinkering.**
 
-### J. Epilogue (about 38:00–41:30, no mouse)
+### J. Epilogue (about 34:30–38:00, no mouse)
 
 - **Verification:** the collection failing first and passing after the fix; repeated runs; continuous IDs in Brave with a clean Console; the optional `createdAt`-only failure if you showed it.
 - **Key decisions:**
   - Test-first.
   - Cursor over offset.
-  - The order-ID tie-breaker.
+  - Reusing the sort's comparator, so the order ID breaks ties exactly as in the sort.
   - An opaque cursor and the 400.
   - The server deciding whether there's more (`nextCursor`).
 - **Limitations and next steps:**
@@ -204,13 +206,15 @@ A  Goal doc → "I will be beginning my task soon. Here is the workflow I have i
 B  Ticket preview (never repeats AND never skips) → README offset/limit, newest first → ▷ dev:api ▷ dev:web
 C  Brave list → Postman POST simulate 3 → save to "Order Lookup API" + baseUrl var
    → Brave Load more → dupes rows 18–23 + Console key error → "list shifted by 3"
-D  Snapshot 40 / Page 1 offset 0 / Simulate / Page 2 offset 20 → scripts → Runner → Page 2 FAILS
-E  offset vs cursor → orders.js newestFirst (createdAt, id) → encode/decode cursor, 400,
-   filter after cursor, nextCursor, drop offset → save (API restarts)
-F  Page 1 saves nextCursor → Page 2 uses {{nextCursor}} → + Bad cursor → Runner all pass ×2
+D  Add Snapshot limit=40 → Duplicate: Page 1 offset 0, Page 2 offset 20 → drag Simulate between
+   → collection Post-response script (save IDs by request name) → Simulate 201 → Page 2 assert
+   → Runner → Page 2 FAILS
+E  offset vs cursor → orders.js: export newestFirst (createdAt, id) → index.js: import, encode/decode
+   cursor, 400, filter newestFirst(o, after) > 0, nextCursor, drop offset → save (API restarts)
+F  Page 1 saves nextCursor → Page 2 uses {{nextCursor}} → + Bad cursor (dup Snapshot) → Runner 3 pass ×2
 G  api.js cursor → OrderSearch nextCursor state, loadMore cursor, button = nextCursor
 H  reload → Postman simulate → Load more → no repeats, clean Console → search al → Load more to the end
-I  Export v2.1 → Source Control diff → FIX_NOTES.md → commit → STOP
+I  Export v2.1 → Source Control diff (4 files) → ＋ stage → commit → STOP
 J  Epilogue 3–4 min: verify · decisions · limits · common mistake
 ```
 
@@ -218,6 +222,7 @@ J  Epilogue 3–4 min: verify · decisions · limits · common mistake
 
 - **Postman shows ECONNREFUSED right after you save a server file:** `node --watch` is restarting. Wait a second and send again.
 - **Page 2 passes before the fix:** check its URL still uses `offset=20` and that Simulate runs *between* Page 1 and Page 2 in the Runner order.
+- **Page 2's message shows "undefined":** the IDs aren't being saved. Check the collection script is on the collection's own Scripts → Post-response tab, not on a request.
 - **Running long** (past about 44 min before the epilogue): skip the optional step, and shorten the Postman script explanations. Keep the epilogue.
 
 ## 7. After recording

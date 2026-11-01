@@ -26,7 +26,7 @@ export default function OrderSearch() {
         setError(err.message);
         setLoading(false);
       });
-    // A newer query replaces this one, so cancel it before its late response can overwrite newer results.
+    // Cancel the old search so it can't overwrite newer results.
     return () => controller.abort();
   }, [query]);
 

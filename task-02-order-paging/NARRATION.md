@@ -6,6 +6,7 @@ Talking points for every step of the run-sheet in `PLAN.md`. Rehearse with them,
 
 - **Before each click**, say four things: the app, the element you're clicking, what you're about to do, and why.
 - **After each result**, say what you see and what it means.
+- **Type in short pieces.** Type one piece, stop, then point at it with the cursor while you explain it. Odin allows at most 45 seconds of typing in one go.
 - Slow and clear is better than fast. Short pauses before important clicks are fine.
 - When you type a Postman script, explain *what it checks* rather than reading the code aloud.
 - Read out the IDs and numbers you *actually* see. The ones below come from rehearsal and may differ.
@@ -57,16 +58,16 @@ Then minimise the Goal doc. Don't read or explain the Goal.
 - The idea: take a snapshot of the first 40 orders. Then load page one, add three new orders, and load page two. If paging is correct, page one plus page two must equal the snapshot exactly, with no repeats and no gaps. One check covers both parts of the ticket.
 
 **Build the requests**
-- I'm adding a request called Snapshot: GET orders with `limit=40`.
-- Page 1: limit 20, offset 0.
+- In the collection, I'm adding a request called Snapshot: GET orders with `limit=40`.
+- Page 1 is almost the same, so I'm duplicating Snapshot instead of typing it again. I'm renaming the copy Page 1 and changing the query to limit 20, offset 0.
+- I'm duplicating Page 1 for Page 2 and changing the offset to 20.
 - I'm dragging Simulate between Page 1 and Page 2, because the new orders have to arrive between the two pages.
-- Page 2: limit 20, offset 20.
 
-**Write the test scripts** (in each request's Post-response script)
-- Snapshot: save the 40 IDs to a collection variable, and check there are 40.
-- Page 1: save its 20 IDs.
-- Simulate: check for status 201 and three new IDs.
-- Page 2: join the IDs from page one and page two, and check they equal the snapshot exactly.
+**Write the test scripts**
+- Snapshot, Page 1 and Page 2 all need to save their order IDs. Instead of writing the same script three times, I'll write it once on the collection. I'm clicking the collection and opening Scripts, then Post-response.
+- This script runs after every request in the collection. It takes the order IDs from the response and saves them in a collection variable named after the request. So after a run, there's a Snapshot variable, a Page 1 variable and a Page 2 variable.
+- Simulate gets one line: check the status is 201 Created.
+- Page 2 gets the real test: join the IDs from page one and page two, and check they equal the snapshot exactly.
 
 **Run it**
 - I'm running the collection with the Collection Runner.
@@ -78,35 +79,37 @@ Then minimise the Goal doc. Don't read or explain the Goal.
 **Why a cursor**
 - The fix is to stop counting positions. Instead of "skip 20 orders", the client says "continue after this exact order". That's called cursor, or keyset, pagination. New orders arriving at the top can't shift it.
 
-**Check the sort order first**
+**Reuse the sort order**
 - In `orders.js`, `newestFirst` sorts by `createdAt`, newest first, and uses the order ID to break ties.
-- Ties matter here. Marketplace imports arrive in batches that share the same timestamp. If my cursor used only `createdAt`, an order with the same timestamp as the last one on a page could be skipped. So the cursor must use the same two keys as the sort: `createdAt` and then the ID.
+- Ties matter here. Marketplace imports arrive in batches that share the same timestamp. If my cursor used only `createdAt`, an order with the same timestamp as the last one on a page could be skipped. So the cursor must follow exactly the same order as the sort, ID included.
+- The simplest way to guarantee that is to reuse this function. I'm typing `export` in front of it, so the API can import it.
 
 **Write the code in `server/index.js`**
-- `encodeCursor` takes the last order's `createdAt` and ID and encodes them as base64url. The cursor is opaque: clients just pass it back and don't depend on what's inside. base64url is also safe to put in a URL without encoding.
-- `decodeCursor` does the reverse and checks both values are strings.
-- If the cursor can't be decoded, the API answers 400 Bad Request instead of crashing or guessing.
-- In the route, after finding the matches, I keep only the orders that come after the cursor in sort order: an older `createdAt`, or the same `createdAt` with a smaller ID.
+- I'm importing `newestFirst` next to `createOrderStore`.
+- `encodeCursor` takes the last order's `createdAt` and ID, turns them into JSON and encodes that as base64url. The cursor is opaque: clients just pass it back and don't depend on what's inside. base64url is also safe to put in a URL without encoding.
+- `decodeCursor` does the reverse: it decodes the base64url back to JSON, reads the two values and checks both are strings. Anything else throws an error.
+- In the route, if the cursor can't be decoded, the API answers 400 Bad Request instead of crashing or guessing.
+- After finding the matches, I keep only the orders that sort after the cursor: `newestFirst(o, after)` is greater than zero. That's the same comparison the list is sorted with, so ties are handled exactly as in the sort.
 - I return the first `limit` orders, plus `nextCursor` built from the last one. When there's nothing more, it's null.
 - I'm removing `offset`; the cursor replaces it.
 - Saving. `node --watch` restarts the API, which also resets the in-memory orders. That's fine.
 
 **Optional: only if you really try the simpler version first**
-- I'll first try the cursor with only `createdAt`. *(Run the collection after step F.)*
+- I'll first try the cursor filter with only `createdAt`: keep the orders older than the cursor's timestamp. *(Run the collection after step F.)*
 - Page 2 fails. ORD-10300 is missing. It has exactly the same timestamp as ORD-10301, the last order on page one, so a `createdAt`-only cursor skips it.
-- That's why I'm adding the ID as a tie-breaker.
+- That's why I'm switching the filter to `newestFirst`, which also compares the IDs.
 
 ## F. Update the tests and run them again (Postman)
 
 **Update the requests**
 - Now the tests need to use the cursor.
-- Page 1: I'm removing `offset`. In its script I also save `nextCursor` and check it's a string.
+- Page 1: I'm removing `offset` from the URL. I'm giving it a one-line script that saves `nextCursor` from the response into a collection variable.
 - Page 2: I'm replacing `offset` with `cursor={{nextCursor}}`. The assertion stays the same: page one plus page two must equal the snapshot.
-- I'm adding a fifth request, Bad cursor, with `cursor=garbage`. It should be rejected with 400.
+- I'm adding a fifth request, Bad cursor. I'm duplicating Snapshot, renaming the copy, dragging it to the end and changing its query to `cursor=garbage`. Its script checks that the API rejects it with 400.
 
 **Run them**
-- Running the collection again. All five tests pass.
-- I'll run it a second time to make sure it isn't a one-off. All five pass again, even with more orders added in between.
+- Running the collection again. All three tests pass.
+- I'll run it a second time to make sure it isn't a one-off. They pass again, even with more orders added in between.
 
 ## G. Update the React client (VS Code)
 
@@ -131,24 +134,13 @@ Then minimise the Goal doc. Don't read or explain the Goal.
 - I'm exporting the collection as Collection v2.1, so the team can rerun these tests, or run them in CI.
 
 **Review the diff (VS Code)**
+- `server/orders.js`: one word, `export`, so the API can reuse the sort comparator.
 - `server/index.js`: the cursor helpers, the 400 for a bad cursor, the filter after the cursor, and `nextCursor`.
 - `api.js`: it sends a cursor instead of an offset.
 - `OrderSearch.jsx`: the `nextCursor` state and the new button condition.
 
-**FIX_NOTES.md**
-
-What to put under each heading (your own words):
-
-| Heading | Content |
-|---|---|
-| Summary | Load more repeated or skipped orders while new orders arrived. Fixed with cursor paging. |
-| Root cause | Offset paging counts positions in a newest-first list. New orders shift every position, so the next page overlaps the previous one. |
-| Fix | Opaque cursor on (createdAt, id), the same keys as the sort, with the ID breaking timestamp ties; 400 for a bad cursor; nextCursor drives the Load more button. |
-| How I verified | The Postman collection failed before the fix and passes after it, on repeated runs; Brave shows continuous IDs and no Console warnings. |
-| Known limitations | New orders only appear after a refresh; the README still documents offset; Load more isn't cancelled when the search changes. |
-
 **Commit**
-- I'm committing with the message "Use cursor paging for the order list (SUP-1433)". The task is done.
+- I'm clicking the plus next to Changes to stage the four files, typing the message "Use cursor paging for the order list (SUP-1433)" and clicking Commit. The task is done.
 
 ## J. Epilogue (3–4 minutes, no mouse)
 
@@ -159,21 +151,21 @@ Cover these in order, in your own words, and speak about what really happened in
 
 **2. How I verified it**
 - I wrote the test first and saw it fail on the old code.
-- After the fix, all five tests passed, on more than one run.
+- After the fix, all three tests passed, on more than one run.
 - In Brave, IDs continue with no repeats and the Console is clean.
 - If you did the optional step: the `createdAt`-only cursor failed, because it skipped a tied order.
 
 **3. Approach and key decisions**
 - Test-first, so the bug is proven at the API level before touching code.
 - Cursor instead of offset, because positions move but a specific order doesn't.
-- The ID as a tie-breaker, because timestamps aren't unique.
+- Reusing the sort's own comparator for the cursor, so the ID breaks timestamp ties exactly as it does in the sort.
 - An opaque cursor, so clients can't depend on its format.
 - Letting the server decide whether there's a next page.
 
 **4. Challenges** (say what was actually hard or unexpected for you; examples)
 - Designing one test that catches both repeats and gaps.
 - Remembering that `node --watch` resets the data on every save.
-- Getting the cursor filter to match the sort order exactly.
+- Making the cursor follow the sort order exactly, which is why I reused `newestFirst`.
 
 **5. Quality and limitations**
 - New orders don't appear until a refresh.

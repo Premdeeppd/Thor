@@ -1,21 +1,22 @@
 # Task 1: Order Lookup, search shows another customer's orders
 
-Status (31 Oct 2026): the input is built, and the bug and its fix are tested in a real browser. The idea text is written (section 1). Not submitted yet.
+Status (2 Nov 2026): idea approved in Studio; section 1 has the approved Starting materials and Steps. FIX_NOTES.md was dropped from the task to keep typing within Odin's limits. The input is built, and the bug and its fix are tested in a real browser. Not recorded yet.
 
 | | |
 |---|---|
 | Domain | DSD: Software engineering |
 | Role | Full-stack engineer (React + Node/Express) on an internal tools team |
 | Apps, the same list everywhere | **Visual Studio Code · Brave Browser** |
-| Planned length | About 35–39 min at a relaxed, explaining pace: intro 0:20, work about 33 min, epilogue about 3:30 |
+| Planned length | About 33–37 min at a relaxed, explaining pace: intro 0:20, work about 31 min, epilogue about 3:30 |
+| Typing | Short entries only: search terms, the logpoint message, single lines of code, two file names and the commit message. About 3–4 min in all, roughly 10% of the recording (the limit is 25%, or 35% for coding tasks). The longest entry is one line of code, well under the 45 s limit for typing in one go. |
 | Input | `inputs/input 1.zip`: the Order Lookup app with seeded synthetic orders, a README and support ticket `docs/SUP-1427.md`. AI-generated, so disclose it. |
 | Outputs | `artifact 1.har` (network log before the fix), `artifact 2.har` (after the fix), `final output 1.zip` (fixed repo) |
 
 The paging bug ("Load more" repeating orders) is still in this code on purpose. It's task 2. Don't touch "Load more" in this recording.
 
-## 1. Describe your idea: text for Studio
+## 1. Describe your idea: the approved text in Studio
 
-Paste this into the **Describe your idea** box. It keeps the form's five headings. Use the **Goal** text exactly as written in three places: the opening Google Doc, TaskRecorder's Task Description and Metadata.rtf's Request.
+Starting materials and Steps are copied from the approved submission (2 Nov 2026). Use the **Goal** text exactly as written in three places: the opening Google Doc, TaskRecorder's Task Description and Metadata.rtf's Request.
 
 ```text
 Domain / Role:
@@ -26,22 +27,23 @@ Fix support ticket SUP-1427 in our internal Order Lookup tool: when agents type 
 
 Starting materials:
 - Order Lookup app: React (Vite) front end and Node.js/Express API with 320 synthetic orders; broad searches respond slower than narrow ones.
-- Ticket SUP-1427 (Markdown in the repo) describing the bug and expected behaviour.
-Both AI-generated before recording.
+- Ticket SUP-1427 (Markdown in the repo) describing the bug and expected behavior.
 
 Steps (with the apps for each):
 1. Visual Studio Code: read the ticket and README; start the API and web app from NPM Scripts.
-2. Brave Browser: reproduce by typing "alice" fast, then slowly.
-3. Brave Browser (DevTools): Network panel shows the broad "a" request finishing last; a Sources logpoint shows it overwriting newer results; export a HAR.
+2. Brave: reproduce by typing "alice" fast, then slowly.
+3. Brave (DevTools): Network panel shows the broad "a" request finishing last; a Sources logpoint shows it overwriting newer results; export a HAR.
 4. Visual Studio Code: cancel superseded searches with an AbortController in the React effect, ignoring AbortError and fixing the loading state.
-5. Brave Browser: confirm old requests are canceled and only the latest result is applied; export a second HAR; stop the API to confirm errors still show.
-6. Visual Studio Code: review the diff, write FIX_NOTES.md, commit.
+5. Brave: confirm old requests are canceled and only the latest result is applied; export a second HAR; stop the API to confirm errors still show.
+6. Visual Studio Code: review the diff and commit.
 
 Deliverable:
-Fixed repository (zip) with the commit and FIX_NOTES.md, plus before/after HAR files. Check: typing "alice" quickly shows only Alice's orders with earlier requests canceled; stopping the API shows an error message.
+Fixed repository (zip) with the commit, plus before/after HAR files. Check: typing "alice" quickly shows only Alice's orders with earlier requests canceled; stopping the API shows an error message.
 ```
 
-**Apps field:** select Visual Studio Code and Brave Browser (if Brave isn't in the list, choose Other and type Brave Browser). The same two go in TaskRecorder's Used Apps and in Metadata.rtf.
+**Apps:** Visual Studio Code and Brave Browser, the same two in Studio's Apps field, TaskRecorder's Used Apps and Metadata.rtf.
+
+The approved Starting materials don't say the inputs are AI-generated, so make that disclosure in Studio's own field when you submit (section 7, step 4).
 
 ## 2. One-time setup (days before; nothing here is recorded)
 
@@ -57,7 +59,7 @@ Fixed repository (zip) with the commit and FIX_NOTES.md, plus before/after HAR f
    ```bash
    bash ~/Developer/Odin/task-01-order-lookup/setup-workcopy.sh ~/Developer/order-lookup-rehearsal
    ```
-   Do the whole run-sheet once while timing yourself, then delete `~/Developer/order-lookup-rehearsal`.
+   Do the whole run-sheet once while timing yourself, including your longest typing (the code comment in E3), then delete `~/Developer/order-lookup-rehearsal`.
 
 `REFERENCE.md` has the working code to rehearse with, and `NARRATION.md` has talking points for every step. Rehearse with both, then close them. Don't have them open, or paste from them, while recording.
 
@@ -76,6 +78,8 @@ Do the full pre-check list in `../ODIN_PLAYBOOK.md`, plus:
 ## 4. Run-sheet
 
 For each step: **Do** is the action, **Why** is the reasoning to explain, and **See** is what should happen. Narrate as you go: what you click, where it is, and why. Times assume a relaxed pace with detailed explanation. Talking points for every step, including the epilogue, are in `NARRATION.md`.
+
+Type in short pieces. After each piece, stop typing and point at it with the cursor while you explain it. Odin allows at most 45 s of typing in one go, and at most 25% of the recording (35% for coding tasks).
 
 ### A. Intro (0:00–0:20)
 
@@ -127,7 +131,7 @@ For each step: **Do** is the action, **Why** is the reasoning to explain, and **
      - at the end, add `return () => controller.abort();` with a one-line comment saying why, so the next keystroke cancels this request;
      - in `.catch`, return early when `err.name === 'AbortError'` (a cancel isn't an error for the agent);
      - move `setLoading(false)` out of `.finally` into the success and real-error paths. Otherwise a cancelled request turns the loading state off while the newer search is still loading.
-   - Leave `loadMore` alone. It's outside this ticket; note it as a known limitation.
+   - Leave `loadMore` alone. It's outside this ticket; mention it in the epilogue as a known limitation.
 
 ### F. Verify (about 23:30–29:30) · Brave: LOOKUP, then VS Code and back
 
@@ -141,17 +145,17 @@ For each step: **Do** is the action, **Why** is the reasoning to explain, and **
    - **Do:** in VS Code's terminal panel, select the `dev:api` terminal and click the trash icon to stop the API. Back in Brave, type one more letter.
    - **See:** a red "Order search failed (502)".
    - **Why:** you ignore only `AbortError`, so real failures still reach the agent, as the ticket asks.
-   - Point out the old rows still showing under the error. That's a known limitation for FIX_NOTES and the epilogue.
+   - Point out the old rows still showing under the error. That's a known limitation to mention in the epilogue.
 
-### G. Hand off (about 29:30–33:30) · VS Code: CREATE
+### G. Review and commit (about 29:30–31:30) · VS Code: CREATE
 
-1. **Do:** NPM Scripts → ▷ `dev:api` to restart the API.
-2. **Do:** Source Control view → click each changed file and walk through the diff out loud.
-3. **Do:** Explorer → New File at the project root → `FIX_NOTES.md` with these headings: Summary · Root cause · Fix · How I verified · Known limitations. Say each section out loud as you type it.
-4. **Do:** stage all (＋), write the message "Fix stale search results (SUP-1427)", then **Commit**.
-5. **Do (Brave, LOOKUP):** one last `alice` check. **Stop here; don't keep tinkering.**
+1. **Do:** Source Control view → click `api.js`, then `OrderSearch.jsx`, and walk through each diff out loud.
+   **See:** two changed files. Every change in `OrderSearch.jsx` is inside the search effect; `loadMore` is unchanged.
+2. **Do:** stage both (＋ next to Changes), type the message "Fix stale search results (SUP-1427)", then **Commit**.
+   **See:** the Changes list is empty. If VS Code then offers **Publish Branch**, don't click it: this copy has no remote.
+3. **Stop here; don't keep tinkering.** The API stays stopped from the error test, which is fine.
 
-### H. Epilogue (about 33:30–37:00, no mouse)
+### H. Epilogue (about 31:30–35:00, no mouse)
 
 Talk from what actually happened in *your* recording:
 
@@ -179,10 +183,11 @@ D  Network: Disable cache, Fetch/XHR, right-click header → Waterfall → clear
    → Export HAR (before-fix)
 E  current effect: no cancel, no check → options: debounce / ignore flag / AbortController
    → api.js signal → effect: controller, signal, cleanup abort → skip AbortError → move setLoading(false)
+   (type one piece, stop, point at it, explain)
 F  reload → (canceled) → only Alice ×3 + other names → logpoint: remove old (19), add on 20 → last = alice
    → Export HAR (after-fix)
    → kill dev:api → type → "Order search failed (502)" → note old rows
-G  ▷ dev:api → Source Control diff → FIX_NOTES.md → commit → final check → STOP
+G  Source Control: api.js diff → OrderSearch.jsx diff → ＋ stage both → "Fix stale search results (SUP-1427)" → Commit → STOP
 H  Epilogue 3–4 min: verify · decisions · limits · common mistake
 ```
 
@@ -206,7 +211,7 @@ H  Epilogue 3–4 min: verify · decisions · limits · common mistake
 2. Zip the folder as `Deliverables.zip`. Keep `Metadata.rtf`, `video.mp4` and the TaskRecorder archive separate.
 3. **Metadata.rtf**, in TextEdit from the Studio template:
    - **Topology:** match what you actually did. If you follow the run-sheet it is:
-     `Visual Studio Code (LOOKUP) -> Brave Browser (LOOKUP) -> Visual Studio Code (MODIFY) -> Brave Browser (LOOKUP) -> Visual Studio Code (LOOKUP) -> Brave Browser (LOOKUP) -> Visual Studio Code (CREATE) -> Brave Browser (LOOKUP)`
+     `Visual Studio Code (LOOKUP) -> Brave Browser (LOOKUP) -> Visual Studio Code (MODIFY) -> Brave Browser (LOOKUP) -> Visual Studio Code (LOOKUP) -> Brave Browser (LOOKUP) -> Visual Studio Code (CREATE)`
    - **Request:** your Goal, exactly as in TaskRecorder.
    - **Task Description:** a numbered outline built from the 6 Steps in your idea, adjusted to what you actually did (apps, methods, final deliverable).
 4. **AI disclosure:** wherever Studio asks, state that `input 1` (the starter app and ticket) was AI-generated before recording, and that no AI was used during the recording.

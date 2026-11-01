@@ -8,6 +8,7 @@ The only lines that aren't spoken are in the intro, where the project rules fix 
 
 - **Before each click**, say four things: the app, the element you're clicking, what you're about to do, and why. For example: *"In VS Code, I'm right-clicking the ticket file and choosing Open Preview, so I can read it formatted."*
 - **After each result**, say what you see and what it means.
+- **Type in short pieces.** Type one piece, stop, then point at it with the cursor while you explain it. Odin allows at most 45 seconds of typing in one go, and nothing in this task needs more than about 30.
 - Slow and clear is better than fast. Short pauses before important clicks are fine.
 - If something unexpected happens, say what you see and what you'll try next. That's valuable, not a mistake.
 - Read out the names, numbers and messages you *actually* see. The ones below come from rehearsal and may differ slightly.
@@ -112,7 +113,7 @@ Then minimise the Goal doc without saying anything else. Don't read or explain t
 **Cancel the old search in the cleanup**
 - At the end of the effect, I'm returning a cleanup function: `return () => controller.abort();`.
 - React runs the cleanup just before it runs the effect again with the new text, and also when the component goes away. So every keystroke first cancels the previous search, then starts the new one. Only the latest search can still answer.
-- I'm adding a one-line comment above it that says why: a newer query replaces this one, so cancel it before its late answer overwrites newer results.
+- I'm adding a one-line comment above it that says why: cancel the old search so it can't overwrite newer results.
 - Those three lines are the core of the fix. But cancelling has two side effects, and I need to handle both.
 
 **Don't show a cancel as an error**
@@ -128,7 +129,7 @@ Then minimise the Goal doc without saying anything else. Don't read or explain t
 - Now the rule is simple: a cancelled search changes nothing on screen. Not the rows, not the error and not the loading state.
 
 **Leave paging alone, then save**
-- I'm not changing `loadMore`. It isn't cancelled when the search changes either, but that's outside this ticket, and I want this change small and easy to review. I'll note it as a known limitation.
+- I'm not changing `loadMore`. It isn't cancelled when the search changes either, but that's outside this ticket, and I want this change small and easy to review. I'll mention it at the end as a known limitation.
 - I'm saving both files with Command S. Vite picks up the change and updates the page in Brave by itself, so next I'll check the fix there.
 
 ## F. Verify the fix (Brave, then VS Code and back)
@@ -156,37 +157,26 @@ Then minimise the Goal doc without saying anything else. Don't read or explain t
 - I'm switching to VS Code. In the terminal panel, I'm selecting the `dev:api` terminal from the list on the right and clicking its trash icon to stop the API.
 - I'm switching back to Brave and typing one more letter in the search box.
 - There's the red message: "Order search failed (502)". The 502 comes from Vite's proxy, because the API behind it is down. Real errors still reach the agent.
-- One thing I notice: the old rows are still visible under the error. That's not part of this ticket, but I'll note it as a known limitation.
+- One thing I notice: the old rows are still visible under the error. That's not part of this ticket, so I'll mention it at the end as a known limitation.
 
-## G. Review, write notes, commit (VS Code)
+## G. Review and commit (VS Code)
 
-**Restart and review**
-- I'm switching to VS Code and restarting the API. In the NPM Scripts panel, I'm clicking the play button next to `dev:api` again.
-- Before committing, I'm opening the Source Control view from the sidebar to review my changes. Two files have changed.
+**Review the diff**
+- I'm switching back to VS Code to review my changes before I commit them. I'm opening the Source Control view from the sidebar. Two files have changed: `api.js` and `OrderSearch.jsx`.
 - I'm clicking `api.js`. The diff shows one change: the new `signal` parameter, passed into `fetch`.
-- Now `OrderSearch.jsx`. Every change is inside the search effect: the AbortController at the top, the signal in the `fetchOrders` call, `setLoading(false)` moved into `.then` and `.catch`, the AbortError check, and the cleanup with its comment. Nothing else changed.
+- Now I'm clicking `OrderSearch.jsx`. Every change is inside the search effect: the AbortController at the top, the signal in the `fetchOrders` call, `setLoading(false)` moved into `.then` and `.catch`, the AbortError check, and the cleanup with its comment. `loadMore` hasn't changed.
 
-**Write FIX_NOTES.md**
-- Now I'm writing notes for the next developer. In the Explorer, I'm clicking New File at the top level of the project and naming it `FIX_NOTES.md`.
-- I'm adding five headings: Summary, Root cause, Fix, How I verified, and Known limitations.
-- Under Summary, I'm writing: "Search results could belong to an older search. Fixed by cancelling superseded requests."
-- Under Root cause: "Every keystroke sends a search. Broad searches are slower, so an older request could finish last and overwrite newer results."
-- Under Fix: "An AbortController in the search effect. The cleanup aborts the previous request, AbortError is ignored, and only a request that really finishes turns off the loading state."
-- Under How I verified: "Canceled requests in the Network panel, the logpoint showing only the latest search applied, before and after HAR files, and the error message still showing with the API stopped."
-- Under Known limitations: "Old rows stay visible under an error. Load more isn't cancelled when the search changes. There's no automated test yet."
-- I'm saving the file.
-
-**Commit and final check**
-- Back in Source Control, there are three changed files now: `api.js`, `OrderSearch.jsx` and `FIX_NOTES.md`. I'm clicking the plus next to Changes to stage all of them.
+**Commit**
+- I'm clicking the plus next to Changes to stage both files.
 - In the message box, I'm typing "Fix stale search results (SUP-1427)" and clicking Commit.
-- One last check. I'm switching to Brave and typing "alice" quickly. I get only Alice's orders, so the fix works, and the task is done.
+- The Changes list is empty now, so the fix is committed, and the task is done.
 
 ## H. Epilogue (3–4 minutes, no mouse)
 
 *If something went differently in your take, say what really happened instead.*
 
 **1. Outcome**
-- The task is complete. The table now always shows results for exactly what's in the search box, however fast the agent types, and agents still see an error when a search fails.
+- The task is complete. The table now always shows results for exactly what's in the search box, however fast the agent types, and agents still see an error when a search fails. The fix is committed.
 
 **2. How I verified it**
 - In the Network panel, older requests are now canceled, including the slow "a" request.

@@ -50,7 +50,7 @@ export default function OrderSearch() {
         setError(err.message);
         setLoading(false);
       });
-    // A newer query replaces this one, so cancel it before its late response can overwrite newer results.
+    // Cancel the old search so it can't overwrite newer results.
     return () => controller.abort();
   }, [query]);
 
@@ -104,7 +104,3 @@ Changes from the starter, all inside the search `useEffect`:
 - Before the fix, typing `alice` at about 150 ms per key: the responses arrive as `ali`, `alic`, `al`, `alice`, then `a` at about 1.47 s. The table shows `a`'s results.
 - After the fix, the same typing gives 9 rows, all Alice. Earlier requests show **(canceled)**.
 - With the API stopped, the error banner reads **Order search failed (502)**. That's Vite's proxy answering for the missing API. The old rows stay visible underneath; that's the known limitation.
-
-## FIX_NOTES.md: headings only
-
-**Summary · Root cause · Fix · How I verified · Known limitations.** Write the content during the recording.

@@ -20,6 +20,7 @@ Screen recordings of real professional work on a Mac, narrated as you go: **what
 | 2–3 apps, each doing real work | Finder doesn't count. Apps you only open briefly don't count. Name web apps (Google Sheets), not the browser, unless the browser itself does the work (DevTools does). The **same list** goes in Studio's Apps field, TaskRecorder's Used Apps and Metadata.rtf. |
 | Length 15:00–50:59 | Includes the intro (under 20 s) and the epilogue (3–4 min, 4:00 max). Aim for 30–40 min. |
 | Mostly mouse-driven | Prefer menus, panels and buttons over shortcuts and terminal commands, and say what you click. |
+| Typing limits | At most 25% of the recording may be typing (35% for coding or writing tasks), and at most 45 s of typing in one go. Split long entries; between pieces, review what you typed, point at details with the cursor, format or test. Don't plan long write-ups typed on camera. |
 | No padding, no tinkering | Don't wait around, and stop once the task is done. Before stopping, check the output is accurate, readable and usable. |
 | Variety | Each task needs a different objective, method, flow between apps, or deliverable. Changing only the dataset, client name, colours or file format doesn't count. |
 | Change the desktop between tasks | Change at least one of: resolution, light/dark mode, wallpaper (built-in, not the default), Dock size, accent colour / sidebar icon size / in-app theme. Moving the Dock doesn't count. Keep the cursor's size and colour at their defaults. |

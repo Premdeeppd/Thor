@@ -1,6 +1,6 @@
 # Task 1: Order Lookup, search shows another customer's orders
 
-Status (2 Nov 2026): idea approved in Studio; section 1 has the approved Starting materials and Steps. FIX_NOTES.md was dropped from the task to keep typing within Odin's limits. The input is built, and the bug and its fix are tested in a real browser. Not recorded yet.
+Status (2 Nov 2026): completed. The recording took about 38 minutes and was hard to narrate, so new tasks aim for 20–25 minutes (see `../TASK_IDEAS.md`). Section 1 has the approved Starting materials and Steps; FIX_NOTES.md was dropped to keep typing within Odin's limits.
 
 | | |
 |---|---|
@@ -12,7 +12,7 @@ Status (2 Nov 2026): idea approved in Studio; section 1 has the approved Startin
 | Input | `inputs/input 1.zip`: the Order Lookup app with seeded synthetic orders, a README and support ticket `docs/SUP-1427.md`. AI-generated, so disclose it. |
 | Outputs | `artifact 1.har` (network log before the fix), `artifact 2.har` (after the fix), `final output 1.zip` (fixed repo) |
 
-The paging bug ("Load more" repeating orders) is still in this code on purpose. It's task 2. Don't touch "Load more" in this recording.
+The paging bug ("Load more" repeating orders) is still in this code on purpose; it's outside this ticket. Don't touch "Load more" in this recording.
 
 ## 1. Describe your idea: the approved text in Studio
 
@@ -215,4 +215,4 @@ H  Epilogue 3–4 min: verify · decisions · limits · common mistake
    - **Request:** your Goal, exactly as in TaskRecorder.
    - **Task Description:** a numbered outline built from the 6 Steps in your idea, adjusted to what you actually did (apps, methods, final deliverable).
 4. **AI disclosure:** wherever Studio asks, state that `input 1` (the starter app and ticket) was AI-generated before recording, and that no AI was used during the recording.
-5. Upload, run AutoQC, final checks, submit. Then delete `~/Developer/order-lookup` before setting up task 2. Task 2 uses the same folder name.
+5. Upload, run AutoQC, final checks, submit. Then delete `~/Developer/order-lookup`.

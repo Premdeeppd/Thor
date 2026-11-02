@@ -18,7 +18,7 @@ Screen recordings of real professional work on a Mac, narrated as you go: **what
 | Inputs are self-made or synthetic | No real customer/company data, nothing proprietary. Anything downloaded must be CC0 or public domain. |
 | No restricted apps | See the banned list below. TextEdit is allowed **only** for writing Metadata.rtf. Don't use Notes or TextEdit for the opening Goal doc. Desktop Excel causes recording problems, so use Google Sheets or Excel on the web. |
 | 2–3 apps, each doing real work | Finder doesn't count. Apps you only open briefly don't count. Name web apps (Google Sheets), not the browser, unless the browser itself does the work (DevTools does). The **same list** goes in Studio's Apps field, TaskRecorder's Used Apps and Metadata.rtf. |
-| Length 15:00–50:59 | Includes the intro (under 20 s) and the epilogue (3–4 min, 4:00 max). Aim for 30–40 min. |
+| Length 15:00–50:59 | Includes the intro (under 20 s) and the epilogue (3–4 min, 4:00 max). Aim for 20–25 min: task 1 ran 38 min and was hard to narrate. |
 | Mostly mouse-driven | Prefer menus, panels and buttons over shortcuts and terminal commands, and say what you click. |
 | Typing limits | At most 25% of the recording may be typing (35% for coding or writing tasks), and at most 45 s of typing in one go. Split long entries; between pieces, review what you typed, point at details with the cursor, format or test. Don't plan long write-ups typed on camera. |
 | No padding, no tinkering | Don't wait around, and stop once the task is done. Before stopping, check the output is accurate, readable and usable. |
@@ -30,7 +30,7 @@ Screen recordings of real professional work on a Mac, narrated as you go: **what
 
 Godot, VSCodium, Inkscape, GIMP, Blender, MATLAB, Sublime Text, Photoshop, Ableton Live, ZBrush, Grammarly, Microsoft Whiteboard, Adobe Bridge, Adobe Animate, Unreal Editor, Telegram, KNIME / KNIME Analytics Platform, Reactotron, Craft, LiquidText, Media Encoder, Sublime Merge, Vital, Twinmotion, Figma, Adobe Lightroom, Autodesk FBX Review, Defold, KiCad, OpenVSP, anatomyapp, FL Studio, GameMaker, LTspice, Parallels Desktop, UCSF Chimera, and more. The video stopped scrolling there.
 
-The full current list is at `odin-mercor1.vercel.app/validated-apps` (needs your Okta sign-in). Check it once for the apps in `TASK_IDEAS.md`: Brave Browser, VS Code, Postman, pgAdmin 4, MongoDB Compass, Google Sheets, Google Docs, Looker Studio.
+The full current list is at `odin-mercor1.vercel.app/validated-apps` (needs your Okta sign-in). Check it once for the apps in `TASK_IDEAS.md`: Brave Browser, Safari, VS Code, Postman, pgAdmin 4, Google Sheets, Google Slides, Looker Studio.
 
 ## Your Mac: what's ready (checked 31 Oct 2026)
 
@@ -109,10 +109,10 @@ One row per task, so no two recordings look the same.
 | Task | Light/Dark | Wallpaper (built-in, not default) | Dock size | Accent colour | Resolution |
 |---|---|---|---|---|---|
 | 1 Order Lookup: search race | | | | | |
-| 2 Order Lookup: paging | | | | | |
+| 2 Newsletter sign-up: accessibility | | | | | |
 | 3 | | | | | |
 | 4 | | | | | |
 
 ## Still to confirm
 
-Check the canonical app list (or ask in `#odin--helpdesk`) that **Brave Browser**, VS Code, Postman, pgAdmin 4 and MongoDB Compass aren't restricted. The 22 Oct update named only Safari and Chrome as permitted browsers, so confirm Brave before submitting. If it isn't allowed, use Chrome for the browser steps instead.
+Check the canonical app list (or ask in `#odin--helpdesk`) that **Brave Browser**, VS Code, Postman, pgAdmin 4, Google Slides and Looker Studio aren't restricted. The 22 Oct update named only Safari and Chrome as permitted browsers, so confirm Brave before submitting. If it isn't allowed, use Chrome for the browser steps instead.

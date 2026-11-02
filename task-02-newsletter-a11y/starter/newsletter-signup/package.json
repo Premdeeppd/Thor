@@ -1,0 +1,14 @@
+{
+  "name": "newsletter-signup",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Sign-up page for The Build Notes, the engineering team's monthly newsletter",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "vite": "^8.3.5"
+  }
+}

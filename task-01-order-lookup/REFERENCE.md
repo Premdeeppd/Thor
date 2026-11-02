@@ -97,7 +97,7 @@ Changes from the starter, all inside the search `useEffect`:
 - `setLoading(false)` moved from `.finally` into the success and real-error paths.
 - The cleanup `return () => controller.abort();`.
 
-`loadMore` is deliberately unchanged; the paging bug is task 2.
+`loadMore` is deliberately unchanged; the paging bug is outside this ticket.
 
 ## What you should see, measured on 31 Oct 2026
 

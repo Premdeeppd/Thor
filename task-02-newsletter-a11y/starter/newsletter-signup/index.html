@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Subscribe to The Build Notes</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <main class="card">
+      <img class="logo" src="/logo.svg" width="220" height="48" />
+
+      <h1>Get The Build Notes in your inbox</h1>
+      <p class="intro">
+        One email a month from our engineering team: what we shipped, what broke, and what we
+        learned fixing it.
+      </p>
+      <ul class="perks">
+        <li>Release highlights before they reach the changelog</li>
+        <li>One deep dive into a real production bug</li>
+        <li>Tools and tips the team actually uses</li>
+      </ul>
+
+      <form class="signup">
+        <div class="field-label">Email address</div>
+        <div class="field-row">
+          <input id="email" name="email" type="email" autocomplete="email" required />
+          <button type="submit">Subscribe</button>
+        </div>
+        <p class="muted">One email a month. Unsubscribe any time.</p>
+      </form>
+    </main>
+
+    <footer class="muted">© 2026 The Build Notes · Sent by our engineering team</footer>
+  </body>
+</html>

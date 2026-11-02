@@ -28,13 +28,15 @@ export async function fetchOrders({ q = '', offset = 0, limit = 20, signal } = {
 
 ## `client/src/OrderSearch.jsx`: the whole change
 
-Lines starting with `+` are what you type. The `-` line becomes the `+` line under it: you add `, signal: controller.signal` after `PAGE_SIZE`.
+Lines starting with `+` are what you type. The `-` line becomes the `+` line under it: you add `, signal: controller.signal` after `PAGE_SIZE`. The `//` line above each change says why it's needed; it's only a note here, not in the file.
 
 ```diff
    useEffect(() => {
+     // Each search needs its own controller, so it can be cancelled later.
 +    const controller = new AbortController();
      setLoading(true);
      setError(null);
+     // A controller can only cancel a request that carries its signal.
 -    fetchOrders({ q: query, limit: PAGE_SIZE })
 +    fetchOrders({ q: query, limit: PAGE_SIZE, signal: controller.signal })
        .then((data) => {
@@ -42,13 +44,16 @@ Lines starting with `+` are what you type. The `-` line becomes the `+` line und
          setTotal(data.total);
        })
        .catch((err) => {
+         // A cancel isn't a failure, so the agent shouldn't see it as an error.
 +        if (err.name === 'AbortError') return;
          setError(err.message);
        })
        .finally(() => {
+         // A cancelled search mustn't turn off "Searching…" while the new one loads.
 +        if (controller.signal.aborted) return;
          setLoading(false);
        });
+     // React runs this before the next search, so the old search is cancelled.
 +    return () => controller.abort();
    }, [query]);
 ```

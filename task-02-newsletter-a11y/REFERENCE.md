@@ -6,10 +6,13 @@
 
 This is the finished fix, measured on 2 Nov 2026 with Lighthouse 13.5.0 (the version Brave 1.98.63 / Chromium 156 bundles in DevTools) against the starter in `inputs/input 1.zip`. Two files change: four lines in all.
 
+The comment above each change says why it's needed. The comments are only notes here, not in the files, so the line numbers below don't count them.
+
 ## `index.html`
 
 ```html
 <!doctype html>
+<!-- Screen readers use lang to pick the voice and pronunciation. -->
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -19,6 +22,7 @@ This is the finished fix, measured on 2 Nov 2026 with Lighthouse 13.5.0 (the ver
   </head>
   <body>
     <main class="card">
+      <!-- Screen readers can't read the name in the picture, so alt says it. -->
       <img alt="The Build Notes" class="logo" src="/logo.svg" width="220" height="48" />
 
       <h1>Get The Build Notes in your inbox</h1>
@@ -33,6 +37,7 @@ This is the finished fix, measured on 2 Nov 2026 with Lighthouse 13.5.0 (the ver
       </ul>
 
       <form class="signup">
+        <!-- A real label, tied to the box by for="email", so screen readers read it. -->
         <label for="email" class="field-label">Email address</label>
         <div class="field-row">
           <input id="email" name="email" type="email" autocomplete="email" required />
@@ -54,6 +59,7 @@ The changes are on lines 2 (`lang="en"`), 11 (`alt`, typed straight after `img`)
 ```css
 .muted {
   font-size: 14px;
+  /* #9ca3af was 2.53:1 on white; AA needs 4.5:1, and this grey is 4.83:1. */
   color: #6b7280;
 }
 ```

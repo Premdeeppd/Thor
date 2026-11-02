@@ -1,6 +1,6 @@
 # Task 2 narration: what to say
 
-Two or three short lines per step, in run-sheet order (`PLAN.md`). Say them in your own words, read out the numbers you actually see, and close this file before recording.
+Every bullet below is a line you say, in run-sheet order (`PLAN.md`), two or three per step. The only lines that aren't spoken are the intro instructions, where the project rules fix the words, and one note at the start of the epilogue. Rehearse with it, read out the numbers you actually see, and close this file before recording.
 
 ## How to talk
 
@@ -9,7 +9,11 @@ Two or three short lines per step, in run-sheet order (`PLAN.md`). Say them in y
 
 ## A. Intro
 
-- "I will be beginning my task soon. Here is the workflow I have in mind." Say only this, then minimise the Goal doc.
+With the Goal doc on screen for a few seconds, say only this:
+
+- "I will be beginning my task soon. Here is the workflow I have in mind."
+
+Then minimise the Goal doc without saying anything else.
 
 ## B. Ticket, README, start the page (VS Code)
 
@@ -61,12 +65,33 @@ Two or three short lines per step, in run-sheet order (`PLAN.md`). Say them in y
 
 ## H. Epilogue (3–4 minutes, no mouse)
 
-Pick from these, and say what really happened in your take:
+*If something went differently in your take, say what really happened instead.*
 
-1. **Outcome:** Lighthouse went from 66 to 100, the email field has a real label, and the form works with the keyboard. The fix is committed.
-2. **Verification:** the before and after reports, clicking the label, and tabbing through the form.
-3. **Approach:** let Lighthouse find the problems, read each one, fix it with the smallest change, then run it again.
-4. **Decisions:** a real label instead of a caption `div`; alt text that says what the logo says; a palette grey with some margin instead of the borderline suggestion.
-5. **Limitations and next steps:** Lighthouse covers only part of WCAG. Next would be a VoiceOver pass, checking the Subscribe flow once it's connected (WEB-322), and an automated accessibility check in CI.
-6. **Lesson:** text that looks like a label isn't one unless it's connected to its field. And don't pick a colour that passes by a hair.
+**1. Outcome**
+- The task is complete. The newsletter sign-up page now scores 100 in Lighthouse Accessibility, up from 66, with no failed audits.
+- The email field has a real label, the form works with the keyboard, and the fix is committed.
+
+**2. How I verified it**
+- I ran Lighthouse before and after the fix and saved both reports.
+- When I clicked the words "Email address", the cursor went into the box, so the label is now connected to the field.
+- And when I tabbed through the form, the focus ring moved from the email box to the Subscribe button, so keyboard users can reach both.
+
+**3. Approach and key decisions**
+- I let Lighthouse find the problems first, then fixed each one with the smallest change, so the page still looks the same.
+- I turned the visible caption into a real label, rather than adding a hidden aria-label, so screen-reader users hear the same words everyone else sees.
+- The logo's alt text says the newsletter's name, because that's what the image shows.
+- For the faint text, I reused the darker grey from the email box's border. It passes with some margin and stays in our palette.
+
+**4. Challenges**
+- The colour picker suggests a colour, but it lands right on the 4.5 minimum and can round to just under it, so I chose one with some margin.
+- The caption was easy to miss. It looked like a label, but it was a plain div, which is why VoiceOver only said "edit text".
+
+**5. Limitations and next steps**
+- The change is small, four lines in two files, so it's easy to review.
+- But Lighthouse only checks part of the accessibility guidelines, so a score of 100 doesn't prove the page is fully accessible.
+- With more time, I'd test the page with VoiceOver, check the Subscribe flow once it's connected, and add an automated accessibility check to our build so this can't come back.
+
+**6. One lesson for less experienced developers**
+- Text that looks like a label isn't a label until it's connected to its field.
+- And don't choose a colour that passes contrast by a hair; rounding or a different background can push it under.
 - That's the end of the task.

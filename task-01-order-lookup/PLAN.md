@@ -2,14 +2,14 @@
 
 Status (2 Nov 2026): the first take (about 38 minutes) was rejected because the narration was hard to follow, mostly while writing code. You're re-recording the same approved idea, so section 1 doesn't change. For the re-take, the starter app is changed so the fix is five short new lines in one file, with nothing deleted or moved (`REFERENCE.md` has them). After the fix, one typing test shows the canceled requests and the logpoint together.
 
-AutoQC's narration feedback on task 1 (2 Nov 2026): record the task again **in one uninterrupted take**; for **every action**, say what you do, name the element, say where it is on screen (the screen area, toolbar or line number in the file) and say why; then check with **Run full AutoQC**, not Rerun failing, so the actions are counted again. `NARRATION.md` now does this line by line, and for each code edit it says why the line is needed before the line number where it goes.
+AutoQC's narration feedback on task 1 (2 Nov 2026): record the task again **in one uninterrupted take**; for **every action**, say what you do, name the element, say where it is on screen (the screen area, toolbar or line number in the file) and say why; then check with **Run full AutoQC**, not Rerun failing, so the actions are counted again. `NARRATION.md` now does this line by line, and for each code edit it says why the line is needed before the line number where it goes. Every line from B to G starts with a tag: **[WHY]** says what you'll do next and why, before you do it; **[DO]** is the action, with its place and element; **[SEE]** is what's on screen afterwards.
 
 | | |
 |---|---|
 | Domain | DSD: Software engineering |
 | Role | Full-stack engineer (React + Node/Express) on an internal tools team |
 | Apps, the same list everywhere | **Visual Studio Code · Brave Browser** |
-| Planned length | About 37–42 min at a relaxed, explaining pace: intro 0:20, work about 33–37 min, epilogue about 3:30. Naming the place and the reason for every action adds about 1,000 spoken words to the earlier re-take narration. Still well under the 50:59 limit. |
+| Planned length | About 40–44 min at a relaxed, explaining pace: intro 0:20, work about 36–39 min, epilogue about 3:30. Naming the place and the reason for every action adds about 1,000 spoken words to the earlier re-take narration, and saying what you'll do and why before each action adds about 250 more (about 3,400 in all). Still under the 50:59 limit. |
 | Typing | Short entries only: the address, search terms, the logpoint message (twice), five short lines of code (about 176 characters), two file names and the commit message. About 350 characters, under 3 minutes in all, under 10% of the recording (the limit is 25%, or 35% for coding tasks). The longest entry is a 41-character line of code, about 20 seconds, well under the 45 s limit for typing in one go. |
 | Input | `inputs/input 1.zip`: the Order Lookup app with seeded synthetic orders, a README and support ticket `docs/SUP-1427.md`. AI-generated, so disclose it. Updated 2 Nov 2026 for the re-take: `api.js` already passes a cancel signal to `fetch`, and the search effect's `.catch` and `.finally` use `{ }` blocks. Upload this new zip, not the first take's copy. |
 | Outputs | `artifact 1.har` (network log before the fix), `artifact 2.har` (after the fix), `final output 1.zip` (fixed repo) |
@@ -91,7 +91,7 @@ Type in short pieces. After each piece, stop typing and point at it with the cur
 
 - **Do:** Goal doc visible. Say *"I will be beginning my task soon. Here is the workflow I have in mind."* Minimise the Goal doc.
 
-### B. Understand the report, start the app (about 0:20–4:10) · VS Code: LOOKUP
+### B. Understand the report, start the app (about 0:20–4:30) · VS Code: LOOKUP
 
 1. **Do:** Explorer → `docs/SUP-1427.md` → right-click → **Open Preview**.
    **Why:** start from what the agent sees and what's expected, because those become your checks at the end. Note both: the table must match the search box, and real errors must still show.
@@ -100,7 +100,7 @@ Type in short pieces. After each piece, stop typing and point at it with the cur
 3. **Do:** NPM Scripts panel → ▷ next to `dev:api`, then ▷ next to `dev:web`.
    **See:** "Order API listening on http://localhost:3001" and Vite's local URL (5173; 5174 if 5173 is busy).
 
-### C. Reproduce (about 4:10–7:40) · Brave: LOOKUP
+### C. Reproduce (about 4:30–8:10) · Brave: LOOKUP
 
 1. **Do:** open the Vite URL. Type `alice` at normal speed.
    **See:** the status says *for "alice"*, but the rows are other customers and nothing is highlighted.
@@ -108,7 +108,7 @@ Type in short pieces. After each piece, stop typing and point at it with the cur
    **See:** now it's correct.
 3. **Why:** the same input gives different results depending on typing speed. That points to a timing problem: responses may be coming back in a different order than the requests were sent.
 
-### D. Diagnose (about 7:40–18:30) · Brave DevTools
+### D. Diagnose (about 8:10–20:00) · Brave DevTools
 
 1. **Network panel** (about 5–6 min)
    - **Do:** View → Developer → Developer Tools → **Network** → tick **Disable cache** → filter **Fetch/XHR** → right-click any column header (for example **Name**) and tick **Waterfall**, so every request gets its own timing bar → clear the search box (the × at its right end) and wait for the full list to come back → clear the log (🚫) → click the search box and type `alice` at normal speed. Clear the box *before* the log, or the empty search shows up as a sixth request.
@@ -125,7 +125,7 @@ Type in short pieces. After each piece, stop typing and point at it with the cur
 3. **Save evidence** (about 1 min)
    - **Do:** Network panel → download icon → **Export HAR**. Save to Downloads as `before-fix.har`. It becomes `artifact 1.har`.
 
-### E. Fix (about 18:30–27:30) · VS Code: MODIFY
+### E. Fix (about 20:00–29:15) · VS Code: MODIFY
 
 Five short new lines, all in `OrderSearch.jsx`. Nothing is deleted or moved, and `api.js` doesn't change. Type one line, stop, point at it with the cursor, say why. You don't need to talk while you type.
 
@@ -146,7 +146,7 @@ Five short new lines, all in `OrderSearch.jsx`. Nothing is deleted or moved, and
    Each new line pushes the lines below it down by one, so the numbers above are the ones you see at that moment. After all five, the new lines are 15, 24, 28 and 31, and the signal is on line 18. If VS Code's suggestion list pops up while you type, keep typing; it closes when you click for the next line.
 5. **Do:** save with ⌘S. Leave `loadMore` alone. It's outside this ticket; mention it in the epilogue as a known limitation.
 
-### F. Verify (about 27:30–34:30) · Brave: LOOKUP, then VS Code and back
+### F. Verify (about 29:15–36:35) · Brave: LOOKUP, then VS Code and back
 
 1. **Do:** Brave, **Network** panel → click the reload button (⟳) left of the address bar. Wait for the full list.
    **See:** you may see one canceled request from the page load. That's React StrictMode in development running the effect twice, so your own cleanup cancels the first request. It's expected, and it disappears when you clear the log in step 3.
@@ -166,7 +166,7 @@ Five short new lines, all in `OrderSearch.jsx`. Nothing is deleted or moved, and
    - **Why:** you ignore only `AbortError`, so real failures still reach the agent, as the ticket asks.
    - Point out the old rows still showing under the error. That's a known limitation to mention in the epilogue.
 
-### G. Review and commit (about 34:30–37:15) · VS Code: CREATE
+### G. Review and commit (about 36:35–39:40) · VS Code: CREATE
 
 1. **Do:** Source Control view → click `OrderSearch.jsx` and walk through the diff out loud.
    **See:** one changed file. Five green lines and the `fetchOrders` line with the signal added, all inside the search effect. `loadMore` is unchanged.
@@ -174,7 +174,7 @@ Five short new lines, all in `OrderSearch.jsx`. Nothing is deleted or moved, and
    **See:** the Changes list is empty. If VS Code then offers **Publish Branch**, don't click it: this copy has no remote.
 3. **Stop here; don't keep tinkering.** The API stays stopped from the error test, which is fine.
 
-### H. Epilogue (about 37:15–40:45, no mouse)
+### H. Epilogue (about 39:40–43:10, no mouse)
 
 Talk from what actually happened in *your* recording:
 
@@ -193,7 +193,7 @@ Talk from what actually happened in *your* recording:
 ## 5. Cue card (paper or phone, never on the recorded screen)
 
 ```
-EVERY ACTION: what I do · which element · where on screen · why.     ONE TAKE, no pauses.
+EACH STEP: WHY (what next + why) → DO (where · element · action) → SEE (result).   ONE TAKE, no pauses.
 A  Goal doc → "I will be beginning my task soon. Here is the workflow I have in mind."
 B  minimise Goal doc (yellow, top left) → VS Code (Dock, left) → Explorer: docs → SUP-1427 Open Preview
    (2 expectations) → README Open Preview, scroll: "broad searches slower"
@@ -210,7 +210,7 @@ D  menu bar View → Developer → Developer Tools (opens on the right) → Netw
    → Network tab → Export HAR (download arrow) → before-fix → Save
 E  VS Code (Dock) → api.js: line 1 takes signal, line 3 passes it to fetch
    → OrderSearch.jsx effect 14–28: then 18, catch 22, finally 25, nothing cancels
-   → debounce only rarer → AbortController.   Each line: WHY → LINE NUMBER → click + type → explain
+   → debounce only rarer → AbortController.   Each line: WHY → LINE NUMBER → DO click + type → SEE explain
    1  own controller per search       end of 14 ⏎ → 15           const controller = new AbortController();
    2  request must carry the signal   18, after PAGE_SIZE →      , signal: controller.signal
    3  cleanup cancels old search      end of 28 ⏎ → 29, Delete   return () => controller.abort();

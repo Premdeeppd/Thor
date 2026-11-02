@@ -2,22 +2,29 @@
 
 Every bullet below is a line you say, in run-sheet order (`PLAN.md`). Rehearse with it, then **close this file before recording** and say it in your own words. Only the cue card should be near you during the take.
 
-The only text that isn't spoken is the two sections before the intro, the intro instruction and one note at the start of the epilogue.
+The only text that isn't spoken is the tags, the two sections before the intro, the intro instruction and one note at the start of the epilogue.
 
 ## How to talk while recording
 
+Every line from B to G starts with a tag that says what kind of line it is. The tags are only for rehearsal; don't say them out loud.
+
+- **[WHY]**: say it *before* you touch anything. It says what you'll do next and why.
+- **[DO]**: say it *while* you do it. It says where the element is on screen, what you do and which element.
+- **[SEE]**: say it once the result is on screen. It says what you see and what it means.
+
+So every step goes the same way: first say what you'll do next and why, then do it, then say what you see.
+
 AutoQC's feedback on task 1's narration asks for three things, and they apply to this task too:
 
-- **For every action, say what you do, name the element, say where it is on screen, and say why.** "Where" is the screen area, the toolbar or panel, or the line number in the file. For example: *"In the Explorer on the left, I'm right-clicking `WEB-318.md` and choosing Open Preview, so I can read the ticket formatted."* Every line below is written this way.
+- **For every action, say what you do, name the element, say where it is on screen, and say why.** "Where" is the screen area, the toolbar or panel, or the line number in the file. The [WHY] line gives the why just before the action, and the [DO] line gives the rest. For example: *"Ticket WEB-318 is about this page, so I'll read it first."* Then: *"I'm right-clicking `WEB-318.md`, just under docs in the Explorer on the left, and choosing Open Preview."*
 - **Record the task in one uninterrupted take,** from the intro to the end of the epilogue. Don't pause or stop TaskRecorder in between. If something goes wrong, say what happened and keep going.
 - **To check the recording, click Run full AutoQC, not Rerun failing,** so all its actions are counted.
 
 Also:
 
-- **Keys are actions too.** Say Return, Tab, Escape, the right arrow and Command A as you press them, and why.
-- **While editing code,** say each of the four changes in the same order: why it's needed, then the line number where it goes, then click there and type it, then stop and point at it while you say what it does. You don't need to talk while you type.
+- **Keys are actions too.** Say Return, Tab, Escape, the right arrow and Command A as you press them.
+- **While editing code,** each of the four changes goes the same way: a [WHY] line for why it's needed, a [WHY] line for the line number where it goes, then [DO] lines as you click there and type it, then a [SEE] line while you point at it and say what it does. You don't need to talk while you type.
 - **Let VS Code type the quote marks.** In `index.html`, when you type an equals sign after an attribute name and pause, VS Code adds `""` and puts the cursor between them. Type only the value. If you type the quotes yourself, you get two pairs.
-- **After each result,** say what you see, where it is, and what it means.
 - **Type in short pieces.** Type one piece, stop, then point at it with the cursor while you explain it. Odin allows at most 45 seconds of typing in one go, and nothing in this task needs more than about 20.
 - Slow and clear is better than fast. Short pauses before important clicks are fine.
 - If something unexpected happens, say what you see and what you'll try next. That's valuable, not a mistake.
@@ -50,137 +57,212 @@ With the Goal doc on screen for a few seconds, say only this:
 
 - "I will be beginning my task soon. Here is the workflow I have in mind."
 
-Don't read or explain the Goal. The first line of B minimises it.
+Don't read or explain the Goal. B starts by minimising it.
 
 ## B. Read the ticket and start the page (VS Code)
 
 **Open the project**
-- I'm clicking the yellow minimise button at the top left of the Goal doc's window, to clear the screen for the work.
-- I'm clicking VS Code in the Dock on the left, to open the sign-up page for our team's newsletter, The Build Notes. It's plain HTML and CSS, served by Vite.
+- **[WHY]** First, I'll clear the screen for the work, and open the sign-up page for our team's newsletter, The Build Notes. It's plain HTML and CSS, served by Vite.
+- **[DO]** I'm clicking the yellow minimise button at the top left of the Goal doc's window.
+- **[DO]** I'm clicking VS Code in the Dock on the left.
 
 **Read the ticket**
-- Ticket WEB-318 is about this page, so I'll read it first. In the Explorer on the left, I'm clicking the docs folder, at the top, to open it.
-- I'm right-clicking `WEB-318.md`, just under docs, and choosing Open Preview, so the ticket opens formatted in the editor.
-- The page fails our accessibility release check, so it can't go live on Friday. A VoiceOver user also said the email box is read out as just "edit text". So the box has no name.
-- The ticket expects a Lighthouse Accessibility score of 100 with no failed audits, a label that screen readers read out for the email box, a form that works with the keyboard, and the same look, apart from colour fixes. Those are my checks at the end.
+- **[WHY]** Ticket WEB-318 is about this page, so I'll read it first. It's in the docs folder.
+- **[DO]** In the Explorer on the left, I'm clicking the docs folder, at the top, to open it.
+- **[DO]** I'm right-clicking `WEB-318.md`, just under docs, and choosing Open Preview.
+- **[SEE]** The ticket opens formatted in the editor. The page fails our accessibility release check, so it can't go live on Friday. A VoiceOver user also said the email box is read out as just "edit text". So the box has no name.
+- **[SEE]** The ticket expects a Lighthouse Accessibility score of 100 with no failed audits, a label that screen readers read out for the email box, a form that works with the keyboard, and the same look, apart from colour fixes. Those are my checks at the end.
 
 **Read the README**
-- Next, I'm right-clicking `README.md`, at the bottom of the file list in the Explorer, and choosing Open Preview, to read the release checklist.
-- Near the top, it says the form isn't connected yet. That's ticket WEB-322, so Subscribe doesn't send anything.
-- I'm pointing at the release checklist at the bottom of the preview. It adds one more check: text contrast of at least 4.5 to 1. And Lighthouse runs with only Accessibility ticked.
+- **[WHY]** Next, I'll read the README, for the release checklist.
+- **[DO]** I'm right-clicking `README.md`, at the bottom of the file list in the Explorer, and choosing Open Preview.
+- **[SEE]** Near the top, it says the form isn't connected yet. That's ticket WEB-322, so Subscribe doesn't send anything.
+- **[WHY]** The release checklist at the bottom says what the page must pass, so I'll go through it.
+- **[DO]** I'm pointing at the release checklist at the bottom of the preview.
+- **[SEE]** It adds one more check: text contrast of at least 4.5 to 1. And Lighthouse runs with only Accessibility ticked.
 
 **Start the page**
-- In the NPM Scripts section at the bottom of the Explorer, I'm clicking the play button at the right end of the `dev` row, to start Vite without typing commands. In the terminal panel that opens at the bottom, Vite prints the address: localhost, port 5173.
+- **[WHY]** Now I'll start Vite. The NPM Scripts section lets me start it with a click, without typing commands.
+- **[DO]** In the NPM Scripts section at the bottom of the Explorer, I'm clicking the play button at the right end of the `dev` row.
+- **[SEE]** In the terminal panel that opens at the bottom, Vite prints the address: localhost, port 5173.
 
 ## C. Run the audit (Brave)
 
 **Look at the page**
-- I'm clicking Brave, the lion icon in the Dock on the left, to look at the page.
-- I'm clicking the address bar at the top of the Brave window, typing localhost:5173 and pressing Return, to open the page Vite is serving.
-- It's one sign-up card. I'm pointing at the grey line under the email box, and at the grey footer under the card. Both are faint and hard to read.
-- Now I'm clicking the words "Email address", just above the box, to see if they're a real label. Nothing happens. Clicking a real label puts the cursor in its box, so this caption isn't connected.
+- **[WHY]** Next, I'll open the page in Brave, to see it the way visitors do.
+- **[DO]** I'm clicking Brave, the lion icon in the Dock on the left.
+- **[DO]** I'm clicking the address bar at the top of the Brave window, typing localhost:5173 and pressing Return.
+- **[SEE]** It's one sign-up card.
+- **[WHY]** First, I'll look at the grey text, because the README asks for good contrast.
+- **[DO]** I'm pointing at the grey line under the email box, and at the grey footer under the card.
+- **[SEE]** Both are faint and hard to read.
+- **[WHY]** Now I'll check whether the words "Email address", just above the box, are a real label. Clicking a real label puts the cursor in its box.
+- **[DO]** I'm clicking the words "Email address".
+- **[SEE]** Nothing happens, so this caption isn't connected to the box.
 
 **Run Lighthouse**
-- In the menu bar at the top of the screen, I'm clicking View, then Developer, then Developer Tools, because Lighthouse is part of DevTools. DevTools opens on the right.
-- In the tab row at the top of DevTools, I'm clicking Lighthouse, the second tab, to open the audit.
-- I'm leaving Mode on Navigation and Device on Mobile, the defaults. Under Categories, I'm unticking Performance, Best practices and SEO, so only Accessibility is ticked, as the README asks.
-- I'm clicking the blue Analyze page load button near the top of the panel, to start the audit. Lighthouse reloads the page and checks it, in about fifteen seconds.
+- **[WHY]** Now I'll run Lighthouse, which is part of DevTools. First I'll open DevTools, then the Lighthouse panel.
+- **[DO]** In the menu bar at the top of the screen, I'm clicking View, then Developer, then Developer Tools.
+- **[SEE]** DevTools opens on the right.
+- **[DO]** In the tab row at the top of DevTools, I'm clicking Lighthouse, the second tab.
+- **[WHY]** Next, I'll set up the audit the way the README asks, with only Accessibility ticked.
+- **[DO]** I'm leaving Mode on Navigation and Device on Mobile, the defaults. Under Categories, I'm unticking Performance, Best practices and SEO.
+- **[WHY]** Now I'll start the audit.
+- **[DO]** I'm clicking the blue Analyze page load button near the top of the panel.
+- **[SEE]** Lighthouse reloads the page and checks it, in about fifteen seconds.
 
 **Read the failed audits**
-- At the top of the report, the Accessibility score is an orange 66. Below it, four audits failed, in three groups.
-- Under Names and labels, I'm clicking the first one, "Image elements do not have alt attributes", to open it. I'm pointing at the element it lists, and the logo lights up in the page. Screen readers can't read the name inside this picture.
-- I'm clicking the next one, "Form elements do not have associated labels", to open it, and pointing at its element: the email box lights up. That's the VoiceOver problem from the ticket.
-- Under Contrast, I'm clicking "Background and foreground colors do not have a sufficient contrast ratio". It lists the grey line and the footer, which are hard to read with low vision or on a bright screen.
-- Under Internationalization and localization, I'm clicking the last one: the html element has no lang attribute. Screen readers use lang to pick the right voice and pronunciation.
+- **[SEE]** At the top of the report, the Accessibility score is an orange 66. Below it, four audits failed, in three groups.
+- **[WHY]** I'll open each failed audit, to see what it found and where it is in the page.
+- **[DO]** Under Names and labels, I'm clicking the first one, "Image elements do not have alt attributes", and pointing at the element it lists.
+- **[SEE]** The logo lights up in the page. Screen readers can't read the name inside this picture.
+- **[DO]** I'm clicking the next one, "Form elements do not have associated labels", and pointing at its element.
+- **[SEE]** The email box lights up. That's the VoiceOver problem from the ticket.
+- **[DO]** Under Contrast, I'm clicking "Background and foreground colors do not have a sufficient contrast ratio".
+- **[SEE]** It lists the grey line and the footer, which are hard to read with low vision or on a bright screen.
+- **[DO]** Under Internationalization and localization, I'm clicking the last one.
+- **[SEE]** The html element has no lang attribute. Screen readers use lang to pick the right voice and pronunciation.
 
 **Save the report**
-- To keep this report as evidence, I'm clicking the three-dot menu at the top right of the report and choosing Save as HTML.
-- In the save dialog, I'm typing lighthouse-before as the file name, checking that it's going to Downloads, and clicking Save at the bottom right.
+- **[WHY]** I'll save this report as evidence.
+- **[DO]** I'm clicking the three-dot menu at the top right of the report and choosing Save as HTML.
+- **[DO]** In the save dialog, I'm typing lighthouse-before as the file name, checking that it's going to Downloads, and clicking Save at the bottom right.
 
 ## D. Check the contrast (Brave DevTools)
 
-- Before I change the code, I want to see the contrast numbers myself. In the page on the left, I'm right-clicking the grey line under the email box and choosing Inspect, to find its colour.
-- DevTools switches to the Elements panel and selects that paragraph. In the Styles pane, under the HTML, the `.muted` rule sets its colour to `#9ca3af`, a light grey.
-- I'm clicking the small grey square just left of `#9ca3af`, to open the colour picker, because it shows the contrast ratio.
-- In the lower half of the picker, the Contrast ratio row says about 2.5, with a warning sign. I'm clicking the arrow at the right end of that row, to see the targets. AA needs 4.5 for text this size, so this grey fails.
-- The picker also offers a colour that just reaches 4.5, but one right on the limit can round to just under it. I'm pressing Escape to close the picker.
-- Instead, I'll try the darker grey our email box's border uses, `#6b7280`. I'm double-clicking the value `#9ca3af` in the `.muted` rule and pressing Command A, so the whole value is selected, hash sign included.
-- In that box, I'm typing `#6b7280` and pressing Return, to apply it. Both grey texts in the page turn darker, because they share the `.muted` class.
-- I'm clicking the colour square next to the new value, to check the ratio again. It's now about 4.8, with a check mark for AA, so it passes with some margin.
-- I'm pressing Escape to close the picker. DevTools changes are lost when the page reloads, so next I'll make the real fix in the code.
+- **[WHY]** Before I change the code, I want to see the contrast numbers myself. First, I'll find the grey line's colour.
+- **[DO]** In the page on the left, I'm right-clicking the grey line under the email box and choosing Inspect.
+- **[SEE]** DevTools switches to the Elements panel and selects that paragraph. In the Styles pane, under the HTML, the `.muted` rule sets its colour to `#9ca3af`, a light grey.
+- **[WHY]** The colour picker shows the contrast ratio, so I'll open it.
+- **[DO]** I'm clicking the small grey square just left of `#9ca3af`.
+- **[SEE]** In the lower half of the picker, the Contrast ratio row says about 2.5, with a warning sign.
+- **[WHY]** I'll open that row, to see the targets.
+- **[DO]** I'm clicking the arrow at the right end of the Contrast ratio row.
+- **[SEE]** AA needs 4.5 for text this size, so this grey fails.
+- **[WHY]** The picker also offers a colour that just reaches 4.5, but one right on the limit can round to just under it. So I won't use it.
+- **[DO]** I'm pressing Escape to close the picker.
+- **[WHY]** Instead, I'll try the darker grey our email box's border uses, `#6b7280`. First, I'll select the whole old value, hash sign included.
+- **[DO]** I'm double-clicking the value `#9ca3af` in the `.muted` rule and pressing Command A.
+- **[DO]** In that box, I'm typing `#6b7280` and pressing Return.
+- **[SEE]** Both grey texts in the page turn darker, because they share the `.muted` class.
+- **[WHY]** Now I'll check the ratio again, in the colour picker.
+- **[DO]** I'm clicking the colour square next to the new value.
+- **[SEE]** It's now about 4.8, with a check mark for AA, so it passes with some margin.
+- **[WHY]** DevTools changes are lost when the page reloads, so I'll make the real fix in the code next. First, I'll close the picker.
+- **[DO]** I'm pressing Escape.
 
 ## E. Fix the code (VS Code)
 
 **Open the HTML**
-- I'm clicking VS Code in the Dock on the left, to make the real fix in the code.
-- In the Explorer on the left, I'm clicking `index.html`, just under `.gitignore`, to open the page's HTML.
-- Three of the problems are in this file, on lines 2, 11 and 25. I'll fix them one at a time, then the colour in the CSS.
+- **[WHY]** Now I'll go back to VS Code, to make the real fix in the code.
+- **[DO]** I'm clicking VS Code in the Dock on the left.
+- **[WHY]** First, I'll open the page's HTML.
+- **[DO]** In the Explorer on the left, I'm clicking `index.html`, just under `.gitignore`.
+- **[SEE]** Three of the problems are in this file, on lines 2, 11 and 25.
+- **[WHY]** I'll fix them one at a time, then the colour in the CSS.
 
 **Change 1 of 4: the page language (line 2)**
-- Screen readers use the lang attribute to pick the voice and pronunciation, and this page doesn't say it's in English.
-- It goes on the html element, on line 2. I'm double-clicking the word html on line 2 and pressing the right arrow key, so the cursor sits just after it.
-- I'm typing a space, lang and an equals sign, and pausing. VS Code adds the two quote marks and puts the cursor between them, so I'm typing just "en".
-- Line 2 now has `lang="en"`: the page is in English.
+- **[WHY]** First, I'll add the page's language. Screen readers use the lang attribute to pick the voice and pronunciation, and this page doesn't say it's in English.
+- **[WHY]** It goes on the html element, on line 2, right after the word html.
+- **[DO]** I'm double-clicking the word html on line 2 and pressing the right arrow key.
+- **[DO]** I'm typing a space, lang and an equals sign, and pausing.
+- **[SEE]** VS Code adds the two quote marks and puts the cursor between them.
+- **[DO]** So I'm typing just "en".
+- **[SEE]** Line 2 now has `lang="en"`: the page is in English.
 
 **Change 2 of 4: the logo's alt text (line 11)**
-- The logo shows the newsletter's name as a picture, so it needs alt text that says the name. A purely decorative image would get an empty alt instead.
-- The logo is the img element on line 11. I'm double-clicking img on line 11 and pressing the right arrow key, so the cursor sits just after it.
-- I'm typing a space, alt and an equals sign, pausing for the quote marks, and typing "The Build Notes" between them.
-- Now screen readers read the logo as "The Build Notes".
+- **[WHY]** Next, the logo's alt text. The logo shows the newsletter's name as a picture, so it needs alt text that says the name. A purely decorative image would get an empty alt instead.
+- **[WHY]** The logo is the img element on line 11, so the alt goes right after the word img.
+- **[DO]** I'm double-clicking img on line 11 and pressing the right arrow key.
+- **[DO]** I'm typing a space, alt and an equals sign, pausing for the quote marks, and typing "The Build Notes" between them.
+- **[SEE]** Now screen readers read the logo as "The Build Notes".
 
 **Change 3 of 4: a real label (line 25)**
-- Now the main problem from the ticket. The "Email address" caption looks like a label, but it's a plain div, so nothing connects it to the box. That's why VoiceOver said just "edit text".
-- The caption is on line 25, and its box is the input on line 27, with the id "email". I'm double-clicking the first div on line 25 and typing label, to make the caption a real label.
-- Right after the word label, I'm typing a space, for and an equals sign, and "email" between the quote marks. The for attribute must match the box's id on line 27.
-- The closing tag at the end of line 25 still says div. I'm double-clicking that div and typing label, so the closing tag matches.
-- Now screen readers read "Email address" for the box. The field-label style already makes the label a block, so the page looks the same.
+- **[WHY]** Now the main problem from the ticket. The "Email address" caption looks like a label, but it's a plain div, so nothing connects it to the box. That's why VoiceOver said just "edit text". So I'll make it a real label.
+- **[WHY]** The caption is on line 25, and its box is the input on line 27, with the id "email". First, I'll change the opening div on line 25 to label.
+- **[DO]** I'm double-clicking the first div on line 25 and typing label.
+- **[WHY]** Next, the label needs a for attribute that matches the box's id on line 27.
+- **[DO]** Right after the word label, I'm typing a space, for and an equals sign, and "email" between the quote marks.
+- **[WHY]** The closing tag at the end of line 25 still says div, so I'll change it too, to match.
+- **[DO]** I'm double-clicking that div and typing label.
+- **[SEE]** Now screen readers read "Email address" for the box. The field-label style already makes the label a block, so the page looks the same.
 
 **Change 4 of 4: the grey text (styles.css, line 87)**
-- Last, the faint grey, which measured 2.5 when it needs 4.5. In the Explorer, I'm clicking the src folder and then `styles.css` inside it, to open the stylesheet.
-- The grey comes from the `.muted` rule, which starts on line 85, so I'm scrolling down the editor to it. The colour is on line 87.
-- I'm double-clicking `9ca3af` on line 87, which selects the six characters after the hash sign, and typing 6b7280, the grey I tested in DevTools.
-- I'm pointing at line 66, a little higher up: the email box's border already uses this grey, so the page stays in its palette. Both grey texts use `.muted`, so this one line fixes both.
+- **[WHY]** Last, the faint grey, which measured 2.5 when it needs 4.5. It's in the stylesheet, so I'll open it.
+- **[DO]** In the Explorer, I'm clicking the src folder and then `styles.css` inside it.
+- **[WHY]** The grey comes from the `.muted` rule, which starts on line 85, so I'll scroll down to it.
+- **[DO]** I'm scrolling down the editor to line 85.
+- **[SEE]** The colour is on line 87.
+- **[WHY]** I'll change it to the grey I tested in DevTools.
+- **[DO]** I'm double-clicking `9ca3af` on line 87, which selects the six characters after the hash sign, and typing 6b7280.
+- **[WHY]** Next, I'll show where this grey comes from.
+- **[DO]** I'm pointing at line 66, a little higher up.
+- **[SEE]** The email box's border already uses this grey, so the page stays in its palette. Both grey texts use `.muted`, so this one line fixes both.
 
 **Save**
-- In the menu bar at the top of the screen, I'm clicking File, then Save All, to save both files. The dots on the `index.html` and `styles.css` tabs at the top of the editor disappear, so they're saved.
+- **[WHY]** Now I'll save both files at once.
+- **[DO]** In the menu bar at the top of the screen, I'm clicking File, then Save All.
+- **[SEE]** The dots on the `index.html` and `styles.css` tabs at the top of the editor disappear, so they're saved.
 
 ## F. Verify the fix (Brave)
 
 **Reload**
-- I'm clicking Brave in the Dock on the left, to check the fix.
-- I'm clicking the reload button, the circular arrow just left of the address bar, so the page loads my saved files, without the colour I tried in DevTools.
+- **[WHY]** Now I'll switch to Brave, to check the fix.
+- **[DO]** I'm clicking Brave in the Dock on the left.
+- **[WHY]** I'll reload the page, so it loads my saved files, without the colour I tried in DevTools.
+- **[DO]** I'm clicking the reload button, the circular arrow just left of the address bar.
 
 **Label and keyboard**
-- In the page on the left, I'm clicking the words "Email address" again, to test the label. Now the cursor jumps into the box and a focus ring appears, so the label is connected.
-- Next, the keyboard check from the README. I'm clicking the heading, "Get The Build Notes in your inbox", so the keyboard starts from there, and pressing Tab. The focus ring moves to the email box.
-- I'm pressing Tab again, and the ring moves to the Subscribe button. So keyboard users can reach the field and the button.
+- **[WHY]** First, I'll test the label, by clicking its words again.
+- **[DO]** In the page on the left, I'm clicking the words "Email address".
+- **[SEE]** Now the cursor jumps into the box and a focus ring appears, so the label is connected.
+- **[WHY]** Next, the keyboard check from the README. I'll start from the heading and move through the form with Tab.
+- **[DO]** I'm clicking the heading, "Get The Build Notes in your inbox", and pressing Tab.
+- **[SEE]** The focus ring moves to the email box.
+- **[DO]** I'm pressing Tab again.
+- **[SEE]** The ring moves to the Subscribe button. So keyboard users can reach the field and the button.
 
 **Run Lighthouse again**
-- In the tab row at the top of DevTools, I'm clicking Lighthouse, to audit the fixed page.
-- I'm clicking the plus button at the left end of the Lighthouse toolbar, at the top of the panel, to start a new report. Only Accessibility is still ticked, so I'm clicking Analyze page load.
-- The score is now a green 100, with no failed audits.
-- I'm pointing at "Additional items to manually check", just under the score. Lighthouse can't check everything automatically, which is why I tested the label and the keyboard myself.
+- **[WHY]** Now I'll audit the fixed page with Lighthouse, in a new report.
+- **[DO]** In the tab row at the top of DevTools, I'm clicking Lighthouse.
+- **[DO]** I'm clicking the plus button at the left end of the Lighthouse toolbar, at the top of the panel, to start a new report.
+- **[SEE]** Only Accessibility is still ticked.
+- **[DO]** So I'm clicking Analyze page load.
+- **[SEE]** The score is now a green 100, with no failed audits.
+- **[WHY]** A score of 100 isn't the whole story, so I'll show what Lighthouse leaves for people to check.
+- **[DO]** I'm pointing at "Additional items to manually check", just under the score.
+- **[SEE]** Lighthouse can't check everything automatically, which is why I tested the label and the keyboard myself.
 
 **Save the report**
-- I'm clicking the three-dot menu at the top right of the report and choosing Save as HTML. In the save dialog, I'm typing lighthouse-after and clicking Save at the bottom right. Now I have reports from before and after the fix.
+- **[WHY]** I'll save this report too, so I have reports from before and after the fix.
+- **[DO]** I'm clicking the three-dot menu at the top right of the report and choosing Save as HTML.
+- **[DO]** In the save dialog, I'm typing lighthouse-after and clicking Save at the bottom right.
 
 ## G. Review and commit (VS Code)
 
 **Review the diff**
-- I'm clicking VS Code in the Dock on the left, to review my changes before I commit them.
-- In the Activity Bar on the far left of VS Code, I'm clicking the Source Control icon, the third one down, to see what changed. Under Changes, two files are listed: `index.html` and `styles.css`.
-- I'm clicking `index.html` in that list to open its diff in the editor. The green lines are my changes: the language on line 2, the alt text on line 11 and the label on line 25.
-- Now I'm clicking `styles.css` in the same list. Only one line changed: the `.muted` colour on line 87. Nothing else changed, so the page keeps its look.
+- **[WHY]** Now I'll go back to VS Code, to review my changes before I commit them.
+- **[DO]** I'm clicking VS Code in the Dock on the left.
+- **[WHY]** I'll open Source Control, to see what changed.
+- **[DO]** In the Activity Bar on the far left of VS Code, I'm clicking the Source Control icon, the third one down.
+- **[SEE]** Under Changes, two files are listed: `index.html` and `styles.css`.
+- **[WHY]** I'll open each file's diff, to check every line I changed.
+- **[DO]** I'm clicking `index.html` in that list.
+- **[SEE]** Its diff opens in the editor. The green lines are my changes: the language on line 2, the alt text on line 11 and the label on line 25.
+- **[DO]** Now I'm clicking `styles.css` in the same list.
+- **[SEE]** Only one line changed: the `.muted` colour on line 87. Nothing else changed, so the page keeps its look.
 
 **Commit**
-- I'm pointing at the Changes header and clicking the plus at its right end, Stage All Changes, to stage both files for the commit.
-- I'm clicking the message box at the top of the Source Control view and typing "Fix accessibility issues on sign-up page (WEB-318)", so the commit names the ticket it fixes.
-- I'm clicking the blue Commit button, just under the message box, to commit the fix.
-- The Source Control list is empty now, so the fix is committed, and the task is done.
+- **[WHY]** The changes look right, so I'll stage both files for the commit.
+- **[DO]** I'm pointing at the Changes header and clicking the plus at its right end, Stage All Changes.
+- **[WHY]** Next, I'll write a commit message that names the ticket it fixes, and commit the fix.
+- **[DO]** I'm clicking the message box at the top of the Source Control view and typing "Fix accessibility issues on sign-up page (WEB-318)".
+- **[DO]** I'm clicking the blue Commit button, just under the message box.
+- **[SEE]** The Source Control list is empty now, so the fix is committed, and the task is done.
 
 ## H. Epilogue (3–4 minutes, no mouse)
 
-*If something went differently in your take, say what really happened instead.*
+*These lines have no tags: you say them with no mouse, and nothing new happens on screen. If something went differently in your take, say what really happened instead.*
 
 **1. Outcome**
 - The task is complete. The newsletter sign-up page now scores 100 in Lighthouse Accessibility, up from 66, with no failed audits.

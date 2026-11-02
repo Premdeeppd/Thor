@@ -2,14 +2,14 @@
 
 Status (2 Nov 2026): prepared, not submitted in Studio yet. The input is built, and both the problem and the fix are measured with Lighthouse 13.5.0, the same version Brave 1.98.63 bundles in DevTools: 66 before, 100 after. Later that day, `NARRATION.md` was rewritten for AutoQC's narration rule (below), and this run-sheet and `REFERENCE.md` were synced with it.
 
-AutoQC's narration feedback on task 1 (2 Nov 2026) applies to this task too: record it **in one uninterrupted take**; for **every action**, keys included, say what you do, name the element, say where it is on screen (the screen area, toolbar or panel, or the line number in the file) and say why; then check with **Run full AutoQC**, not Rerun failing, so every action is counted. `NARRATION.md` does this line by line, and for each code change it says why the change is needed before the line number where it goes. The line numbers were checked by replaying the edits on the starter: no line is added or removed, so they never shift.
+AutoQC's narration feedback on task 1 (2 Nov 2026) applies to this task too: record it **in one uninterrupted take**; for **every action**, keys included, say what you do, name the element, say where it is on screen (the screen area, toolbar or panel, or the line number in the file) and say why; then check with **Run full AutoQC**, not Rerun failing, so every action is counted. `NARRATION.md` does this line by line, and for each code change it says why the change is needed before the line number where it goes. Every line from B to G starts with a tag: **[WHY]** says what you'll do next and why, before you do it; **[DO]** is the action, with its place and element; **[SEE]** is what's on screen afterwards. The line numbers were checked by replaying the edits on the starter: no line is added or removed, so they never shift.
 
 | | |
 |---|---|
 | Domain | DSD: Software engineering |
 | Role | Front-end developer on the web team that builds the company's marketing and sign-up pages |
 | Apps, the same list everywhere | **Visual Studio Code · Brave Browser** |
-| Planned length | About 24–25 min at a slow, explaining pace: intro 0:20, work about 21 min, epilogue about 3:20. Naming the place and the reason for every action makes the work narration about 2,000 words, about 18 minutes at 110 words a minute. That's near the top of the 20–25 min target and well inside Odin's 15:00–50:59. |
+| Planned length | About 26–27 min at a slow, explaining pace: intro 0:20, work about 23 min, epilogue about 3:20. Naming the place and the reason for every action, and saying what you'll do and why before each action, makes the work narration about 2,230 words, about 20 minutes at 110 words a minute. That's a little over the 20–25 min target and well inside Odin's 15:00–50:59. |
 | Typing | About 160 characters in all: the address, two file names, one colour value in DevTools and the same value in VS Code, three short attribute edits (VS Code types the quote marks) and the commit message. About a minute, roughly 4% of the recording; the longest entry (the 50-character commit message) takes about 20 s. |
 | Input | `inputs/input 1.zip`: the sign-up page (HTML and CSS served by Vite), a README with the release checklist and ticket `docs/WEB-318.md`. AI-generated, so disclose it. |
 | Outputs | `artifact 1.html` (Lighthouse report before the fix), `artifact 2.html` (after the fix), `final output 1.zip` (fixed repo) |
@@ -89,7 +89,7 @@ Type in short pieces. After each piece, stop typing and point at it with the cur
 
 - **Do:** Goal doc visible. Say *"I will be beginning my task soon. Here is the workflow I have in mind."* Don't read or explain the Goal.
 
-### B. Read the ticket, start the page (about 0:20–3:20) · VS Code: LOOKUP
+### B. Read the ticket, start the page (about 0:20–3:40) · VS Code: LOOKUP
 
 1. **Do:** minimise the Goal doc (yellow button, top left of its window) → VS Code in the Dock → Explorer → click `docs` (top of the list) → right-click `WEB-318.md` → **Open Preview**.
    **Why:** the page can't go live until Lighthouse Accessibility is 100, and a VoiceOver user heard the email box as just "edit text", so the box has no name. The three Expected items become your checks at the end.
@@ -98,7 +98,7 @@ Type in short pieces. After each piece, stop typing and point at it with the cur
 3. **Do:** NPM Scripts (bottom of the Explorer) → ▷ at the right end of the `dev` row.
    **See:** the terminal panel opens at the bottom, and Vite prints `Local: http://localhost:5173/`.
 
-### C. Run the audit (about 3:20–7:50) · Brave Browser: LOOKUP
+### C. Run the audit (about 3:40–8:35) · Brave Browser: LOOKUP
 
 1. **Do:** Brave in the Dock → click the address bar → type `localhost:5173` → Return. Point at the faint grey line under the email box and the grey footer under the card. Click the words **Email address** above the box: the cursor doesn't go into the box.
    **Why:** clicking a real label puts the cursor in its field, so this caption isn't connected to the box.
@@ -111,7 +111,7 @@ Type in short pieces. After each piece, stop typing and point at it with the cur
    **Why:** screen readers can't read text inside an image, can't name an unlabelled field, and use `lang` to pick the voice and pronunciation; faint text is hard to read for people with low vision or on a bright screen.
 4. **Do:** the report's **⋮** menu (top right of the report) → **Save as HTML** → in the save dialog, type `lighthouse-before`, check that Where says Downloads → **Save** (bottom right). It becomes `artifact 1.html`.
 
-### D. Check the contrast in DevTools (about 7:50–10:40) · Brave Browser: LOOKUP
+### D. Check the contrast in DevTools (about 8:35–11:35) · Brave Browser: LOOKUP
 
 1. **Do:** in the page, right-click the grey "One email a month. Unsubscribe any time." line under the email box → **Inspect**.
    **See:** the Elements panel selects `<p class="muted">`, and in the Styles pane under the HTML, `.muted` has `color: #9ca3af`.
@@ -122,7 +122,7 @@ Type in short pieces. After each piece, stop typing and point at it with the cur
    **See:** both grey texts get darker, and the ratio is about 4.8 with a check mark for AA. Press **Escape** to close the picker.
    **Why:** `#6b7280` is the grey the email box's border already uses, so the page stays in its palette and passes with some margin. DevTools changes disappear on reload, so the real fix goes in the CSS file next. Command A matters: a double-click may select only `9ca3af`, and typing `#6b7280` over that gives `##6b7280`.
 
-### E. Fix the code (about 10:40–16:30) · VS Code: MODIFY
+### E. Fix the code (about 11:35–18:00) · VS Code: MODIFY
 
 Four changes: three in `index.html` and one in `src/styles.css`. Nothing is added or removed, so no line moves while you edit: the changes stay on lines 2, 11, 25 and 87 (`REFERENCE.md` has every keystroke). Type one piece, stop, point at it, say why. You don't need to talk while you type.
 
@@ -142,7 +142,7 @@ Four changes: three in `index.html` and one in `src/styles.css`. Nothing is adde
 3. **Do:** menu bar → File → **Save All**.
    **See:** the dots on the `index.html` and `styles.css` tabs disappear.
 
-### F. Verify (about 16:30–19:30) · Brave Browser: LOOKUP
+### F. Verify (about 18:00–21:25) · Brave Browser: LOOKUP
 
 1. **Do:** Brave in the Dock → reload button (⟳, just left of the address bar).
    **Why:** the page loads the saved files, and the colour you tried in DevTools is gone, so what you test next comes from the code.
@@ -152,7 +152,7 @@ Four changes: three in `index.html` and one in `src/styles.css`. Nothing is adde
    **See:** a green **100** and no failed audits. Point at **Additional items to manually check** under the score: Lighthouse says automated checks can't catch everything, which is why you did the label and keyboard checks by hand.
 4. **Do:** ⋮ → **Save as HTML** → `lighthouse-after` → **Save**. It becomes `artifact 2.html`.
 
-### G. Review and commit (about 19:30–21:30) · VS Code: CREATE
+### G. Review and commit (about 21:25–23:40) · VS Code: CREATE
 
 1. **Do:** VS Code in the Dock → Source Control (Activity Bar, third icon) → click `index.html` and say its three changed lines (2, 11, 25), then `styles.css` and its one line (87).
    **See:** two changed files, four green lines in all. Nothing else changed, so the page keeps its look.
@@ -160,7 +160,7 @@ Four changes: three in `index.html` and one in `src/styles.css`. Nothing is adde
    **See:** the Changes list is empty. If VS Code then offers **Publish Branch**, don't click it: this copy has no remote.
 3. **Stop here.** Don't keep tinkering.
 
-### H. Epilogue (about 21:30–24:50, no mouse)
+### H. Epilogue (about 23:40–27:00, no mouse)
 
 Say the lines in `NARRATION.md`, changed to match what actually happened in *your* recording. They cover:
 
@@ -172,7 +172,7 @@ Say the lines in `NARRATION.md`, changed to match what actually happened in *you
 ## 5. Cue card (paper or phone, never on the recorded screen)
 
 ```
-EVERY ACTION: what I do · which element · where on screen · why.     ONE TAKE, no pauses.
+EACH STEP: WHY (what next + why) → DO (where · element · action) → SEE (result).   ONE TAKE, no pauses.
 A  Goal doc → "I will be beginning my task soon. Here is the workflow I have in mind."
 B  minimise Goal doc (yellow, top left) → VS Code (Dock, left) → Explorer: docs (top) → WEB-318 Open Preview
    (can't go live · VoiceOver "edit text" = no name · 3 expectations) → README (last in list) Open Preview
@@ -186,7 +186,7 @@ D  page: right-click grey line → Inspect → Styles (under HTML): .muted #9ca3
    → arrow (right end of row): AA 4.5 → suggestion borderline → Esc
    → double-click value → ⌘A → #6b7280 ⏎ → both darker → square: 4.8 ✓ → Esc → DevTools = temporary
 E  VS Code (Dock) → Explorer: index.html (under .gitignore) → problems on 2, 11, 25
-   Each change: WHY → LINE NUMBER → click + type → explain.   VS Code types the quotes: type only the value.
+   Each change: WHY → LINE NUMBER → DO click + type → SEE explain.   VS Code types the quotes: type only the value.
    1  lang: voice, pronunciation   line 2: double-click html → right arrow    " lang=" pause → en
    2  logo: name in a picture      line 11: double-click img → right arrow    " alt=" pause → The Build Notes
    3  caption is a plain div       line 25: double-click 1st div → label · " for=" pause → email (id on 27)

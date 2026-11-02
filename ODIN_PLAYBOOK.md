@@ -55,7 +55,7 @@ The full current list is at `odin-mercor1.vercel.app/validated-apps` (needs your
 6. **Stop and archive** in TaskRecorder, and check the files.
 7. **Organise the outputs** and write Metadata.rtf (below).
 8. **Upload to Studio**, each file in its own field.
-9. **Run AutoQC** and fix anything it flags.
+9. **Run AutoQC** and fix anything it flags. After uploading a new recording, click **Run full AutoQC**, not Rerun failing, so its actions are counted again.
 10. **Final checks**, then submit.
 
 ## Pre-checks before you press Record
@@ -75,7 +75,7 @@ The full current list is at `odin-mercor1.vercel.app/validated-apps` (needs your
 ## How the recording runs
 
 1. **Intro (under 20 s).** Leave the Goal doc visible for a few seconds and say: *"I will be beginning my task soon. Here is the workflow I have in mind."* Don't read or explain the Goal. Minimise the Goal doc.
-2. **The work.** Before each action, say what you'll click (by name), what you're about to do and why. Keep a comfortable, realistic pace, and show your checks out loud.
+2. **The work.** For every action, keys included, say what you do, name the element, say where it is on screen (the screen area, toolbar or panel, or the line number in a file) and say why. AutoQC checks each action for all four and sent task 1 back for missing them. Record in one uninterrupted take. Keep a comfortable, realistic pace, and show your checks out loud.
 3. **Epilogue (3–4 min, 4:00 max).** No mouse needed. Answer some of these in your own words:
    - How did you verify the task was complete? Any limitations?
    - What was your approach, and why that one?

@@ -83,13 +83,15 @@ Nothing is deleted or moved. `loadMore` and the JSX below it stay exactly as the
 
 ## The five edits, in the order you make them
 
+Line numbers are the ones VS Code shows at that moment: each new line pushes the lines below it down by one.
+
 | # | Where you click | What you type | What it does |
 |---|---|---|---|
-| 1 | End of line 14, `useEffect(() => {`, then Return | `const controller = new AbortController();` | A fresh controller for every search |
-| 2 | Double-click `PAGE_SIZE` in the `fetchOrders` line, then press → | `, signal: controller.signal` | Ties this request to the controller |
-| 3 | End of the `});` line that closes `.finally` (just above `}, [query]);`), then Return | `return () => controller.abort();` | React runs this before the next search, so the old search is cancelled |
-| 4 | End of `.catch((err) => {`, then Return | `if (err.name === 'AbortError') return;` | A cancel isn't an error, so the agent never sees it |
-| 5 | End of `.finally(() => {`, then Return | `if (controller.signal.aborted) return;` | A cancelled search can't turn off "Searching…" |
+| 1 | End of line 14, `useEffect(() => {`, then Return → new line 15 | `const controller = new AbortController();` | A fresh controller for every search |
+| 2 | Line 18 (it was 17): double-click `PAGE_SIZE` in the `fetchOrders` call, then press → | `, signal: controller.signal` | Ties this request to the controller |
+| 3 | End of line 28, the `});` that closes `.finally` (just above `}, [query]);`), then Return → new line 29 | `return () => controller.abort();` | React runs this before the next search, so the old search is cancelled |
+| 4 | End of line 23, `.catch((err) => {`, then Return → new line 24 | `if (err.name === 'AbortError') return;` | A cancel isn't an error, so the agent never sees it |
+| 5 | End of line 27, `.finally(() => {`, then Return → new line 28 | `if (controller.signal.aborted) return;` | A cancelled search can't turn off "Searching…" |
 
 About 176 typed characters in all. The longest line is edit 1, 41 characters.
 

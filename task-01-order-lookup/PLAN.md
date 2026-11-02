@@ -2,12 +2,14 @@
 
 Status (2 Nov 2026): the first take (about 38 minutes) was rejected because the narration was hard to follow, mostly while writing code. You're re-recording the same approved idea, so section 1 doesn't change. For the re-take, the starter app is changed so the fix is five short new lines in one file, with nothing deleted or moved (`REFERENCE.md` has them). After the fix, one typing test shows the canceled requests and the logpoint together.
 
+AutoQC's narration feedback on task 1 (2 Nov 2026): record the task again **in one uninterrupted take**; for **every action**, say what you do, name the element, say where it is on screen (the screen area, toolbar or line number in the file) and say why; then check with **Run full AutoQC**, not Rerun failing, so the actions are counted again. `NARRATION.md` now does this line by line, and for each code edit it says why the line is needed before the line number where it goes.
+
 | | |
 |---|---|
 | Domain | DSD: Software engineering |
 | Role | Full-stack engineer (React + Node/Express) on an internal tools team |
 | Apps, the same list everywhere | **Visual Studio Code · Brave Browser** |
-| Planned length | About 28–32 min at a relaxed, explaining pace: intro 0:20, work about 25 min, epilogue about 3:30 |
+| Planned length | About 37–42 min at a relaxed, explaining pace: intro 0:20, work about 33–37 min, epilogue about 3:30. Naming the place and the reason for every action adds about 1,000 spoken words to the earlier re-take narration. Still well under the 50:59 limit. |
 | Typing | Short entries only: the address, search terms, the logpoint message (twice), five short lines of code (about 176 characters), two file names and the commit message. About 350 characters, under 3 minutes in all, under 10% of the recording (the limit is 25%, or 35% for coding tasks). The longest entry is a 41-character line of code, about 20 seconds, well under the 45 s limit for typing in one go. |
 | Input | `inputs/input 1.zip`: the Order Lookup app with seeded synthetic orders, a README and support ticket `docs/SUP-1427.md`. AI-generated, so disclose it. Updated 2 Nov 2026 for the re-take: `api.js` already passes a cancel signal to `fetch`, and the search effect's `.catch` and `.finally` use `{ }` blocks. Upload this new zip, not the first take's copy. |
 | Outputs | `artifact 1.har` (network log before the fix), `artifact 2.har` (after the fix), `final output 1.zip` (fixed repo) |
@@ -71,15 +73,17 @@ Do the full pre-check list in `../ODIN_PLAYBOOK.md`, plus:
 
 - [ ] Nothing else is using port 5173: stop your Examlo frontend dev server and the first take's order-lookup server. Their terminals would also show another project.
 - [ ] Set the desktop appearance for this task and log it in the playbook's variety table.
-- [ ] VS Code: `order-lookup` open, no editor tabs, NPM Scripts panel visible, then minimised.
+- [ ] VS Code: `order-lookup` open, no editor tabs, no terminals, all folders collapsed (the Collapse Folders button at the top of the Explorer), NPM Scripts panel visible, then minimised.
+- [ ] Brave DevTools back to defaults **after your rehearsal**, so every click in the narration does what it says: open DevTools, click ⚙ (Settings) at its top right → Preferences → **Restore defaults and reload** at the bottom. That removes leftover logpoints and turns off Disable cache, the Fetch/XHR filter and the Waterfall column. Then dock it on the right (⋮ → Dock side → the right-hand icon), because the narration says the page is on the left, and close DevTools. If you can't find that button, undo those three settings by hand.
 - [ ] Brave: one window, one blank tab, Leo hidden, DevTools closed, then minimised.
+- [ ] Ready to record in **one uninterrupted take**: TaskRecorder runs from the intro to the end of the epilogue without a pause.
 - [ ] Goal doc in Google Docs with only the Goal text, behind TaskRecorder.
 - [ ] TaskRecorder: Task Description = Goal (exact); Used Apps = Visual Studio Code, Brave Browser.
 - [ ] This file, NARRATION.md, REFERENCE.md and the playbook closed. The cue card (section 5) is on paper or your phone, never on the recorded screen.
 
 ## 4. Run-sheet
 
-For each step: **Do** is the action, **Why** is the reasoning to explain, and **See** is what should happen. Narrate as you go: what you click, where it is, and why. Times assume a relaxed pace with detailed explanation. The lines to say at every step, including the epilogue, are in `NARRATION.md`.
+For each step: **Do** is the action, **Why** is the reasoning to explain, and **See** is what should happen. Narrate **every** action, keys included: what you do, the element's name, where it is on screen (screen area, toolbar or line number) and why. Times assume a relaxed pace with detailed explanation. The lines to say at every step, including the epilogue, are in `NARRATION.md`.
 
 Type in short pieces. After each piece, stop typing and point at it with the cursor while you explain it. Odin allows at most 45 s of typing in one go, and at most 25% of the recording (35% for coding tasks).
 
@@ -87,7 +91,7 @@ Type in short pieces. After each piece, stop typing and point at it with the cur
 
 - **Do:** Goal doc visible. Say *"I will be beginning my task soon. Here is the workflow I have in mind."* Minimise the Goal doc.
 
-### B. Understand the report, start the app (about 0:20–3:30) · VS Code: LOOKUP
+### B. Understand the report, start the app (about 0:20–4:10) · VS Code: LOOKUP
 
 1. **Do:** Explorer → `docs/SUP-1427.md` → right-click → **Open Preview**.
    **Why:** start from what the agent sees and what's expected, because those become your checks at the end. Note both: the table must match the search box, and real errors must still show.
@@ -96,24 +100,24 @@ Type in short pieces. After each piece, stop typing and point at it with the cur
 3. **Do:** NPM Scripts panel → ▷ next to `dev:api`, then ▷ next to `dev:web`.
    **See:** "Order API listening on http://localhost:3001" and Vite's local URL (5173; 5174 if 5173 is busy).
 
-### C. Reproduce (about 3:30–6:30) · Brave: LOOKUP
+### C. Reproduce (about 4:10–7:40) · Brave: LOOKUP
 
 1. **Do:** open the Vite URL. Type `alice` at normal speed.
    **See:** the status says *for "alice"*, but the rows are other customers and nothing is highlighted.
-2. **Do:** clear the box and type `alice` very slowly, one letter every two seconds.
+2. **Do:** clear the box with the × at its right end, and type `alice` very slowly, one letter every two seconds.
    **See:** now it's correct.
 3. **Why:** the same input gives different results depending on typing speed. That points to a timing problem: responses may be coming back in a different order than the requests were sent.
 
-### D. Diagnose (about 6:30–14:30) · Brave DevTools
+### D. Diagnose (about 7:40–18:30) · Brave DevTools
 
-1. **Network panel** (about 4 min)
-   - **Do:** View → Developer → Developer Tools → **Network** → tick **Disable cache** → filter **Fetch/XHR** → right-click any column header (for example **Name**) and tick **Waterfall**, so every request gets its own timing bar → clear the search box and wait for the full list to come back → clear the log (🚫) → type `alice` at normal speed. Clear the box *before* the log, or the empty search shows up as a sixth request.
+1. **Network panel** (about 5–6 min)
+   - **Do:** View → Developer → Developer Tools → **Network** → tick **Disable cache** → filter **Fetch/XHR** → right-click any column header (for example **Name**) and tick **Waterfall**, so every request gets its own timing bar → clear the search box (the × at its right end) and wait for the full list to come back → clear the log (🚫) → click the search box and type `alice` at normal speed. Clear the box *before* the log, or the empty search shows up as a sixth request.
    - **See:** five requests: `q=a`, `q=al`, `q=ali`, `q=alic`, `q=alice`.
-   - **Do:** click `q=a` → **Preview** shows `"query": "a"` and 320 matches → **Timing** shows about 1.4 s waiting for the server. Click `q=alice`: about 0.14 s. In the **Waterfall** column, each bar runs from when the request was sent to when its answer arrived: the `a` bar is the longest and ends furthest right. The **Time** column shows the same in numbers (about 1.4 s against 143 ms).
+   - **Do:** point at the **Waterfall** column first. Each bar runs from when the request was sent to when its answer arrived: the `a` bar is the longest and ends furthest right. The **Time** column shows the same in numbers (about 1.4 s against 143 ms). Then click `q=a` → **Preview** shows `"query": "a"` and 320 matches → **Timing** shows about 1.4 s waiting for the server. Click `q=alice`: about 0.14 s. Do the Waterfall before clicking a request, because once a request's details are open, the list shows only the Name column.
    - **Note:** with **Disable cache** ticked, the requests show status 200. Without it, repeat searches show 304: the browser re-checked a copy it already had. The server still ran the search, so the timing is the same, but 200 is simpler to explain.
    - **Why:** the first request was sent first but answered last, because a one-letter search matches everything and the server is slower for broad searches. Nothing in the client says "ignore answers to old searches".
-2. **Logpoint in Sources** (about 3 min)
-   - **Do:** **Sources** → Page tree → `localhost:5173` → `src` → the *italic* `OrderSearch.jsx`. Every file shows twice: the italic one is your original code, rebuilt from Vite's source map; the plain one is the compiled JavaScript Vite serves. Find `setOrders(data.orders);` inside the effect (line 19, not the one in `loadMore`). Right-click its line number → **Add logpoint…** → type `'applied results for', data.query` → Enter. The marker turns pink. If you get a blue marker instead, that's a normal breakpoint that pauses the page: click it to remove it, then use Add logpoint… Open the **Console** drawer (press Esc, or DevTools ⋮ menu → Show console drawer). Clear the box and wait for the full list, clear the console (🚫), then type `alice` again.
+2. **Logpoint in Sources** (about 4 min)
+   - **Do:** **Sources** → Page tree → `localhost:5173` → `src` → the *italic* `OrderSearch.jsx`. Every file shows twice: the italic one is your original code, rebuilt from Vite's source map; the plain one is the compiled JavaScript Vite serves. Find `setOrders(data.orders);` inside the effect (line 19, not the one in `loadMore`). Right-click its line number → **Add logpoint…** → type `'applied results for', data.query` → Enter. The marker turns pink. If you get a blue marker instead, that's a normal breakpoint that pauses the page: click it to remove it, then use Add logpoint… Open the **Console** drawer (press Esc, or DevTools ⋮ menu → Show console drawer). Clear the box (×) and wait for the full list, clear the console (🚫), then click the search box and type `alice` again.
    - **See:** console lines in arrival order, ending with *applied results for a*.
    - **Why:** this proves it at the state level: the last response to arrive overwrites the table, even though it's for an old search.
    - **Do:** click the pink marker on line 19 to remove the logpoint.
@@ -121,7 +125,7 @@ Type in short pieces. After each piece, stop typing and point at it with the cur
 3. **Save evidence** (about 1 min)
    - **Do:** Network panel → download icon → **Export HAR**. Save to Downloads as `before-fix.har`. It becomes `artifact 1.har`.
 
-### E. Fix (about 14:30–20:30) · VS Code: MODIFY
+### E. Fix (about 18:30–27:30) · VS Code: MODIFY
 
 Five short new lines, all in `OrderSearch.jsx`. Nothing is deleted or moved, and `api.js` doesn't change. Type one line, stop, point at it with the cursor, say why. You don't need to talk while you type.
 
@@ -129,31 +133,31 @@ Five short new lines, all in `OrderSearch.jsx`. Nothing is deleted or moved, and
    **Why:** `fetchOrders` can already cancel a request; the search effect just never gives it a signal. So the whole fix stays in the search effect.
 2. **Do:** open `client/src/OrderSearch.jsx` and walk through the search effect (lines 14–28): it runs on every keystroke, `.then` fills the table, `.catch` shows an error, `.finally` turns off "Searching…". Nothing cancels an older search.
 3. **Why AbortController** (say it, don't type it): a debounce only makes the race rarer, because a slow answer can still arrive last. An AbortController cancels the old request in the browser, so its answer can never reach the table, and DevTools marks it as canceled, so the fix is easy to prove.
-4. **Do**, one line at a time, in this order:
+4. **Do**, one line at a time, in this order. For each line, first say why it's needed, then say the line number where it goes, then click there and type it, then point at it and say what it does:
 
-   | # | Click | Type | Say |
+   | # | 1. Say why | 2. Say the line number, then click | 3. Type |
    |---|---|---|---|
-   | 1 | End of line 14, `useEffect(() => {` → Return | `const controller = new AbortController();` | One controller for each search. |
-   | 2 | Double-click `PAGE_SIZE` in the `fetchOrders` line → press → | `, signal: controller.signal` | Now this request can be canceled. |
-   | 3 | End of the `});` that closes `.finally`, just above `}, [query]);` → Return → if the cursor starts further right than `fetchOrders`, press Delete once | `return () => controller.abort();` | React runs this before the next search, so the old one is canceled. |
-   | 4 | End of `.catch((err) => {` → Return | `if (err.name === 'AbortError') return;` | A cancel isn't an error; real errors still show. |
-   | 5 | End of `.finally(() => {` → Return | `if (controller.signal.aborted) return;` | Fixes the loading state: a canceled search can't turn off "Searching…". |
+   | 1 | Every search needs its own controller to be cancelable. | End of line 14, `useEffect(() => {` → Return → new line 15 | `const controller = new AbortController();` |
+   | 2 | A controller only cancels a request that carries its signal. | Line 18 (it was 17), the `fetchOrders` call: double-click `PAGE_SIZE` → press → | `, signal: controller.signal` |
+   | 3 | The effect's cleanup cancels the old search; React runs it before the effect runs again. | End of line 28, the `});` that closes `.finally`, just above `}, [query]);` → Return → new line 29 → if the cursor starts further right than `fetchOrders`, press Delete once | `return () => controller.abort();` |
+   | 4 | A cancel throws an AbortError, which isn't a real error. | End of line 23, `.catch((err) => {` → Return → new line 24 | `if (err.name === 'AbortError') return;` |
+   | 5 | `.finally` runs for canceled searches too and would turn off "Searching…". | End of line 27, `.finally(() => {` → Return → new line 28 | `if (controller.signal.aborted) return;` |
 
-   If VS Code's suggestion list pops up while you type, keep typing; it closes when you click for the next line.
+   Each new line pushes the lines below it down by one, so the numbers above are the ones you see at that moment. After all five, the new lines are 15, 24, 28 and 31, and the signal is on line 18. If VS Code's suggestion list pops up while you type, keep typing; it closes when you click for the next line.
 5. **Do:** save with ⌘S. Leave `loadMore` alone. It's outside this ticket; mention it in the epilogue as a known limitation.
 
-### F. Verify (about 20:30–25:30) · Brave: LOOKUP, then VS Code and back
+### F. Verify (about 27:30–34:30) · Brave: LOOKUP, then VS Code and back
 
 1. **Do:** Brave, **Network** panel → click the reload button (⟳) left of the address bar. Wait for the full list.
    **See:** you may see one canceled request from the page load. That's React StrictMode in development running the effect twice, so your own cleanup cancels the first request. It's expected, and it disappears when you clear the log in step 3.
 2. **Do:** **Sources** → the *italic* `OrderSearch.jsx`. It now shows your fix, so `setOrders(data.orders);` is on **line 20**. Right-click line 20 → **Add logpoint…** → `'applied results for', data.query` → Enter.
-3. **Do:** back to **Network**. Clear the network log (🚫) and the console drawer (🚫; press Esc if the drawer isn't showing). Type `alice` at normal speed.
+3. **Do:** back to **Network**. Clear the network log (🚫) and the console drawer (🚫; press Esc if the drawer isn't showing). Click the search box and type `alice` at normal speed.
    **See:**
    - Network: the earlier requests show **(canceled)** in red, always including the slow `q=a`. A quick one such as `alic` sometimes finishes before your next key; that's fine.
    - Table: only Alice's orders, highlighted (9 orders).
    - Console: the last line is *applied results for alice*, and *applied results for a* never appears.
    **Why:** one test proves the first expectation of the ticket in two ways: the old requests are canceled, and only the latest search reaches the table.
-4. **Do:** clear the box, wait for the full list, then type `omar`.
+4. **Do:** clear the box (×), wait for the full list, then type `omar`.
    **See:** only Omar's orders (7). It works for other names too.
 5. **Do:** Network panel → **Export HAR** → `after-fix.har`. It becomes `artifact 2.har`.
 6. **Error path** · VS Code: LOOKUP, then Brave: LOOKUP
@@ -162,7 +166,7 @@ Five short new lines, all in `OrderSearch.jsx`. Nothing is deleted or moved, and
    - **Why:** you ignore only `AbortError`, so real failures still reach the agent, as the ticket asks.
    - Point out the old rows still showing under the error. That's a known limitation to mention in the epilogue.
 
-### G. Review and commit (about 25:30–27:30) · VS Code: CREATE
+### G. Review and commit (about 34:30–37:15) · VS Code: CREATE
 
 1. **Do:** Source Control view → click `OrderSearch.jsx` and walk through the diff out loud.
    **See:** one changed file. Five green lines and the `fetchOrders` line with the signal added, all inside the search effect. `loadMore` is unchanged.
@@ -170,7 +174,7 @@ Five short new lines, all in `OrderSearch.jsx`. Nothing is deleted or moved, and
    **See:** the Changes list is empty. If VS Code then offers **Publish Branch**, don't click it: this copy has no remote.
 3. **Stop here; don't keep tinkering.** The API stays stopped from the error test, which is fine.
 
-### H. Epilogue (about 27:30–31:00, no mouse)
+### H. Epilogue (about 37:15–40:45, no mouse)
 
 Talk from what actually happened in *your* recording:
 
@@ -189,25 +193,37 @@ Talk from what actually happened in *your* recording:
 ## 5. Cue card (paper or phone, never on the recorded screen)
 
 ```
-A  Goal doc → "I will be beginning my task soon. Here is the workflow I have in mind." → minimise
-B  Ticket preview (2 expectations) → README "broad searches slower" → NPM Scripts ▷ dev:api ▷ dev:web
-C  type alice fast → wrong rows → slowly → right rows → timing problem
-D  Network: Disable cache, Fetch/XHR, right-click header → Waterfall → clear box, wait, clear log → type alice
-   → 5 requests → q=a Preview/Timing 1.4 s → a bar ends last
-   → Sources logpoint on line 19 setOrders: 'applied results for', data.query → Esc console → last = a
-   → click pink marker to remove it → Export HAR (before-fix)
-E  api.js: signal already there → effect: nothing cancels → debounce only rarer → AbortController
-   1  end of useEffect line ⏎   const controller = new AbortController();
-   2  after PAGE_SIZE           , signal: controller.signal
-   3  after .finally's }); ⏎ (Delete once)   return () => controller.abort();
-   4  end of .catch line ⏎      if (err.name === 'AbortError') return;
-   5  end of .finally line ⏎    if (controller.signal.aborted) return;
-   ⌘S   (type one line, stop, point at it, say why)
-F  Network ⟳ reload → Sources: logpoint on line 20 → Network: clear log + console → type alice
-   → (canceled) incl. q=a · only Alice (9) · console last = alice → omar
-   → Export HAR (after-fix)
-   → kill dev:api → type a letter → "Order search failed (502)" → note old rows
-G  Source Control: OrderSearch.jsx diff → ＋ stage → "Fix stale search results (SUP-1427)" → Commit → STOP
+EVERY ACTION: what I do · which element · where on screen · why.     ONE TAKE, no pauses.
+A  Goal doc → "I will be beginning my task soon. Here is the workflow I have in mind."
+B  minimise Goal doc (yellow, top left) → VS Code (Dock, left) → Explorer: docs → SUP-1427 Open Preview
+   (2 expectations) → README Open Preview, scroll: "broad searches slower"
+   → NPM Scripts (bottom of Explorer): ▷ dev:api, ▷ dev:web
+C  Brave (Dock) → address bar: localhost:5173 ⏎ → search box: alice fast → wrong rows
+   → × (right end of box) → alice slowly → right rows → timing problem
+D  menu bar View → Developer → Developer Tools (opens on the right) → Network tab
+   → toolbar: Disable cache → filter row: Fetch/XHR → right-click Name header → Waterfall
+   → × clear box, wait → 🚫 clear log → click box, type alice → 5 requests
+   → Waterfall: a bar ends last · Time 1.4 s vs 140 ms → q=a: Preview 320 → Timing 1.4 s → alice 0.14 s
+   → Sources tab → Page tree: localhost:5173 › src › italic OrderSearch.jsx → line 19 setOrders
+   → right-click 19 → Add logpoint: 'applied results for', data.query ⏎ → Esc console drawer
+   → × clear, wait → 🚫 console → click box, type alice → last = a → click pink marker 19
+   → Network tab → Export HAR (download arrow) → before-fix → Save
+E  VS Code (Dock) → api.js: line 1 takes signal, line 3 passes it to fetch
+   → OrderSearch.jsx effect 14–28: then 18, catch 22, finally 25, nothing cancels
+   → debounce only rarer → AbortController.   Each line: WHY → LINE NUMBER → click + type → explain
+   1  own controller per search       end of 14 ⏎ → 15           const controller = new AbortController();
+   2  request must carry the signal   18, after PAGE_SIZE →      , signal: controller.signal
+   3  cleanup cancels old search      end of 28 ⏎ → 29, Delete   return () => controller.abort();
+   4  a cancel isn't an error         end of 23 ⏎ → 24           if (err.name === 'AbortError') return;
+   5  keep "Searching…" on            end of 27 ⏎ → 28           if (controller.signal.aborted) return;
+   loadMore (34) untouched → ⌘S, tab dot goes
+F  Brave (Dock) → ⟳ (left of address bar) → 1 canceled = StrictMode → Sources: right-click 20 → logpoint ⏎
+   → Network: 🚫 log + 🚫 console → click box, type alice
+   → Status (canceled) incl. q=a · only Alice (9) · console last = alice → × → omar
+   → Export HAR → after-fix → VS Code (Dock) → terminal list (right): dev:api → trash
+   → Brave (Dock) → type a letter → "Order search failed (502)" above the table → note old rows
+G  VS Code (Dock) → Source Control (Activity Bar, 3rd icon) → OrderSearch.jsx diff: 15, 18, 24, 28, 31
+   → ＋ on Changes header → message box: "Fix stale search results (SUP-1427)" → Commit → STOP
 H  Epilogue 3–4 min: verify · decisions · limits · common mistake
 ```
 
@@ -219,6 +235,8 @@ H  Epilogue 3–4 min: verify · decisions · limits · common mistake
 - **A pink marker is still on line 19 after the fix:** you didn't remove it in D2. Click it to remove it; line 19 is now the `.then` line.
 - **A red "signal is aborted without reason" shows while you type:** that's a cancel showing up as an error, so line 4 is missing or misspelled. Check `'AbortError'` (capital A and E, in quotes), save, and say what you fixed.
 - **The `return () => controller.abort();` line sits further right than `fetchOrders`:** click just before `return` and press Delete once. The code works either way.
+- **Disable cache, Fetch/XHR or Waterfall is already on, or a marker is already on line 19 or 20:** DevTools wasn't reset (section 3). Say so, leave the setting on (or click the marker to remove it), and carry on.
+- **A DevTools tab or button you need isn't showing:** DevTools is too narrow. Look behind the » at the end of that row, or drag DevTools' left edge to widen it, and say what you're doing.
 - **A mistake on camera:** fix it and explain what happened. That's real debugging and fine to show. Don't restart the recording for small slips.
 
 ## 7. After recording
@@ -238,4 +256,4 @@ H  Epilogue 3–4 min: verify · decisions · limits · common mistake
    - **Request:** your Goal, exactly as in TaskRecorder.
    - **Task Description:** a numbered outline built from the 6 Steps in your idea, adjusted to what you actually did (apps, methods, final deliverable).
 4. **AI disclosure:** wherever Studio asks, state that `input 1` (the starter app and ticket) was AI-generated before recording, and that no AI was used during the recording.
-5. Upload, run AutoQC, final checks, submit. Then delete `~/Developer/order-lookup`.
+5. Upload, then click **Run full AutoQC**, not Rerun failing, so the new recording's actions are all counted again. Fix anything it flags, do the final checks and submit. Then delete `~/Developer/order-lookup`.

@@ -19,8 +19,12 @@ export default function OrderSearch() {
         setOrders(data.orders);
         setTotal(data.total);
       })
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
+      .catch((err) => {
+        setError(err.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [query]);
 
   function loadMore() {
@@ -30,8 +34,12 @@ export default function OrderSearch() {
         setOrders((prev) => [...prev, ...data.orders]);
         setTotal(data.total);
       })
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
+      .catch((err) => {
+        setError(err.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }
 
   return (

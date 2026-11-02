@@ -8,7 +8,8 @@ The only lines that aren't spoken are in the intro, where the project rules fix 
 
 - **Before each click**, say four things: the app, the element you're clicking, what you're about to do, and why. For example: *"In VS Code, I'm right-clicking the ticket file and choosing Open Preview, so I can read it formatted."*
 - **After each result**, say what you see and what it means.
-- **Type in short pieces.** Type one piece, stop, then point at it with the cursor while you explain it. Odin allows at most 45 seconds of typing in one go, and nothing in this task needs more than about 30.
+- **Type in short pieces.** Type one piece, stop, then point at it with the cursor while you explain it. Odin allows at most 45 seconds of typing in one go, and nothing in this task needs more than about 20.
+- **While coding**, do the same three things for each of the five lines: say where you're clicking, type the line, then stop and say what it does. You don't need to talk while you type; a short pause is fine.
 - Slow and clear is better than fast. Short pauses before important clicks are fine.
 - If something unexpected happens, say what you see and what you'll try next. That's valuable, not a mistake.
 - Read out the names, numbers and messages you *actually* see. The ones below come from rehearsal and may differ slightly.
@@ -76,6 +77,7 @@ Then minimise the Goal doc without saying anything else. Don't read or explain t
 - I'm pressing Escape to open the console drawer under the code.
 - I'm clearing the search box and waiting for the full list to come back. Then I'm clicking the clear button in the console and typing "alice" again at normal speed.
 - The console shows the order in which results were applied. The exact order varies, but the last line is "applied results for a". So the table ends up showing the results for "a", even though I typed "alice". That's the root cause.
+- I have my proof, so I'm clicking the pink marker to remove the logpoint for now. My fix will add a line above it, so I'll add it again on the right line when I check the fix.
 
 **Save the evidence**
 - Before I change anything, I'll save this network log as evidence. I'm switching to the Network tab and clicking the Export HAR button, the download arrow at the top of the panel.
@@ -84,90 +86,82 @@ Then minimise the Goal doc without saying anything else. Don't read or explain t
 ## E. Fix the code (VS Code)
 
 **Read the current code**
-- Now I'm switching back to VS Code to fix it. In the Explorer, I'm opening the client and src folders, then `OrderSearch.jsx` and `api.js`.
-- First I'll walk through the search effect in `OrderSearch.jsx`, to show exactly where the bug is.
-- The effect has `query` in its dependency array, so React runs it again on every keystroke. Each run shows "Searching…", clears the old error and calls `fetchOrders` with the current text.
-- When an answer comes back, `.then` saves its orders and total into React state, and the table redraws. Line 19, `setOrders`, is the same line where I put the logpoint.
-- The problem is what's missing. When a newer search starts, nothing cancels the older request, and nothing checks whether an answer is still for the text in the box. So when the answer for "a" arrives last, it still runs `setOrders` and replaces Alice's results.
-- So the fix needs one rule: once a newer search starts, the older one must never change the screen.
+- Now I'm switching back to VS Code to fix it. In the Explorer, I'm opening the client and src folders, then `api.js`.
+- `fetchOrders` already accepts a `signal` and passes it to `fetch`. A signal is how you cancel a fetch. So this helper can already cancel a request, but the search never gives it a signal.
+- Now I'm opening `OrderSearch.jsx` and going to the search effect.
+- This effect runs every time the search text changes, so on every keystroke. It shows "Searching…", clears the old error and calls `fetchOrders`. Then `.then` puts the results in the table, `.catch` shows an error, and `.finally` turns "Searching…" off.
+- What's missing is cancelling. When a new search starts, the old one keeps going, and whichever answer arrives last fills the table.
 
 **Choose the approach**
-- There are three common ways to handle a race like this, so I'll go through them before I pick one.
-- First, a debounce: wait until the user stops typing, say for 300 milliseconds, before searching. That sends fewer requests. But if someone pauses after "a" and then types the rest, the slow answer for "a" can still arrive last. It makes the bug rarer and harder to reproduce, but it doesn't fix it.
-- Second, an "ignore" flag: the effect's cleanup sets a flag, and the effect checks it before updating the table. That fixes what the agent sees, but the browser still waits for every old answer and downloads it, only to throw it away.
-- Third, an AbortController, the browser's built-in way to cancel a fetch. When the search changes, I cancel the previous request. The browser stops waiting for it, its answer can never reach the table, and the Network panel marks it as canceled, so I can prove the fix. That's the one I'll use.
+- A debounce, waiting until the agent stops typing, would only make this rarer, because a slow answer could still arrive last.
+- So I'll cancel the old search with an AbortController, the browser's built-in way to cancel a fetch. A canceled answer can never reach the table, and the Network panel shows it as canceled, so I can prove the fix.
+- I'll add one line at a time.
 
-**`api.js`: let the caller cancel a request**
-- I'm starting with `api.js`, because the component can only cancel a request if `fetchOrders` allows it.
-- Right now `fetchOrders` takes `q`, `offset` and `limit`, and calls `fetch` with only the URL. Once a request starts, nothing can stop it.
-- I'm adding `signal` to the parameters, after `limit`.
-- And I'm passing it to `fetch` as the second argument, in the options object: `{ signal }`. The signal is how `fetch` learns it's been cancelled. When the signal is aborted, the browser drops the request.
-- I'm leaving `signal` optional, with no default. `loadMore` doesn't pass one, and without a signal `fetch` works exactly as before.
-- `api.js` doesn't decide when to cancel. The component does, because only the component knows when the search text changes.
+**Line 1: a controller for each search**
+- I'm clicking at the end of the `useEffect` line and pressing Return.
+- I'm typing: `const controller = new AbortController();`
+- The effect runs once for every search, so every search gets its own controller.
 
-**`OrderSearch.jsx`: one controller per search**
-- I'm switching back to the `OrderSearch.jsx` tab, to the search effect. At the top, I'm adding `const controller = new AbortController();`.
-- I'm creating it inside the effect on purpose. A controller can cancel only once; after that, its signal stays aborted. Each run of the effect is one search, so this gives every search a fresh controller of its own.
-- In the `fetchOrders` call, I'm adding `signal: controller.signal`. Now this search's request is tied to this controller.
+**Line 2: pass its signal**
+- I'm double-clicking `PAGE_SIZE` in the `fetchOrders` call and pressing the right arrow, so the cursor is just after it.
+- I'm typing: `, signal: controller.signal`
+- Now this request is tied to this controller, so it can be canceled.
 
-**Cancel the old search in the cleanup**
-- At the end of the effect, I'm returning a cleanup function: `return () => controller.abort();`.
-- React runs the cleanup just before it runs the effect again with the new text, and also when the component goes away. So every keystroke first cancels the previous search, then starts the new one. Only the latest search can still answer.
-- I'm adding a one-line comment above it that says why: cancel the old search so it can't overwrite newer results.
-- Those three lines are the core of the fix. But cancelling has two side effects, and I need to handle both.
+**Line 3: cancel the old search**
+- I'm clicking at the end of the effect, after the `});` that closes `.finally`, and pressing Return.
+- The cursor starts a little too far right, so I'm pressing Delete once to line it up with `fetchOrders`.
+- I'm typing: `return () => controller.abort();`
+- This is the effect's cleanup. React runs it just before the effect runs again, so every keystroke cancels the previous search. Only the latest search can finish.
+- Those three lines are the main fix. Cancelling has two side effects, and I'll handle both.
 
-**Don't show a cancel as an error**
-- When a request is cancelled, `fetch` throws an error named `AbortError`. Right now `.catch` sends every error to `setError`.
-- I'm turning the catch callback into a block, so I can check first: `if (err.name === 'AbortError') return;`. After that, `setError(err.message)` stays as it was.
-- A cancel is something my own code did on purpose. It isn't a failure, so the agent shouldn't see it. Without this check, typing quickly would put a red error message on screen even though nothing went wrong.
-- I'm skipping only `AbortError`. Real failures, like the API being down, still reach the agent. I'll test that later.
+**Line 4: ignore AbortError**
+- When a request is canceled, `fetch` throws an AbortError, and `.catch` would show it to the agent as an error.
+- I'm clicking at the end of the `.catch` line, pressing Return and typing: `if (err.name === 'AbortError') return;`
+- A cancel is something my own code did on purpose, so I ignore it. Every other error still goes to `setError`, so real failures still show.
 
-**Only a finished search turns off "Searching…"**
-- The last change is the loading state. `setLoading(false)` is in `.finally`, and `finally` runs for every request, cancelled ones too.
-- So when I type the next letter, the cancelled search would turn the loading state off while the new search is still on its way. Instead of "Searching…", the status line would say it's showing results for "alice" while the table still has the old rows. That's the same kind of mismatch this ticket is about.
-- So I'm removing `.finally` and calling `setLoading(false)` in the two places where a request really finishes: in `.then` after the results are saved, and in `.catch` after a real error. A cancelled request returns before that, so it never touches the loading state.
-- Now the rule is simple: a cancelled search changes nothing on screen. Not the rows, not the error and not the loading state.
+**Line 5: fix the loading state**
+- `.finally` runs for every request, canceled ones too. So a canceled search would turn off "Searching…" while the new search is still loading.
+- I'm clicking at the end of the `.finally` line, pressing Return and typing: `if (controller.signal.aborted) return;`
+- Now a canceled search leaves the loading state alone, and only the latest search turns "Searching…" off.
 
-**Leave paging alone, then save**
-- I'm not changing `loadMore`. It isn't cancelled when the search changes either, but that's outside this ticket, and I want this change small and easy to review. I'll mention it at the end as a known limitation.
-- I'm saving both files with Command S. Vite picks up the change and updates the page in Brave by itself, so next I'll check the fix there.
+**Save**
+- I'm not changing `loadMore`. Paging is outside this ticket, and I want this change small and easy to review.
+- I'm saving with Command S. Vite updates the page in Brave by itself, so next I'll check the fix there.
 
 ## F. Verify the fix (Brave, then VS Code and back)
 
-**Cancelled requests**
-- I'm switching back to Brave. I'm on the Network tab, and I'm reloading the page so I start clean.
-- I'm typing "alice" at normal speed.
-- Now the earlier requests show as canceled, in red, including the slow "a" request. The table has only Alice's orders, with "alice" highlighted: 9 orders.
-- I'll try it a few more times, and with other names, like "omar" and "priya". It's right every time.
-- There's also a canceled request from when the page loaded. That's React StrictMode in development: it runs the effect twice on purpose, so my own cleanup cancels the first request. It only happens in development, and it shows the cleanup works.
+**Reload and add the logpoint again**
+- I'm switching back to Brave. I'm on the Network tab, and I'm clicking the reload button so I start clean.
+- There's one canceled request from the page load. That's React's development mode: it runs the effect twice on purpose, so my own cleanup cancels the first request. That's expected.
+- Now I'll add the logpoint again. I'm opening the Sources tab and the italic `OrderSearch.jsx`. My first new line pushed `setOrders` down from line 19 to line 20.
+- I'm right-clicking line 20, choosing Add logpoint and typing the same message: `'applied results for', data.query`. I'm pressing Enter, and the marker turns pink.
 
-**Logpoint again**
-- Now I'll check the same thing with the logpoint. I'm switching to the Sources tab and opening the italic `OrderSearch.jsx` again.
-- My change added a line at the top of the effect, so `setOrders(data.orders)` has moved down from line 19 to line 20. The old logpoint stayed on line 19, which is now the `.then` line, so it's in the wrong place. I'm clicking its pink marker to remove it.
-- I'm right-clicking line 20, choosing Add logpoint and typing the same message: `'applied results for', data.query`. I'm pressing Enter, and the marker on line 20 turns pink.
-- I'm clearing the search box and waiting for the full list to come back. Then I'm clearing the console and typing "alice" again at normal speed.
-- This time the last line is "applied results for alice". Often it's the only line, because every earlier search was canceled before it could answer.
-- I'm typing it twice more. It always ends with "alice". Canceled searches never reach `setOrders`.
+**Type alice again**
+- I'm going back to the Network tab. I'm clearing the network log and the console, so I only see the next search.
+- I'm typing "alice" at normal speed.
+- Now the earlier requests show as canceled, in red, including the slow "a" request.
+- The table shows only Alice's orders, with "alice" highlighted: 9 orders.
+- And the last line in the console is "applied results for alice". The "a" search never reaches the table, because it was canceled first.
+- I'll try one more name. I'm clearing the box, waiting for the full list and typing "omar". Only Omar's orders, so it works for other names too.
 
 **After-fix evidence**
-- I'm switching to the Network tab, clicking the Export HAR button again and saving this log to Downloads as `after-fix.har`. Now I have evidence from before and after the fix.
+- I'm clicking the Export HAR button again and saving this log to Downloads as `after-fix.har`. Now I have evidence from before and after the fix.
 
 **Error path**
-- The ticket also says agents must still see an error if a search fails. I'm now ignoring AbortError, so I want to make sure I didn't hide real errors.
+- The ticket also says agents must still see an error if a search fails. I'm ignoring AbortError now, so I want to make sure I didn't hide real errors.
 - I'm switching to VS Code. In the terminal panel, I'm selecting the `dev:api` terminal from the list on the right and clicking its trash icon to stop the API.
 - I'm switching back to Brave and typing one more letter in the search box.
-- There's the red message: "Order search failed (502)". The 502 comes from Vite's proxy, because the API behind it is down. Real errors still reach the agent.
+- There's the red message: "Order search failed (502)". The 502 comes from Vite's proxy, because the API behind it is down. And the status line isn't stuck on "Searching…". Real errors still reach the agent.
 - One thing I notice: the old rows are still visible under the error. That's not part of this ticket, so I'll mention it at the end as a known limitation.
 
 ## G. Review and commit (VS Code)
 
 **Review the diff**
-- I'm switching back to VS Code to review my changes before I commit them. I'm opening the Source Control view from the sidebar. Two files have changed: `api.js` and `OrderSearch.jsx`.
-- I'm clicking `api.js`. The diff shows one change: the new `signal` parameter, passed into `fetch`.
-- Now I'm clicking `OrderSearch.jsx`. Every change is inside the search effect: the AbortController at the top, the signal in the `fetchOrders` call, `setLoading(false)` moved into `.then` and `.catch`, the AbortError check, and the cleanup with its comment. `loadMore` hasn't changed.
+- I'm switching back to VS Code to review my change before I commit it. I'm opening the Source Control view from the sidebar. Only one file has changed: `OrderSearch.jsx`.
+- I'm clicking it to see the diff. Everything is inside the search effect: the controller at the top, the signal in the `fetchOrders` call, the AbortError check in `.catch`, the canceled check in `.finally`, and the cleanup at the end. `loadMore` hasn't changed.
 
 **Commit**
-- I'm clicking the plus next to Changes to stage both files.
+- I'm clicking the plus next to Changes to stage the file.
 - In the message box, I'm typing "Fix stale search results (SUP-1427)" and clicking Commit.
 - The Changes list is empty now, so the fix is committed, and the task is done.
 
@@ -179,23 +173,25 @@ Then minimise the Goal doc without saying anything else. Don't read or explain t
 - The task is complete. The table now always shows results for exactly what's in the search box, however fast the agent types, and agents still see an error when a search fails. The fix is committed.
 
 **2. How I verified it**
-- In the Network panel, older requests are now canceled, including the slow "a" request.
-- The logpoint on the `setOrders` line always ended with "applied results for alice", so only the latest search reaches the table.
+- In the Network panel, the older requests are now canceled, including the slow "a" request.
+- The logpoint on the `setOrders` line ended with "applied results for alice", and the "a" search never reached the table.
+- I also tried another name, "omar", and only Omar's orders came back.
 - I saved HAR files from before and after the fix.
 - And with the API stopped, the error message still appeared, so real errors aren't hidden.
 
 **3. Approach and key decision**
 - I proved the cause before changing any code, first with the Network timings, then with a logpoint on the exact line that updates the table.
-- I chose AbortController over a debounce, which only makes the race rarer, and over an ignore flag, which still waits for every old answer just to throw it away. Canceled requests also show up in the Network panel, so the fix is easy to prove.
+- I chose an AbortController over a debounce. A debounce only makes the race rarer, but a canceled request can never reach the table. And `fetchOrders` already accepted a signal, so the whole fix stayed inside the search effect.
 
 **4. Challenges**
-- The part that needed the most care was the AbortError. Cancelling makes fetch throw it, so I had to skip it without hiding real errors. That's why I stopped the API to test it.
-- The canceled request on page load looks like a bug, but it's React StrictMode running the effect twice in development.
+- Cancelling has two side effects, and I had to handle both. `fetch` throws an AbortError, so I ignored it without hiding real errors. That's why I stopped the API to test it.
+- And `.finally` runs for canceled requests too, so I made sure a canceled search can't turn off "Searching…" while the new one is still loading.
 
 **5. Quality, limitations and next steps**
-- The change is small, one parameter and a few lines in the search effect, so it's easy to review.
-- Its limitations: old rows stay visible under an error, Load more isn't cancelled when the search changes, and there's no automated test.
-- With more time, I'd add a React Testing Library test with delayed fake responses, and clear or grey out old rows when a search fails.
+- The change is small: five short lines, all inside the search effect, so it's easy to review.
+- Its limitations: old rows stay visible under an error, Load more isn't canceled when the search changes, and there's no automated test yet.
+- With more time, I'd add a React Testing Library test with delayed fake responses, and clear or grey out the old rows when a search fails.
+- A debounce could still be added on top later, to send fewer requests to the server.
 
 **6. One lesson for less experienced developers**
 - A debounce can hide a race condition without fixing it. It only makes the bug rarer and harder to reproduce.

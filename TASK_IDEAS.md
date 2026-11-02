@@ -19,7 +19,7 @@ Time budget: intro 0:20 + work 17–20 min + epilogue 3:00–3:30. Recordings un
 
 | # | Track | Idea | Apps | Deliverable a reviewer can check | Length | Status |
 |---|---|---|---|---|---|---|
-| 1 | Software | Search shows results for an older search when agents type fast (front-end race condition) | VS Code, Brave Browser | Fixed repo + before/after HAR evidence | 38 min | **Done.** `task-01-order-lookup/` |
+| 1 | Software | Search shows results for an older search when agents type fast (front-end race condition) | VS Code, Brave Browser | Fixed repo + before/after HAR evidence | 38 min first take; re-take 28–32 min | **Re-take.** First take rejected (narration); smaller fix prepared 2 Nov 2026. `task-01-order-lookup/PLAN.md` |
 | 2 | Software (front end) | Fix the accessibility problems Lighthouse finds on a sign-up page | VS Code, Brave Browser | Fixed repo + before/after Lighthouse reports | 21–23 min | **Ready.** `task-02-newsletter-a11y/PLAN.md` |
 | 3 | Software (API) | Test a sign-up API in Postman and add the missing email check | Postman, VS Code | Fixed repo + Postman collection with 4 passing tests | 21–24 min | Idea only |
 | 4 | Software (front end) | Fix a pricing page that scrolls sideways on phones | VS Code, Safari | Fixed repo + before/after screenshots | 20–23 min | Idea only |

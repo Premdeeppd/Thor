@@ -2,11 +2,20 @@
 
 > Close this file before you press Record, and never paste from it while recording. The current Studio form says "No AI while recording".
 >
-> Rehearse until you can write this change yourself and explain every line.
+> Rehearse until you can type these five lines yourself and say why each one is there.
 
-This is a working fix, tested on 31 Oct 2026 against the starter in `inputs/input 1.zip`. Only two files change.
+This is the smaller fix for the re-recording, tested on 2 Nov 2026 against the new starter in `inputs/input 1.zip`. Only one file changes: `client/src/OrderSearch.jsx`.
 
-## `client/src/api.js`
+## What changed in the starter, and why
+
+The first take needed eight edits in two files, including rewriting `.catch` and `.finally` and moving `setLoading(false)`. The starter now does two things already, so the fix is only new lines:
+
+- `api.js` already accepts a `signal` and passes it to `fetch`. You only open it to show this; you don't edit it.
+- `.catch` and `.finally` already use `{ }` blocks, so each guard is one new line inside a block.
+
+The idea text in Studio doesn't change: step 4 still says "cancel superseded searches with an AbortController in the React effect, ignoring AbortError and fixing the loading state", and that's exactly what the five lines do.
+
+## `client/src/api.js` (no change; already in the starter)
 
 ```js
 export async function fetchOrders({ q = '', offset = 0, limit = 20, signal } = {}) {
@@ -17,24 +26,38 @@ export async function fetchOrders({ q = '', offset = 0, limit = 20, signal } = {
 }
 ```
 
-The only change: the `signal` parameter, passed to `fetch`.
+## `client/src/OrderSearch.jsx`: the whole change
 
-## `client/src/OrderSearch.jsx`
+Lines starting with `+` are what you type. The `-` line becomes the `+` line under it: you add `, signal: controller.signal` after `PAGE_SIZE`.
+
+```diff
+   useEffect(() => {
++    const controller = new AbortController();
+     setLoading(true);
+     setError(null);
+-    fetchOrders({ q: query, limit: PAGE_SIZE })
++    fetchOrders({ q: query, limit: PAGE_SIZE, signal: controller.signal })
+       .then((data) => {
+         setOrders(data.orders);
+         setTotal(data.total);
+       })
+       .catch((err) => {
++        if (err.name === 'AbortError') return;
+         setError(err.message);
+       })
+       .finally(() => {
++        if (controller.signal.aborted) return;
+         setLoading(false);
+       });
++    return () => controller.abort();
+   }, [query]);
+```
+
+Nothing is deleted or moved. `loadMore` and the JSX below it stay exactly as they are.
+
+### The search effect after the fix (lines 14–32)
 
 ```jsx
-import { useEffect, useState } from 'react';
-import { fetchOrders } from './api.js';
-import OrderTable from './OrderTable.jsx';
-
-const PAGE_SIZE = 20;
-
-export default function OrderSearch() {
-  const [query, setQuery] = useState('');
-  const [orders, setOrders] = useState([]);
-  const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
   useEffect(() => {
     const controller = new AbortController();
     setLoading(true);
@@ -43,64 +66,38 @@ export default function OrderSearch() {
       .then((data) => {
         setOrders(data.orders);
         setTotal(data.total);
-        setLoading(false);
       })
       .catch((err) => {
         if (err.name === 'AbortError') return;
         setError(err.message);
+      })
+      .finally(() => {
+        if (controller.signal.aborted) return;
         setLoading(false);
       });
-    // Cancel the old search so it can't overwrite newer results.
     return () => controller.abort();
   }, [query]);
-
-  function loadMore() {
-    setLoading(true);
-    fetchOrders({ q: query, offset: orders.length, limit: PAGE_SIZE })
-      .then((data) => {
-        setOrders((prev) => [...prev, ...data.orders]);
-        setTotal(data.total);
-      })
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
-  }
-
-  return (
-    <section className="order-search">
-      <input
-        className="search-input"
-        type="search"
-        placeholder="Search by customer, email or order ID"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        autoFocus
-      />
-      <div className="status-line">
-        {loading ? 'Searching…' : `Showing ${orders.length} of ${total} orders`}
-        {query && <span className="query-label"> for “{query}”</span>}
-      </div>
-      {error && <div className="error">{error}</div>}
-      <OrderTable orders={orders} highlight={query} loading={loading} />
-      {orders.length < total && (
-        <button className="load-more" onClick={loadMore} disabled={loading}>
-          Load more
-        </button>
-      )}
-    </section>
-  );
-}
 ```
 
-Changes from the starter, all inside the search `useEffect`:
-- An `AbortController` whose `signal` goes to `fetchOrders`.
-- `AbortError` is ignored in `.catch`.
-- `setLoading(false)` moved from `.finally` into the success and real-error paths.
-- The cleanup `return () => controller.abort();`.
+`setOrders(data.orders);` is on line 19 before the fix and line 20 after it, because the first new line goes above it.
 
-`loadMore` is deliberately unchanged; the paging bug is outside this ticket.
+## The five edits, in the order you make them
 
-## What you should see, measured on 31 Oct 2026
+| # | Where you click | What you type | What it does |
+|---|---|---|---|
+| 1 | End of line 14, `useEffect(() => {`, then Return | `const controller = new AbortController();` | A fresh controller for every search |
+| 2 | Double-click `PAGE_SIZE` in the `fetchOrders` line, then press → | `, signal: controller.signal` | Ties this request to the controller |
+| 3 | End of the `});` line that closes `.finally` (just above `}, [query]);`), then Return | `return () => controller.abort();` | React runs this before the next search, so the old search is cancelled |
+| 4 | End of `.catch((err) => {`, then Return | `if (err.name === 'AbortError') return;` | A cancel isn't an error, so the agent never sees it |
+| 5 | End of `.finally(() => {`, then Return | `if (controller.signal.aborted) return;` | A cancelled search can't turn off "Searching…" |
 
-- Before the fix, typing `alice` at about 150 ms per key: the responses arrive as `ali`, `alic`, `al`, `alice`, then `a` at about 1.47 s. The table shows `a`'s results.
-- After the fix, the same typing gives 9 rows, all Alice. Earlier requests show **(canceled)**.
-- With the API stopped, the error banner reads **Order search failed (502)**. That's Vite's proxy answering for the missing API. The old rows stay visible underneath; that's the known limitation.
+About 176 typed characters in all. The longest line is edit 1, 41 characters.
+
+After edit 3's Return, the cursor usually starts two spaces too far right (under `.finally`). Press Delete once so it lines up with `fetchOrders`, then type.
+
+## What you should see (measured on 2 Nov 2026)
+
+- **Before the fix**, typing `alice` at about 150 ms per key: answers arrive as `ali`, `alic`, `al`, `alice`, then `a` after about 1.43 s. The table ends with 20 of 320 orders (Elena Fischer, Noah Rossi, …) under *for "alice"*.
+- **After the fix**, the same typing: `a`, `al` and `ali` are cancelled, the table shows 9 orders, all Alice, highlighted. The same works for `omar` (7 orders) and `priya` (7 orders). `alic` sometimes finishes before you type the `e`; that's fine, because `alice` still arrives after it.
+- **Loading state:** "Searching…" stays on until the `alice` answer arrives. Without edit 5, the status line said "Showing 20 of 320 orders for "alic"" while the old rows were still on screen.
+- **API stopped:** the red banner reads **Order search failed (502)**, and the status line doesn't get stuck on "Searching…". The 502 comes from Vite's proxy. The old rows stay visible underneath; that's the known limitation.

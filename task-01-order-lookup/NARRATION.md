@@ -2,17 +2,19 @@
 
 Every bullet below is a line you say, in run-sheet order (`PLAN.md`). Rehearse with it, then **close this file before recording** and say it in your own words. Only the cue card should be near you during the take.
 
-The only text that isn't spoken is the two sections before the intro, the intro instruction and one note at the start of the epilogue.
+The only text that isn't spoken is the tags, the two sections before the intro, the intro instruction and the note at the start of the epilogue.
 
 ## How to talk while recording
 
-- **One short sentence per action: where, what, which element, why.** *"In the Explorer on the left, I'm right-clicking `SUP-1427.md` and choosing Open Preview, to read the ticket."* AutoQC checks every action for all four, so keep all four, just briefly.
-- **Say the line, then move on.** Don't add explanations between the lines; your reasoning goes in the epilogue. That's what brings the take down from over 40 minutes to about 25.
+- **Explain, then do.** Every step starts with a **[WHY]** line: say what you're about to do and why, in plain words, as if you're explaining it to a colleague sitting next to you. Then do it.
+- **[DO]** lines: say them while you do the action. They name the place on screen, what you do and the element.
+- **[SEE]** lines: say them once the result is on screen. Read out what you actually see; the numbers below come from rehearsal.
+- AutoQC checks every action for where, what, which element and why: the [WHY] line gives the why, and the [DO] line gives the rest.
+- **Say the line, then move on.** Deeper reasoning goes in the epilogue. That keeps the take under 30 minutes.
 - **Keys are actions too.** Say Return, Delete, Escape and Command S as you press them.
-- **Code:** for each of the five edits, say why it's needed, then the line number, then click and type. You don't need to talk while you type.
+- **Code:** each of the five edits starts with a [WHY] line saying what you're going to change and why. Then the [DO] line gives the line number, and you click and type. You don't need to talk while you type.
 - **One uninterrupted take,** from the intro to the end of the epilogue. If something goes wrong, say what happened and keep going.
 - **Check with Run full AutoQC,** not Rerun failing, so every action is counted again.
-- Read out the names, numbers and messages you *actually* see. The ones below come from rehearsal.
 
 ## Where things are on screen
 
@@ -38,120 +40,132 @@ The only text that isn't spoken is the two sections before the intro, the intro 
 
 With the Goal doc on screen for a few seconds, say only this:
 
-- "I will be beginning my task soon. Here is the workflow I have in mind."
+> "I will be beginning my task soon. Here is the workflow I have in mind."
 
 Don't read or explain the Goal. The first line of B minimises it.
 
 ## B. Read the ticket and start the app (VS Code)
 
-- I'm clicking the yellow minimise button at the top left of the Goal doc's window, to clear the screen.
-- I'm clicking VS Code in the Dock on the left, to open our internal Order Lookup tool: a React front end and an Express API.
-- In the Explorer on the left, I'm opening the docs folder, right-clicking `SUP-1427.md` and choosing Open Preview, to read the support ticket.
-- When agents type a name fast, like "alice", the table shows other customers' orders. It's high priority, because agents have quoted wrong orders on calls.
-- The ticket expects two things: results always match the search box, and failed searches still show an error. I'll check both at the end.
-- I'm right-clicking `README.md`, near the bottom of the Explorer, and choosing Open Preview, to see how search works.
-- I'm scrolling down the preview to the end of the API section, for one line: broad searches are slower than narrow ones. So "a" takes longer than "alice".
-- In NPM Scripts at the bottom of the Explorer, I'm clicking the play button on the `dev:api` row, to start the API. The terminal at the bottom says it's listening on port 3001.
-- I'm clicking the play button on the `dev:web` row below it, to start the front end. Vite serves it on localhost, port 5173.
+- **[WHY]** First, I'll clear the screen and open the project in VS Code. It's our internal Order Lookup tool, with a React front end and an Express API.
+- **[DO]** I'm clicking the yellow minimise button at the top left of the Goal doc's window, then VS Code in the Dock on the left.
+- **[WHY]** Support raised ticket SUP-1427 about this tool, so I'll read it first, to understand what agents are seeing.
+- **[DO]** In the Explorer on the left, I'm opening the docs folder, right-clicking `SUP-1427.md` and choosing Open Preview.
+- **[SEE]** It says that when agents type a name quickly, like "alice", the table fills up with other customers' orders. It's high priority, because agents have given customers the wrong order details on calls.
+- **[SEE]** It expects two things: the table must always match what's in the search box, and if a search fails, agents must still see an error. I'll check both at the end.
+- **[WHY]** Next, I'll read the README, to understand how search works.
+- **[DO]** I'm right-clicking `README.md` near the bottom of the Explorer, choosing Open Preview, and scrolling down to the end of the API section.
+- **[SEE]** One line here is important: broad searches are slower than narrow ones. So a search for just "a" will take longer than "alice".
+- **[WHY]** Now I'll start the app. The NPM Scripts panel lets me start it with a click, without typing commands.
+- **[DO]** In NPM Scripts at the bottom of the Explorer, I'm clicking the play button on the `dev:api` row.
+- **[SEE]** The terminal at the bottom says the API is listening on port 3001.
+- **[DO]** Now I'm clicking the play button on the `dev:web` row below it, for the front end.
+- **[SEE]** Vite says it's running on localhost, port 5173.
 
 ## C. Reproduce the bug (Brave)
 
-- I'm clicking Brave, the lion icon in the Dock, to reproduce the bug.
-- I'm clicking the address bar at the top, typing localhost:5173 and pressing Return, to open the app. It lists the newest 20 of 320 orders.
-- I'm clicking the search box at the top of the page and typing "alice" at normal speed, like a busy agent, to see the bug.
-- There's the bug: the status line says "for alice", but the rows are other customers, like Elena Fischer, and nothing is highlighted.
-- I'm clicking the X at the right end of the search box to clear it, and typing "alice" again very slowly, to compare.
-- Now only Alice's orders show. The same text gives a different result depending on speed, so the answers are probably arriving out of order. I'll check that in DevTools.
+- **[WHY]** Now I'll try to see the bug myself, the same way an agent would.
+- **[DO]** I'm clicking Brave, the lion icon in the Dock, then the address bar at the top, typing localhost:5173 and pressing Return.
+- **[SEE]** The app shows the newest 20 of 320 orders.
+- **[DO]** I'm clicking the search box at the top of the page and typing "alice" at normal speed, like a busy agent.
+- **[SEE]** And there's the bug. The status line says "for alice", but the rows belong to other customers, like Elena Fischer, and nothing is highlighted.
+- **[WHY]** Let me compare that with typing slowly, to see if speed makes a difference.
+- **[DO]** I'm clicking the X at the right end of the search box to clear it, and typing "alice" again, very slowly.
+- **[SEE]** Now only Alice's orders show.
+- **[WHY]** So the same text gives different results depending on how fast I type. That usually means the answers are coming back in a different order than the searches went out. I'll check that in DevTools.
 
 ## D. Find the cause (Brave DevTools)
 
 **Network panel**
-- In the menu bar at the top of the screen, I'm choosing View, Developer, Developer Tools, to watch the page's requests. DevTools opens on the right.
-- In the tab row at the top of DevTools, I'm clicking Network, to list every request.
-- In the toolbar under the tabs, I'm ticking Disable cache, so every search reaches the server. In the filter row below, I'm clicking Fetch/XHR, to show only the API calls.
-- I'm right-clicking the Name header at the top of the request list and ticking Waterfall, to add a timing bar to every row.
-- In the page on the left, I'm clicking the X in the search box to start empty, and waiting for the full list. Then I'm clicking Clear at the left end of the Network toolbar, so the log shows only my next search.
-- I'm clicking the search box and typing "alice" at normal speed, to catch the bug in the log.
-- There are five requests, one per keystroke: a, al, ali, alic and alice.
-- In the Waterfall column on the far right, the bar for "a" is the longest and ends last. The Time column next to it says about 1.4 seconds for "a", and 0.14 for "alice".
-- So the first search sent answers last, because "a" matches every order. And nothing in the code ignores old answers.
+- **[WHY]** I'm going to open DevTools and watch the Network panel, because it shows every search the page sends and how long each one takes. Then I'll set it up so it's easy to read.
+- **[DO]** In the menu bar at the top of the screen, I'm choosing View, Developer, Developer Tools. DevTools opens on the right, and in its tab row at the top, I'm clicking Network.
+- **[DO]** In the toolbar under the tabs, I'm ticking Disable cache, so every search really goes to the server. In the filter row below, I'm clicking Fetch/XHR, so only the API calls show.
+- **[DO]** I'm right-clicking the Name header of the request list and ticking Waterfall. That adds a timing bar to every row.
+- **[WHY]** Now I'll run the fast test again, on an empty log.
+- **[DO]** In the page on the left, I'm clicking the X to clear the search box and waiting for the full list. Then I'm clicking Clear at the left end of the Network toolbar, clicking the search box, and typing "alice" at normal speed.
+- **[SEE]** There are five requests, one for each letter: a, al, ali, alic and alice.
+- **[SEE]** In the Waterfall column on the far right, the bar for "a" is the longest, and it finishes last. The Time column next to it says about 1.4 seconds for "a", but only 0.14 for "alice".
+- **[WHY]** So the first search I sent comes back last, because "a" matches every order. And nothing in the code ignores old answers.
 
 **Logpoint in Sources**
-- To prove this late answer fills the table, I'm clicking Sources in the tab row at the top of DevTools.
-- In the Page tree on the left, I'm opening localhost:5173 and src, and clicking the italic `OrderSearch.jsx`. Italic means my original source, so the line numbers match VS Code.
-- Line 19, `setOrders`, puts the results in the table. I'm right-clicking the number 19 at the left edge of the code and choosing Add logpoint, to log every answer that reaches it.
-- In the box under line 19, I'm typing `'applied results for', data.query`, because each answer carries its search text. I'm pressing Return to save it, and the marker turns pink.
-- I'm pressing Escape to open the console drawer at the bottom of DevTools, where the logpoint prints.
-- In the page, I'm clicking the X to clear the search and waiting for the list. Then I'm clicking Clear console at the top left of the drawer, so it shows only the next search, and typing "alice" in the search box at normal speed.
-- The last console line is "applied results for a". So the answer for "a" fills the table, even though I typed "alice". That's the root cause.
-- I'm clicking the pink marker on line 19 to remove the logpoint, because my fix will move this line. And I'm pressing Escape to close the console drawer.
+- **[WHY]** Now I want proof that this late answer is what ends up in the table, so I'll look at the code the browser runs.
+- **[DO]** In the tab row at the top of DevTools, I'm clicking Sources. In the Page tree on the left, I'm opening localhost:5173 and src, and clicking the italic `OrderSearch.jsx`. The italic one is my original code, so the line numbers match VS Code.
+- **[WHY]** Line 19, `setOrders`, puts the results into the table. I'll add a logpoint there: it prints a message each time the line runs, without pausing the page.
+- **[DO]** I'm right-clicking the number 19 on the left edge of the code and choosing Add logpoint.
+- **[WHY]** Each answer includes the search it was for, in `data.query`, so I'll print that.
+- **[DO]** In the box under line 19, I'm typing `'applied results for', data.query` and pressing Return to save it. The marker turns pink.
+- **[WHY]** The messages show up in the console, so I'll open it and run the same fast test again.
+- **[DO]** I'm pressing Escape to open the console drawer at the bottom of DevTools. In the page, I'm clicking the X to clear the search and waiting for the list. Then I'm clicking Clear console at the top left of the drawer and typing "alice" again at normal speed.
+- **[SEE]** The last line in the console says "applied results for a". So the results for "a" are what fill the table, even though I typed "alice". That's the root cause.
+- **[WHY]** I have my proof, so I'll remove the logpoint, because my fix will shift this line.
+- **[DO]** I'm clicking the pink marker on line 19 to remove it, and pressing Escape to close the console drawer.
 
 **Save the evidence**
-- Before changing any code, I'm saving this log as evidence. I'm clicking Network in the tab row, then Export HAR, the download arrow in the Network toolbar.
-- In the save dialog, I'm typing before-fix as the name, checking it's going to Downloads, and clicking Save at the bottom right.
+- **[WHY]** Before I change any code, I'll save this network log as evidence of the bug.
+- **[DO]** I'm clicking Network in the tab row, then Export HAR, the download arrow in the Network toolbar. In the save dialog, I'm typing before-fix as the name, checking it goes to Downloads, and clicking Save at the bottom right.
 
 ## E. Fix the code (VS Code)
 
 **Read the code**
-- I'm clicking VS Code in the Dock on the left, to fix the code.
-- In the Explorer on the left, I'm opening client, then src, and clicking `api.js`, to see how a search is sent.
-- Line 1 already accepts a `signal`, and line 3 passes it to `fetch`. A signal is how you cancel a fetch, but the search never passes one.
-- I'm clicking `OrderSearch.jsx`, in the same src folder, to open the search component.
-- The search effect, lines 14 to 28, runs on every keystroke. Line 17 sends the request, and `.then`, `.catch` and `.finally` handle the results, errors and loading state. Nothing cancels an older search.
-- A debounce would only make this rarer. So I'll cancel old searches with an AbortController, in five small edits.
+- **[WHY]** Now I'll go back to VS Code and look at how the search request is sent.
+- **[DO]** I'm clicking VS Code in the Dock. In the Explorer on the left, I'm opening client, then src, and clicking `api.js`.
+- **[SEE]** Line 1 already accepts a `signal`, and line 3 passes it on to `fetch`. A signal is the browser's way to cancel a request, but the search never gives it one.
+- **[WHY]** Next, I'll open the search component, to see what happens on every keystroke.
+- **[DO]** I'm clicking `OrderSearch.jsx`, in the same src folder.
+- **[SEE]** The search effect is lines 14 to 28, and it runs every time the search text changes. Line 17 sends the request, and `.then`, `.catch` and `.finally` handle the results, errors and the loading state. But nothing cancels the older searches.
+- **[WHY]** I could add a debounce, to wait until the agent stops typing, but that only makes this rarer: a slow answer could still arrive last. So I'll cancel the old search instead, with an AbortController. It takes five small edits.
 
 **Edit 1 of 5: line 15**
-- Every search needs its own controller, so it can be canceled. That goes at the top of the effect.
-- I'm clicking the end of line 14, pressing Return, and on the new line 15 typing: `const controller = new AbortController();`
+- **[WHY]** First, every search needs its own controller, so that I can cancel that search later. I'll create it at the very top of the effect.
+- **[DO]** I'm clicking the end of line 14, pressing Return, and on the new line 15 typing: `const controller = new AbortController();`
 
 **Edit 2 of 5: line 18**
-- The request must carry the controller's signal, or it can't be canceled. The `fetchOrders` call is now on line 18.
-- I'm double-clicking `PAGE_SIZE` on line 18, pressing the right arrow to move after it, and typing: `, signal: controller.signal`
+- **[WHY]** Next, I need to hand the controller's signal to the request. Without it, the controller has nothing to cancel.
+- **[DO]** The `fetchOrders` call is now on line 18. I'm double-clicking `PAGE_SIZE` there, pressing the right arrow to move after it, and typing: `, signal: controller.signal`
 
 **Edit 3 of 5: line 29**
-- Now the cancel itself. React runs the function an effect returns just before the effect runs again, so that's where the old search gets canceled.
-- I'm clicking the end of line 28, the `});` that closes `.finally`, and pressing Return. I'm pressing Delete once to line up with `fetchOrders`, and on line 29 typing: `return () => controller.abort();`
-- Now each keystroke cancels the previous search.
+- **[WHY]** Now I'll add the line that does the cancelling. Here's how React helps: if the effect returns a function, React calls it right before the next search starts. So I'll return a function that cancels the old request.
+- **[DO]** I'm clicking the end of line 28, the `});` that closes `.finally`, and pressing Return. I'm pressing Delete once, to line up with `fetchOrders`, and on line 29 typing: `return () => controller.abort();`
 
 **Edit 4 of 5: line 24**
-- Cancelling has two side effects. First, a canceled fetch throws an AbortError, and `.catch` would show it as an error on every keystroke.
-- I'm clicking the end of line 23, the `.catch` line, pressing Return, and on line 24 typing: `if (err.name === 'AbortError') return;`
-- Real errors still reach `setError` below it.
+- **[WHY]** Cancelling causes two small problems. First, a canceled request throws an AbortError, and `.catch` would show it to the agent as an error on every keystroke. A cancel isn't a real error, so I'll tell `.catch` to ignore it.
+- **[DO]** I'm clicking the end of line 23, the `.catch` line, pressing Return, and on line 24 typing: `if (err.name === 'AbortError') return;`
 
 **Edit 5 of 5: line 28**
-- Second, `.finally` also runs for a canceled search, and would turn off "Searching…" while the new search is still loading.
-- I'm clicking the end of line 27, the `.finally` line, pressing Return, and on line 28 typing: `if (controller.signal.aborted) return;`
+- **[WHY]** The second problem: `.finally` also runs for a canceled search, so it would switch off "Searching…" while the new search is still loading. So I'll make `.finally` skip canceled searches.
+- **[DO]** I'm clicking the end of line 27, the `.finally` line, pressing Return, and on line 28 typing: `if (controller.signal.aborted) return;`
 
 **Save**
-- I'm leaving `loadMore`, below the effect, alone, because paging is outside this ticket.
-- I'm pressing Command S to save. The dot on the file's tab at the top of the editor disappears, and Vite loads the new code into Brave.
+- **[WHY]** I'm leaving `loadMore`, below the effect, alone, because paging isn't part of this ticket. Now I'll save, so Vite sends the new code to Brave.
+- **[DO]** I'm pressing Command S. The dot on the file's tab at the top of the editor disappears.
 
 ## F. Verify the fix (Brave, then VS Code and back)
 
-- I'm clicking Brave in the Dock on the left, to test the fix. DevTools is still on the Network tab.
-- In the page on the left, I'm clicking the X to clear the search and waiting for the full list. Then I'm clicking Clear at the left of the Network toolbar, so the log shows only the test.
-- I'm clicking the search box and typing "alice" at normal speed, to run the same test as before.
-- In the Status column, the older requests say canceled, in red, including the slow "a". And the table shows only Alice's orders, highlighted.
-- A canceled answer can't reach the table, so only the latest search is applied.
-- I'm clicking Export HAR, the download arrow in the Network toolbar, typing after-fix as the name and clicking Save, to keep evidence after the fix.
-- The ticket also says failed searches must show an error. To test that, I'll stop the API.
-- I'm clicking VS Code in the Dock. In the terminal list on the right of the bottom panel, I'm clicking `dev:api`, then its trash icon, to stop the API.
-- I'm clicking Brave in the Dock, then the end of the text in the search box, and typing one more letter, so the page searches the stopped API.
-- A red message above the table says "Order search failed (502)", and the status line isn't stuck on "Searching…". So real errors still reach the agent.
-- The old rows stay under the error. That's outside this ticket, so I'll note it as a limitation.
+- **[WHY]** Now I'll check the fix in Brave, with the same fast test as before.
+- **[DO]** I'm clicking Brave in the Dock. DevTools is still on the Network tab. In the page on the left, I'm clicking the X to clear the search and waiting for the full list, then clicking Clear at the left of the Network toolbar.
+- **[DO]** I'm clicking the search box and typing "alice" at normal speed.
+- **[SEE]** In the Status column, the older requests now say canceled, in red, including the slow "a". And the table shows only Alice's orders, highlighted.
+- **[WHY]** That's what I wanted: a canceled answer can never reach the table, so only the latest search is applied. I'll save this log too, as evidence after the fix.
+- **[DO]** I'm clicking Export HAR, the download arrow in the Network toolbar, typing after-fix as the name and clicking Save.
+- **[WHY]** The ticket also says agents must still see an error if a search fails. To test that, I'll stop the API, so the next search fails.
+- **[DO]** I'm clicking VS Code in the Dock. In the terminal list on the right of the bottom panel, I'm clicking `dev:api`, then its trash icon.
+- **[DO]** I'm clicking Brave in the Dock, then the end of the text in the search box, and typing one more letter.
+- **[SEE]** A red message appears above the table: "Order search failed (502)". And the status line isn't stuck on "Searching…". So real errors still reach the agent.
+- **[SEE]** The old rows are still there under the error. That's outside this ticket, so I'll mention it at the end.
 
 ## G. Review and commit (VS Code)
 
-- I'm clicking VS Code in the Dock, to review my change before committing.
-- In the Activity Bar on the far left, I'm clicking Source Control, the third icon, to see what changed. Only `OrderSearch.jsx` has.
-- I'm clicking `OrderSearch.jsx` in that list to open its diff. My five edits are all inside the search effect, and `loadMore` is unchanged.
-- I'm clicking the plus at the right end of the Changes header, to stage the file.
-- I'm clicking the message box at the top and typing "Fix stale search results (SUP-1427)", so the commit names the ticket.
-- I'm clicking the blue Commit button under the message box. The list is empty now, so the fix is committed and the task is done.
+- **[WHY]** Finally, I'll review my change in VS Code before I commit it.
+- **[DO]** I'm clicking VS Code in the Dock. In the Activity Bar on the far left, I'm clicking Source Control, the third icon.
+- **[SEE]** Only `OrderSearch.jsx` has changed.
+- **[DO]** I'm clicking `OrderSearch.jsx` in the Changes list, to open its diff.
+- **[SEE]** My five edits are all inside the search effect, and `loadMore` hasn't changed.
+- **[WHY]** It looks right, so I'll stage it and commit it, with a message that names the ticket.
+- **[DO]** I'm clicking the plus at the right end of the Changes header. Then I'm clicking the message box at the top, typing "Fix stale search results (SUP-1427)", and clicking the blue Commit button under it.
+- **[SEE]** The list is empty now, so the fix is committed, and the task is done.
 
 ## H. Epilogue (3–4 minutes, no mouse)
 
-*If something went differently in your take, say what really happened instead.*
+*Everything here is explanation, said with no mouse, so these lines have no tags. If something went differently in your take, say what really happened instead.*
 
 **1. Outcome**
 - The task is complete. The table now always shows results for exactly what's in the search box, however fast the agent types, and agents still see an error when a search fails. The fix is committed.
